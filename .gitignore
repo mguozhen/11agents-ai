@@ -1,3 +1,26 @@
+# vercel
 .vercel
-*-screen.png
+
+# deps
+node_modules/
+
+# builds
+.next/
+dist/
+*.tsbuildinfo
+
+# env
+.env
+.env.*
+!.env.example
+
+# logs
+*.log
+logs/
+
+# os
+.DS_Store
+
+# screenshots (debug artifacts)
 live-*.png
+*-screen.png
