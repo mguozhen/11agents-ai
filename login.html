@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign in — 11agents.ai admin</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #1a1612;
+    --bg-2: #221d17;
+    --bg-3: #2a241b;
+    --fg: #ebe0cc;
+    --fg-muted: rgba(235, 224, 204, 0.62);
+    --fg-dim: rgba(235, 224, 204, 0.32);
+    --accent: #d4a574;
+    --accent-bright: #e8be94;
+    --line: rgba(235, 224, 204, 0.14);
+    --line-strong: rgba(235, 224, 204, 0.32);
+    --red: #d76450;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: var(--bg); color: var(--fg);
+    min-height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    padding: 24px;
+    -webkit-font-smoothing: antialiased;
+  }
+  body::before {
+    content: ''; position: fixed; inset: 0;
+    background:
+      radial-gradient(ellipse 50% 50% at 80% 20%, rgba(212, 165, 116, 0.12) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 50% at 20% 80%, rgba(212, 165, 116, 0.08) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .box {
+    width: 100%; max-width: 420px;
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 40px 32px;
+    position: relative;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.4);
+  }
+  .mark {
+    font-weight: 700; font-size: 19px;
+    letter-spacing: -0.025em; color: var(--fg);
+    text-align: center; margin-bottom: 4px;
+  }
+  .mark .dot { color: var(--accent); }
+  .mark .tld { opacity: 0.55; font-weight: 400; }
+  h1 {
+    font-size: 28px; font-weight: 700;
+    letter-spacing: -0.02em; margin-bottom: 8px;
+    text-align: center;
+  }
+  .sub {
+    text-align: center;
+    font-size: 13px; color: var(--fg-muted);
+    margin-bottom: 32px;
+    letter-spacing: 0.05em; text-transform: uppercase;
+  }
+  form { display: flex; flex-direction: column; gap: 14px; }
+  label {
+    font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--accent); font-weight: 600;
+  }
+  input {
+    background: var(--bg); border: 1px solid var(--line-strong);
+    color: var(--fg); padding: 14px 16px;
+    font-family: inherit; font-size: 15px; border-radius: 4px;
+    transition: border-color .15s;
+    margin-top: 6px;
+  }
+  input:focus { outline: none; border-color: var(--accent); }
+  input::placeholder { color: var(--fg-dim); }
+  button {
+    background: var(--accent); color: var(--bg);
+    padding: 14px; border-radius: 4px; border: 0;
+    font-family: inherit; font-size: 14px; font-weight: 600;
+    letter-spacing: 0.02em; cursor: pointer;
+    margin-top: 8px;
+    transition: background .15s;
+  }
+  button:hover:not(:disabled) { background: var(--accent-bright); }
+  button:disabled { opacity: .6; cursor: not-allowed; }
+  .err {
+    background: rgba(215, 100, 80, 0.1);
+    border: 1px solid rgba(215, 100, 80, 0.3);
+    color: var(--red);
+    padding: 12px 14px;
+    border-radius: 4px;
+    font-size: 13px;
+    display: none;
+  }
+  .err.show { display: block; }
+  .back {
+    text-align: center; margin-top: 24px;
+    font-size: 12px; color: var(--fg-muted);
+    letter-spacing: 0.05em;
+  }
+  .back a { color: var(--accent); text-decoration: none; }
+  .back a:hover { color: var(--accent-bright); }
+</style>
+</head>
+<body>
+<div class="box">
+  <div class="mark">11<span class="dot">.</span>agents<span class="tld">.ai</span></div>
+  <div class="sub">/ admin sign-in /</div>
+  <div id="err" class="err"></div>
+  <form id="f">
+    <div>
+      <label for="email">Email</label>
+      <input id="email" type="email" name="email" placeholder="you@email.com" required autocomplete="username" autofocus>
+    </div>
+    <div>
+      <label for="password">Password</label>
+      <input id="password" type="password" name="password" required autocomplete="current-password">
+    </div>
+    <button type="submit" id="btn">Sign in →</button>
+  </form>
+  <div class="back"><a href="/">← back to homepage</a></div>
+</div>
+
+<script>
+const f = document.getElementById('f');
+const btn = document.getElementById('btn');
+const err = document.getElementById('err');
+f.addEventListener('submit', async (ev) => {
+  ev.preventDefault();
+  err.classList.remove('show');
+  btn.disabled = true;
+  btn.textContent = 'Signing in…';
+  try {
+    const body = new URLSearchParams({
+      email: document.getElementById('email').value.trim(),
+      password: document.getElementById('password').value
+    });
+    const resp = await fetch('/api/login', {
+      method: 'POST',
+      headers: { 'content-type': 'application/x-www-form-urlencoded' },
+      body
+    });
+    if (resp.ok) {
+      const data = await resp.json().catch(() => ({}));
+      window.location.href = data.redirect || '/dashboard';
+      return;
+    }
+    const data = await resp.json().catch(() => ({}));
+    err.textContent = data.error || 'Sign in failed.';
+    err.classList.add('show');
+  } catch (e) {
+    err.textContent = 'Network error. Try again.';
+    err.classList.add('show');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Sign in →';
+  }
+});
+</script>
+</body>
+</html>

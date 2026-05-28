@@ -1,0 +1,1366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>11agents.ai — No business should struggle with GTM.</title>
+<meta name="description" content="Eleven specialised AI agents — one for every growth channel. One hire. One year. $999. Launching on Kickstarter Q3 2026.">
+<meta property="og:title" content="11agents.ai — No business should struggle with GTM.">
+<meta property="og:description" content="Hire 11 specialised GTM agents for $999/year. Hardware + first year included. Coming to Kickstarter.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://11agents.ai">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+SC:wght@300;400;500;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #1a1612;
+    --bg-2: #221d17;
+    --bg-3: #2a241b;
+    --fg: #ebe0cc;
+    --fg-muted: rgba(235, 224, 204, 0.62);
+    --fg-dim: rgba(235, 224, 204, 0.32);
+    --accent: #d4a574;
+    --accent-bright: #e8be94;
+    --accent-soft: rgba(212, 165, 116, 0.14);
+    --line: rgba(235, 224, 204, 0.14);
+    --line-strong: rgba(235, 224, 204, 0.32);
+    --maxw: 1240px;
+    --font-en: 'Inter', system-ui, sans-serif;
+    --font-cn: 'Noto Sans SC', 'Inter', sans-serif;
+    --font-jp: 'Noto Sans JP', 'Inter', sans-serif;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--font-en);
+    background: var(--bg); color: var(--fg);
+    line-height: 1.5; overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+  html[lang="zh"] body, html[lang="zh"] h1, html[lang="zh"] h2, html[lang="zh"] h3 { font-family: var(--font-cn); }
+  html[lang="ja"] body, html[lang="ja"] h1, html[lang="ja"] h2, html[lang="ja"] h3 { font-family: var(--font-jp); }
+  ::selection { background: var(--accent); color: var(--bg); }
+  a { color: inherit; text-decoration: none; }
+  button { font-family: inherit; cursor: pointer; }
+  .accent { color: var(--accent); }
+  .muted { color: var(--fg-muted); }
+  .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 64px; }
+  @media (max-width: 880px) { .wrap { padding: 0 24px; } }
+
+  .chrome {
+    position: sticky; top: 0; z-index: 80;
+    backdrop-filter: blur(20px);
+    background: rgba(26, 22, 18, 0.78);
+    border-bottom: 1px solid var(--line);
+  }
+  .chrome-inner {
+    max-width: var(--maxw); margin: 0 auto;
+    padding: 18px 64px;
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 13px;
+  }
+  @media (max-width: 880px) { .chrome-inner { padding: 16px 24px; } }
+  .mark { font-weight: 700; font-size: 18px; letter-spacing: -0.025em; color: var(--fg); font-family: var(--font-en); }
+  .mark .dot { color: var(--accent); }
+  .mark .tld { opacity: 0.55; font-weight: 400; }
+  .right-cluster { display: flex; align-items: center; gap: 20px; }
+  .nav { display: flex; gap: 28px; color: var(--fg-muted); font-size: 13px; font-weight: 500; }
+  .nav a:hover { color: var(--fg); }
+  @media (max-width: 980px) { .nav { display: none; } }
+  .lang-switch {
+    display: flex; gap: 0;
+    font-size: 11px;
+    border: 1px solid var(--line-strong);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .lang-switch button {
+    padding: 7px 11px;
+    color: var(--fg-muted);
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+    border-right: 1px solid var(--line);
+    transition: background .15s, color .15s;
+  }
+  .lang-switch button:last-child { border-right: 0; }
+  .lang-switch button.active { background: var(--accent); color: var(--bg); }
+  .lang-switch button:hover:not(.active) { color: var(--fg); background: rgba(212, 165, 116, 0.08); }
+  .chrome .signin {
+    color: var(--fg-muted);
+    font-size: 13px;
+    font-weight: 500;
+    padding: 6px 4px;
+    transition: color .15s;
+  }
+  .chrome .signin:hover { color: var(--fg); }
+  @media (max-width: 540px) { .chrome .signin { display: none; } }
+  .chrome .buy {
+    background: var(--accent); color: var(--bg);
+    padding: 10px 18px; border-radius: 4px;
+    font-weight: 600; font-size: 13px;
+    transition: background .15s;
+  }
+  .chrome .buy:hover { background: var(--accent-bright); }
+  @media (max-width: 640px) { .chrome .buy { display: none; } }
+
+  /* ============================================================
+     HERO — VALUE-FIRST
+     ============================================================ */
+  .hero {
+    padding: 80px 0 96px;
+    min-height: 88vh;
+    display: flex; align-items: center;
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: ''; position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 70% 50% at 80% 30%, rgba(212, 165, 116, 0.16) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 30% at 20% 70%, rgba(212, 165, 116, 0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-inner { position: relative; width: 100%; }
+  .hero-eyebrow {
+    font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 32px; font-weight: 600;
+    display: inline-flex; align-items: center; gap: 10px;
+    font-family: var(--font-en);
+  }
+  .hero-eyebrow::before { content: '◆'; color: var(--accent); }
+  .hero h1.slogan {
+    font-size: clamp(56px, 9vw, 144px);
+    font-weight: 700; line-height: 0.98;
+    letter-spacing: -0.04em;
+    margin-bottom: 32px; color: var(--fg);
+    max-width: 1180px;
+  }
+  .hero h1.slogan .gtm { color: var(--accent); }
+  html[lang="zh"] .hero h1.slogan, html[lang="ja"] .hero h1.slogan {
+    font-size: clamp(48px, 7.5vw, 120px);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    font-weight: 700;
+  }
+  .hero .sub {
+    font-size: clamp(18px, 1.8vw, 22px);
+    color: var(--fg-muted);
+    margin-bottom: 56px; max-width: 760px;
+    line-height: 1.6;
+    font-weight: 400;
+  }
+  .hero .sub strong { color: var(--fg); font-weight: 600; }
+  .cta-row { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 20px; margin-bottom: 72px; }
+  .cta-primary {
+    background: var(--accent); color: var(--bg);
+    padding: 18px 36px; border-radius: 4px; border: 0;
+    font-size: 15px; font-weight: 600; letter-spacing: 0.01em;
+    transition: background .15s;
+    display: inline-flex; align-items: center; gap: 12px;
+    font-family: var(--font-en);
+  }
+  .cta-primary:hover { background: var(--accent-bright); }
+  .cta-primary .price { color: rgba(26, 22, 18, 0.65); margin-left: 4px; font-weight: 500; }
+  .cta-secondary {
+    background: transparent; color: var(--fg);
+    padding: 16px 0; border: 0;
+    font-size: 14px; font-weight: 500; letter-spacing: 0.05em;
+    text-decoration: underline; text-underline-offset: 6px;
+    text-decoration-color: var(--accent);
+  }
+  .hero-meta {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 32px; padding-top: 32px;
+    border-top: 1px solid var(--line);
+    max-width: 980px;
+  }
+  @media (max-width: 880px) { .hero-meta { grid-template-columns: repeat(2, 1fr); } }
+  .hero-meta .label {
+    font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 8px; font-weight: 600;
+    font-family: var(--font-en);
+  }
+  .hero-meta .val { font-size: 14px; color: var(--fg); line-height: 1.5; }
+
+  /* ============================================================
+     VIDEO HERO STRIP — Seedance teaser
+     ============================================================ */
+  .video-strip {
+    padding: 32px 0 96px;
+    background: var(--bg);
+    border-top: 1px solid var(--line);
+  }
+  .video-box {
+    aspect-ratio: 16 / 9;
+    border-radius: 16px;
+    border: 1px solid var(--line-strong);
+    position: relative; overflow: hidden;
+    background: #000;
+    box-shadow:
+      0 80px 160px rgba(0,0,0,0.55),
+      0 0 200px rgba(212, 165, 116, 0.18),
+      inset 0 1px 0 rgba(212, 165, 116, 0.1);
+  }
+  .video-box video {
+    display: block;
+    width: 100%; height: 100%;
+    object-fit: cover;
+  }
+  .video-box::after {
+    content: ''; position: absolute;
+    inset: auto 0 0 0; height: 50%;
+    background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.6) 100%);
+    pointer-events: none;
+  }
+  .video-caption {
+    position: absolute; bottom: 28px; left: 32px; right: 32px;
+    display: flex; justify-content: space-between; align-items: end;
+    z-index: 2; pointer-events: none;
+  }
+  .video-caption .vtitle {
+    font-size: clamp(20px, 2.4vw, 32px);
+    font-weight: 700; color: #fff;
+    letter-spacing: -0.02em;
+    text-shadow: 0 2px 16px rgba(0,0,0,0.6);
+  }
+  .video-caption .vmeta {
+    font-size: 10px; color: rgba(255,255,255,0.7);
+    letter-spacing: 0.3em; text-transform: uppercase;
+    text-shadow: 0 2px 16px rgba(0,0,0,0.6);
+  }
+
+  /* ============================================================
+     PROMISE (3-card)
+     ============================================================ */
+  .promise { padding: 96px 0; background: var(--bg-2); }
+  .promise .lab {
+    font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 24px; font-weight: 600;
+    font-family: var(--font-en);
+  }
+  .promise h2 {
+    font-size: clamp(40px, 6vw, 72px); font-weight: 700;
+    letter-spacing: -0.035em; line-height: 1.05; margin-bottom: 64px;
+    color: var(--fg); max-width: 880px;
+  }
+  html[lang="zh"] .promise h2, html[lang="ja"] .promise h2 { line-height: 1.2; letter-spacing: -0.02em; }
+  .promise h2 .accent { color: var(--accent); }
+  .promise-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  @media (max-width: 880px) { .promise-grid { grid-template-columns: 1fr; } }
+  .promise-card {
+    background: var(--bg); border: 1px solid var(--line);
+    padding: 40px 32px; border-radius: 8px;
+    transition: border-color .2s;
+  }
+  .promise-card:hover { border-color: var(--accent); }
+  .promise-card .idx {
+    font-size: 11px; letter-spacing: 0.3em; color: var(--accent);
+    margin-bottom: 28px; font-weight: 600; font-family: var(--font-en);
+  }
+  .promise-card h3 {
+    font-size: 26px; font-weight: 700; line-height: 1.2;
+    color: var(--fg); margin-bottom: 16px; letter-spacing: -0.015em;
+  }
+  html[lang="zh"] .promise-card h3, html[lang="ja"] .promise-card h3 { line-height: 1.3; }
+  .promise-card h3 strong { color: var(--accent); font-weight: 700; }
+  .promise-card p { font-size: 15px; line-height: 1.6; color: var(--fg-muted); }
+
+  /* ============================================================
+     11 AGENTS GRID
+     ============================================================ */
+  .agents { padding: 96px 0; }
+  .agents-head { margin-bottom: 56px; }
+  .agents-head .lab {
+    font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 16px; font-weight: 600;
+    font-family: var(--font-en);
+  }
+  .agents-head h2 {
+    font-size: clamp(40px, 6vw, 72px); font-weight: 700;
+    letter-spacing: -0.035em; line-height: 1.05; color: var(--fg);
+    max-width: 880px;
+  }
+  html[lang="zh"] .agents-head h2, html[lang="ja"] .agents-head h2 { line-height: 1.2; letter-spacing: -0.02em; }
+  .agents-head h2 .accent { color: var(--accent); }
+  .agents-head p {
+    font-size: 17px; color: var(--fg-muted);
+    margin-top: 16px; max-width: 720px; line-height: 1.6;
+  }
+  .agents-grid {
+    display: grid; grid-template-columns: repeat(12, 1fr);
+    gap: 1px; background: var(--line);
+    border: 1px solid var(--line); border-radius: 4px; overflow: hidden;
+  }
+  @media (max-width: 1280px) { .agents-grid { grid-template-columns: repeat(4, 1fr); } }
+  @media (max-width: 740px) { .agents-grid { grid-template-columns: repeat(2, 1fr); } }
+  .agent.bonus { background: rgba(212, 165, 116, 0.06); }
+  .agent.bonus .num { font-size: 22px; color: var(--accent); letter-spacing: 0; }
+  .agent.bonus .ch-tag {
+    display: block;
+    font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--accent); margin-top: 6px; font-weight: 600;
+  }
+  .agent {
+    background: var(--bg); padding: 28px 16px; text-align: center;
+    min-height: 200px; display: flex; flex-direction: column;
+    justify-content: space-between; transition: background .15s;
+  }
+  .agent:hover { background: var(--bg-3); }
+  .agent .num {
+    font-size: 42px; font-weight: 700; color: var(--accent);
+    line-height: 1; margin-bottom: 8px; letter-spacing: -0.04em;
+    font-family: var(--font-en);
+  }
+  .agent .ch {
+    font-size: 12px; font-weight: 700; letter-spacing: 0.06em;
+    color: var(--fg); margin-bottom: 14px; text-transform: uppercase;
+    font-family: var(--font-en);
+  }
+  .agent .ships { font-size: 11px; color: var(--fg-muted); line-height: 1.5; }
+
+  /* ============================================================
+     COMPARISON
+     ============================================================ */
+  .comp { padding: 96px 0; background: var(--bg-2); }
+  .comp-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 48px; gap: 32px; flex-wrap: wrap; }
+  .comp-head .lab {
+    font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--accent); font-weight: 600; font-family: var(--font-en);
+  }
+  .comp-head h2 {
+    font-size: clamp(40px, 6vw, 72px); font-weight: 700;
+    letter-spacing: -0.035em; line-height: 1.05; color: var(--fg); max-width: 720px;
+  }
+  html[lang="zh"] .comp-head h2, html[lang="ja"] .comp-head h2 { line-height: 1.2; letter-spacing: -0.02em; }
+  .comp-table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); }
+  .comp-table { width: 100%; border-collapse: collapse; min-width: 760px; }
+  .comp-table th, .comp-table td {
+    padding: 20px 16px; text-align: left; font-size: 14px;
+    border-bottom: 1px solid var(--line); vertical-align: middle;
+  }
+  .comp-table tr:last-child td { border-bottom: 0; }
+  .comp-table th {
+    font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--fg-muted); font-weight: 600;
+    border-bottom: 1px solid var(--line-strong); background: var(--bg-2);
+    font-family: var(--font-en);
+  }
+  .comp-table th.us { background: var(--accent); color: var(--bg); }
+  .comp-table td.us { background: var(--accent-soft); color: var(--fg); font-weight: 600; }
+  .comp-table td.lbl {
+    color: var(--fg-muted); font-size: 12px; letter-spacing: 0.1em;
+    text-transform: uppercase; font-weight: 500; width: 220px;
+  }
+  .comp-table td.x { color: var(--fg-dim); }
+  .comp-table td.check { color: var(--accent); font-weight: 700; }
+
+  /* ============================================================
+     PRICING TIERS (Kickstarter)
+     ============================================================ */
+  .pricing { padding: 96px 0; }
+  .pricing-head { text-align: center; margin-bottom: 56px; }
+  .pricing-head .lab {
+    font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 16px; font-weight: 600;
+    font-family: var(--font-en);
+  }
+  .pricing-head h2 {
+    font-size: clamp(40px, 6vw, 72px); font-weight: 700;
+    letter-spacing: -0.035em; line-height: 1.05; color: var(--fg);
+  }
+  html[lang="zh"] .pricing-head h2, html[lang="ja"] .pricing-head h2 { line-height: 1.2; letter-spacing: -0.02em; }
+  .pricing-head h2 .accent { color: var(--accent); }
+  .ks-tiers {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 20px; max-width: 1080px; margin: 0 auto;
+  }
+  @media (max-width: 880px) { .ks-tiers { grid-template-columns: 1fr; } }
+  .tier-card {
+    background: var(--bg-2); border: 1px solid var(--line);
+    padding: 40px 32px; border-radius: 12px; position: relative;
+    display: flex; flex-direction: column;
+  }
+  .tier-card.featured {
+    border-color: var(--accent);
+    box-shadow: 0 30px 80px rgba(0,0,0,0.4), 0 0 80px rgba(212, 165, 116, 0.08);
+  }
+  .tier-card .ribbon {
+    position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+    background: var(--accent); color: var(--bg);
+    font-size: 10px; font-weight: 700; letter-spacing: 0.2em;
+    text-transform: uppercase; padding: 5px 14px; border-radius: 999px;
+    font-family: var(--font-en);
+  }
+  .tier-card .tname {
+    font-size: 12px; letter-spacing: 0.25em; text-transform: uppercase;
+    color: var(--accent); font-weight: 600; margin-bottom: 12px;
+    font-family: var(--font-en);
+  }
+  .tier-card .tprice {
+    font-size: 56px; font-weight: 700; color: var(--fg);
+    letter-spacing: -0.04em; line-height: 1; margin-bottom: 4px;
+    font-family: var(--font-en);
+  }
+  .tier-card .tprice .strike {
+    color: var(--fg-dim);
+    font-size: 18px; text-decoration: line-through; font-weight: 400;
+    margin-right: 8px; letter-spacing: 0;
+  }
+  .tier-card .tprice .currency { color: var(--accent); }
+  .tier-card .tsub { font-size: 13px; color: var(--fg-muted); margin-bottom: 28px; }
+  .tier-card ul { list-style: none; margin-bottom: 32px; flex: 1; }
+  .tier-card li {
+    padding: 10px 0; font-size: 14px; color: var(--fg);
+    display: grid; grid-template-columns: 20px 1fr; gap: 12px;
+    line-height: 1.5;
+  }
+  .tier-card li .ic { color: var(--accent); font-weight: 700; }
+  .tier-card .stock {
+    font-size: 11px; color: var(--accent);
+    letter-spacing: 0.15em; text-transform: uppercase;
+    font-weight: 600; margin-bottom: 16px; font-family: var(--font-en);
+  }
+  .tier-card a.cta {
+    background: transparent; color: var(--fg);
+    border: 1px solid var(--line-strong);
+    padding: 14px 24px; border-radius: 4px;
+    font-size: 14px; font-weight: 600; text-align: center;
+    transition: all .15s;
+  }
+  .tier-card.featured a.cta {
+    background: var(--accent); color: var(--bg); border-color: var(--accent);
+  }
+  .tier-card a.cta:hover { border-color: var(--accent); color: var(--accent); }
+  .tier-card.featured a.cta:hover { background: var(--accent-bright); border-color: var(--accent-bright); color: var(--bg); }
+
+  /* ============================================================
+     HARDWARE
+     ============================================================ */
+  .hw { padding: 140px 0; text-align: center; position: relative; overflow: hidden; background: var(--bg-2); }
+  .hw::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse 60% 50% at 50% 60%, rgba(212, 165, 116, 0.16) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hw > * { position: relative; }
+  .hw .lab {
+    font-size: 11px; letter-spacing: 0.45em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 56px; font-weight: 600;
+    font-family: var(--font-en);
+  }
+  .hw h2 {
+    font-size: clamp(48px, 7vw, 96px); font-weight: 700; color: var(--fg);
+    line-height: 1.04; letter-spacing: -0.04em;
+    max-width: 1100px; margin: 0 auto 56px;
+  }
+  html[lang="zh"] .hw h2, html[lang="ja"] .hw h2 { line-height: 1.2; letter-spacing: -0.02em; }
+  .hw h2 .accent { color: var(--accent); }
+  .hw-box {
+    width: clamp(360px, 60vw, 760px); aspect-ratio: 16/9;
+    margin: 0 auto 24px;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow:
+      0 80px 160px rgba(0,0,0,0.6),
+      0 0 200px rgba(212, 165, 116, 0.25),
+      inset 0 1px 0 rgba(212, 165, 116, 0.16);
+    position: relative;
+  }
+  .hw-box img {
+    display: block;
+    width: 100%; height: 100%;
+    object-fit: cover;
+  }
+  .hw-box::after {
+    content: ''; position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 50% 100%, rgba(212, 165, 116, 0.18) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(0.9); }
+  }
+  .render-note {
+    font-size: 11px; color: var(--fg-dim);
+    letter-spacing: 0.1em; margin-bottom: 48px;
+    font-style: italic;
+  }
+  .hw-specs {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 24px; max-width: 880px; margin: 0 auto 56px;
+  }
+  @media (max-width: 880px) { .hw-specs { grid-template-columns: repeat(2, 1fr); } }
+  .hw-spec .val {
+    font-size: 56px; font-weight: 700; color: var(--accent);
+    letter-spacing: -0.04em; line-height: 1; font-family: var(--font-en);
+  }
+  .hw-spec .label {
+    font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--fg-muted); margin-top: 8px; font-weight: 500;
+    font-family: var(--font-en);
+  }
+  .hw-cap {
+    font-size: clamp(20px, 2.5vw, 28px); font-weight: 300; color: var(--fg);
+    line-height: 1.5; max-width: 880px; margin: 0 auto 48px;
+    letter-spacing: -0.005em;
+  }
+  html[lang="zh"] .hw-cap, html[lang="ja"] .hw-cap { line-height: 1.7; }
+  .hw-cap strong { color: var(--accent); font-weight: 600; }
+  .hw .cta-primary { background: var(--accent); color: var(--bg); padding: 20px 48px; border-radius: 4px; border: 0; font-size: 15px; font-weight: 600; letter-spacing: 0.02em; text-decoration: none; display: inline-block; }
+
+  /* ============================================================
+     PRE-ORDER FORM
+     ============================================================ */
+  .form-section { padding: 96px 0; }
+  .form-inner { max-width: 720px; margin: 0 auto; text-align: center; }
+  .form-section .lab {
+    font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 16px; font-weight: 600;
+    font-family: var(--font-en);
+  }
+  .form-section h2 {
+    font-size: clamp(36px, 5vw, 56px); font-weight: 700;
+    letter-spacing: -0.03em; line-height: 1.1; color: var(--fg);
+    margin-bottom: 16px;
+  }
+  html[lang="zh"] .form-section h2, html[lang="ja"] .form-section h2 { line-height: 1.25; letter-spacing: -0.015em; }
+  .form-section p {
+    font-size: 16px; color: var(--fg-muted);
+    margin-bottom: 40px; line-height: 1.6;
+  }
+  .form-section p strong { color: var(--accent); }
+  form { display: flex; flex-direction: column; gap: 16px; text-align: left; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 600px) { .form-row { grid-template-columns: 1fr; } }
+  input, select {
+    background: var(--bg-2); border: 1px solid var(--line-strong);
+    color: var(--fg); padding: 18px 20px;
+    font-family: inherit; font-size: 15px; border-radius: 4px;
+    transition: border-color .15s;
+  }
+  input:focus, select:focus { outline: none; border-color: var(--accent); }
+  input::placeholder { color: var(--fg-dim); }
+  form button {
+    background: var(--accent); color: var(--bg);
+    padding: 20px; border-radius: 4px; border: 0;
+    font-size: 15px; font-weight: 600; letter-spacing: 0.02em;
+    margin-top: 8px;
+  }
+  form button:hover { background: var(--accent-bright); }
+  .form-fine { font-size: 12px; color: var(--fg-muted); margin-top: 8px; text-align: center; }
+
+  /* ============================================================
+     FAQ
+     ============================================================ */
+  .faq { padding: 96px 0; background: var(--bg-2); }
+  .faq-head { margin-bottom: 56px; }
+  .faq-head .lab {
+    font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 16px; font-weight: 600;
+    font-family: var(--font-en);
+  }
+  .faq-head h2 {
+    font-size: clamp(40px, 6vw, 72px); font-weight: 700;
+    letter-spacing: -0.035em; line-height: 1.05; color: var(--fg);
+  }
+  html[lang="zh"] .faq-head h2, html[lang="ja"] .faq-head h2 { line-height: 1.2; letter-spacing: -0.02em; }
+  .faq-list { max-width: 880px; }
+  details { border-bottom: 1px solid var(--line); padding: 24px 0; }
+  details:first-child { border-top: 1px solid var(--line); }
+  summary {
+    font-size: 18px; font-weight: 600; color: var(--fg);
+    cursor: pointer; list-style: none;
+    display: flex; justify-content: space-between; align-items: center; gap: 24px;
+  }
+  summary::-webkit-details-marker { display: none; }
+  summary::after {
+    content: '+'; color: var(--accent);
+    font-size: 24px; font-weight: 400; flex-shrink: 0;
+  }
+  details[open] summary::after { content: '−'; }
+  details p { margin-top: 16px; font-size: 15px; color: var(--fg-muted); line-height: 1.7; }
+
+  /* ============================================================
+     FINAL CTA + FOOTER
+     ============================================================ */
+  .final {
+    padding: 120px 0; text-align: center;
+    background:
+      radial-gradient(ellipse 60% 50% at 50% 50%, rgba(212, 165, 116, 0.18) 0%, transparent 70%),
+      var(--bg);
+  }
+  .final h2 {
+    font-size: clamp(48px, 7vw, 96px); font-weight: 700;
+    line-height: 1.04; letter-spacing: -0.04em;
+    color: var(--fg); margin-bottom: 32px;
+  }
+  html[lang="zh"] .final h2, html[lang="ja"] .final h2 { line-height: 1.2; letter-spacing: -0.02em; }
+  .final h2 .accent { color: var(--accent); }
+  .final .sub {
+    font-size: 18px; color: var(--fg-muted);
+    margin-bottom: 48px; max-width: 720px;
+    margin-left: auto; margin-right: auto;
+  }
+
+  footer { border-top: 1px solid var(--line); padding: 48px 0; background: var(--bg-2); }
+  .footer-inner {
+    display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 32px; max-width: var(--maxw); margin: 0 auto; padding: 0 64px;
+  }
+  @media (max-width: 880px) {
+    .footer-inner { grid-template-columns: 1fr 1fr; padding: 0 24px; }
+  }
+  footer .mark { display: block; margin-bottom: 16px; }
+  footer .tag { font-size: 13px; color: var(--fg-muted); line-height: 1.6; }
+  .footer-col h4 {
+    font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 16px; font-weight: 600;
+    font-family: var(--font-en);
+  }
+  .footer-col a { display: block; padding: 6px 0; font-size: 14px; color: var(--fg-muted); }
+  .footer-col a:hover { color: var(--fg); }
+  .footer-bottom {
+    max-width: var(--maxw); margin: 48px auto 0;
+    padding: 24px 64px 0; border-top: 1px solid var(--line);
+    display: flex; justify-content: space-between;
+    font-size: 12px; color: var(--fg-muted); letter-spacing: 0.02em;
+  }
+  @media (max-width: 880px) { .footer-bottom { padding: 24px 24px 0; flex-direction: column; gap: 8px; } }
+  section { scroll-margin-top: 80px; }
+</style>
+</head>
+<body>
+
+<header class="chrome">
+  <div class="chrome-inner">
+    <a href="/" class="mark">11<span class="dot">.</span>agents<span class="tld">.ai</span></a>
+    <nav class="nav">
+      <a href="#agents" data-i18n="nav_agents">The 11</a>
+      <a href="#pricing" data-i18n="nav_pricing">Kickstarter</a>
+      <a href="#hardware" data-i18n="nav_hardware">Hardware</a>
+      <a href="#faq" data-i18n="nav_faq">FAQ</a>
+    </nav>
+    <div class="right-cluster">
+      <div class="lang-switch" role="group" aria-label="Language">
+        <button type="button" data-lang="en">EN</button>
+        <button type="button" data-lang="zh">中</button>
+        <button type="button" data-lang="ja">日</button>
+        <button type="button" data-lang="de">DE</button>
+      </div>
+      <a href="/login" class="signin" data-i18n="nav_signin">Sign in</a>
+      <a href="#reserve" class="buy" data-i18n="nav_buy">Notify me</a>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap hero-inner">
+    <div class="hero-eyebrow" data-i18n="hero_eyebrow">Launching on Kickstarter · Q3 2026</div>
+    <h1 class="slogan" data-i18n="hero_slogan">No business should struggle with <span class="gtm">GTM</span>.</h1>
+    <div class="sub" data-i18n="hero_sub"><strong>Eleven specialised AI agents.</strong> One hire. One year. $999. One device on your desk. Coming to Kickstarter Q3 2026.</div>
+    <div class="cta-row">
+      <a href="#reserve" class="cta-primary" data-i18n="hero_cta_primary">Get on the Kickstarter early-bird list <span class="price">→</span></a>
+      <a href="#agents" class="cta-secondary" data-i18n="hero_cta_secondary">See how it works ↓</a>
+    </div>
+    <div class="hero-meta">
+      <div><div class="label" data-i18n="hm_launch_l">LAUNCH</div><div class="val" data-i18n="hm_launch_v">Kickstarter · Q3 2026</div></div>
+      <div><div class="label" data-i18n="hm_eb_l">EARLY BIRD</div><div class="val" data-i18n="hm_eb_v">$799 · first 250 backers</div></div>
+      <div><div class="label" data-i18n="hm_dl_l">DELIVERY</div><div class="val" data-i18n="hm_dl_v">Shipped GTM artifacts, weekly</div></div>
+      <div><div class="label" data-i18n="hm_dr_l">DOCTRINE</div><div class="val" data-i18n="hm_dr_v">No Triangle = No Agent</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="video-strip">
+  <div class="wrap">
+    <div class="video-box">
+      <video src="/hero-video.mp4" poster="/hero-hardware.png" autoplay muted loop playsinline preload="metadata"></video>
+      <div class="video-caption">
+        <div class="vtitle" data-i18n="video_title">Meet the device.</div>
+        <div class="vmeta" data-i18n="video_sub">SEEDANCE · TEASER · 2026</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="promise">
+  <div class="wrap">
+    <div class="lab" data-i18n="promise_lab">/ THE PROMISE /</div>
+    <h2 data-i18n="promise_h2">You've hired <span class="accent">tools.</span><br>This time, <span class="accent">hire a team.</span></h2>
+    <div class="promise-grid">
+      <div class="promise-card">
+        <div class="idx">/ 01</div>
+        <h3 data-i18n="p1_h">Not advice. <strong>Output.</strong></h3>
+        <p data-i18n="p1_p">Other AI tools draft a plan and hand you a chatbot. We hand you 30 published posts, 12 ranked articles, 8 community threads, and a TikTok short — every week, reviewed before they ship.</p>
+      </div>
+      <div class="promise-card">
+        <div class="idx">/ 02</div>
+        <h3 data-i18n="p2_h">Not a subscription. <strong>A hire.</strong></h3>
+        <p data-i18n="p2_p">$999 once. The full 11-agent team works for you for a year. No per-seat. No per-token. No metered overage. One price, eleven specialists, zero surprises on your card.</p>
+      </div>
+      <div class="promise-card">
+        <div class="idx">/ 03</div>
+        <h3 data-i18n="p3_h">Not 1 agent. <strong>11 specialists.</strong></h3>
+        <p data-i18n="p3_p">X, Reddit, SEO, GEO, TikTok, KOC, KOL, MCP, Ads, owned channels, EDM — each in its own Iron Triangle (Builder + Reviewer + Cron). One team. Every channel that matters.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="agents" id="agents">
+  <div class="wrap">
+    <div class="agents-head">
+      <div class="lab" data-i18n="agents_lab">/ THE TEAM YOU HIRE /</div>
+      <h2 data-i18n="agents_h2">Eleven <span class="accent">specialists.</span><br>One swarm. Every channel.</h2>
+      <p data-i18n="agents_p">Each agent owns one growth channel end-to-end. Each is held in an Iron Triangle — a Builder who drafts, a Reviewer who decides, and a Cron who fires the loop. Nothing ships without all three.</p>
+    </div>
+    <div class="agents-grid">
+      <div class="agent"><div><div class="num">01</div><div class="ch">X</div></div><div class="ships" data-i18n="a1">30 ICP-aligned posts /mo</div></div>
+      <div class="agent"><div><div class="num">02</div><div class="ch">Reddit</div></div><div class="ships" data-i18n="a2">8 community threads /mo</div></div>
+      <div class="agent"><div><div class="num">03</div><div class="ch">SEO</div></div><div class="ships" data-i18n="a3">12 ranked articles + backlinks /mo</div></div>
+      <div class="agent"><div><div class="num">04</div><div class="ch">GEO</div></div><div class="ships" data-i18n="a4">AI-search citation pages</div></div>
+      <div class="agent"><div><div class="num">05</div><div class="ch">TikTok</div></div><div class="ships" data-i18n="a5">15 short-form videos /mo</div></div>
+      <div class="agent"><div><div class="num">06</div><div class="ch">KOC</div></div><div class="ships" data-i18n="a6">20 micro-creator partnerships /mo</div></div>
+      <div class="agent"><div><div class="num">07</div><div class="ch">KOL</div></div><div class="ships" data-i18n="a7">4 tier-1 creator deals /qtr</div></div>
+      <div class="agent"><div><div class="num">08</div><div class="ch">MCP</div></div><div class="ships" data-i18n="a8">Claude / Cursor / OpenAI tool listings</div></div>
+      <div class="agent"><div><div class="num">09</div><div class="ch">Ads</div></div><div class="ships" data-i18n="a9">launched + optimised campaigns /wk</div></div>
+      <div class="agent"><div><div class="num">10</div><div class="ch">Owned</div></div><div class="ships" data-i18n="a10">8 owned-channels self-publishing</div></div>
+      <div class="agent"><div><div class="num">11</div><div class="ch">EDM</div></div><div class="ships" data-i18n="a11">weekly newsletter + sequences</div></div>
+      <div class="agent bonus"><div><div class="num">+1</div><div class="ch">CS</div><div class="ch-tag" data-i18n="a12_tag">Included</div></div><div class="ships" data-i18n="a12">24/7 customer support + ticket triage</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="comp">
+  <div class="wrap">
+    <div class="comp-head">
+      <div>
+        <div class="lab" data-i18n="comp_lab">/ VS. THE ALTERNATIVES /</div>
+        <h2 data-i18n="comp_h2">You've tried <span class="accent">everything else.</span></h2>
+      </div>
+      <span class="muted" style="font-size:13px;" data-i18n="comp_sub">Straight numbers, no spin.</span>
+    </div>
+    <div class="comp-table-wrap">
+      <table class="comp-table">
+        <thead>
+          <tr>
+            <th></th>
+            <th data-i18n="c_h1">GTM agency</th>
+            <th data-i18n="c_h2">Marketing hire</th>
+            <th data-i18n="c_h3">DIY GPT / Claude</th>
+            <th class="us">11agents.ai</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="lbl" data-i18n="c_r1">Annual cost</td><td>$60k – 180k</td><td>$80k – 150k</td><td>$200 – 2k</td><td class="us">$999</td></tr>
+          <tr><td class="lbl" data-i18n="c_r2">Channels covered</td><td>2 – 3</td><td>1</td><td>1 – 2</td><td class="us">11</td></tr>
+          <tr><td class="lbl" data-i18n="c_r3">What you receive</td><td data-i18n="c_r3a">advice + decks</td><td data-i18n="c_r3b">mixed bag</td><td data-i18n="c_r3c">prompts you wrote</td><td class="us" data-i18n="c_r3d">shipped GTM artifacts</td></tr>
+          <tr><td class="lbl" data-i18n="c_r4">Onboarding</td><td data-i18n="c_r4a">4 – 8 weeks</td><td data-i18n="c_r4b">6 – 12 weeks</td><td data-i18n="c_r4c">same day</td><td class="us" data-i18n="c_r4d">24 hours</td></tr>
+          <tr><td class="lbl" data-i18n="c_r5">Reviewer in loop</td><td class="x" data-i18n="no">— no</td><td class="x">n/a</td><td class="x" data-i18n="no2">— no</td><td class="us check" data-i18n="c_r5d">✓ Iron Triangle</td></tr>
+          <tr><td class="lbl" data-i18n="c_r6">Hardware included</td><td class="x" data-i18n="no3">— no</td><td class="x" data-i18n="no4">— no</td><td class="x" data-i18n="no5">— no</td><td class="us check" data-i18n="c_r6d">✓ Lobster box</td></tr>
+          <tr><td class="lbl" data-i18n="c_r7">Subscription</td><td data-i18n="c_r7a">yearly retainer</td><td data-i18n="c_r7b">monthly salary</td><td data-i18n="c_r7c">per-token</td><td class="us check" data-i18n="c_r7d">✓ None — single $999</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="pricing" id="pricing">
+  <div class="wrap">
+    <div class="pricing-head">
+      <div class="lab" data-i18n="pricing_lab">/ KICKSTARTER TIERS · Q3 2026 /</div>
+      <h2 data-i18n="pricing_h2">Back us early. <br><span class="accent">Save up to $200.</span></h2>
+    </div>
+    <div class="ks-tiers">
+      <div class="tier-card">
+        <div class="tname" data-i18n="t1_n">Early Bird</div>
+        <div class="tprice"><span class="strike">$999</span><span class="currency">$</span>799</div>
+        <div class="tsub" data-i18n="t1_s">First 250 backers only</div>
+        <div class="stock" data-i18n="t1_st">◆ 250 / 250 still available</div>
+        <ul>
+          <li><span class="ic">◆</span><span data-i18n="t1_l1">1 × lobster-box device</span></li>
+          <li><span class="ic">◆</span><span data-i18n="t1_l2">11 agents, full year of service</span></li>
+          <li><span class="ic">◆</span><span data-i18n="t1_l3">$200 off the retail price</span></li>
+          <li><span class="ic">◆</span><span data-i18n="t1_l4">Founders' edition serial number</span></li>
+          <li><span class="ic">◆</span><span data-i18n="t1_l5">First-cohort shipping (Q3 2026)</span></li>
+        </ul>
+        <a href="#reserve" class="cta" data-i18n="t1_cta">Reserve early-bird spot →</a>
+      </div>
+      <div class="tier-card featured">
+        <div class="ribbon" data-i18n="t2_r">Most Popular</div>
+        <div class="tname" data-i18n="t2_n">Standard</div>
+        <div class="tprice"><span class="currency">$</span>999</div>
+        <div class="tsub" data-i18n="t2_s">Kickstarter campaign price</div>
+        <div class="stock" data-i18n="t2_st">◆ unlimited</div>
+        <ul>
+          <li><span class="ic">◆</span><span data-i18n="t2_l1">1 × lobster-box device</span></li>
+          <li><span class="ic">◆</span><span data-i18n="t2_l2">11 agents, full year of service</span></li>
+          <li><span class="ic">◆</span><span data-i18n="t2_l3">All channels included</span></li>
+          <li><span class="ic">◆</span><span data-i18n="t2_l4">30-day refund guarantee</span></li>
+          <li><span class="ic">◆</span><span data-i18n="t2_l5">Q3 – Q4 2026 shipping</span></li>
+        </ul>
+        <a href="#reserve" class="cta" data-i18n="t2_cta">Get notified at launch →</a>
+      </div>
+      <div class="tier-card">
+        <div class="tname" data-i18n="t3_n">Partner</div>
+        <div class="tprice"><span class="currency">$</span>2,999</div>
+        <div class="tsub" data-i18n="t3_s">Builders + agencies</div>
+        <div class="stock" data-i18n="t3_st">◆ 50 spots</div>
+        <ul>
+          <li><span class="ic">◆</span><span data-i18n="t3_l1">3 × lobster-box devices</span></li>
+          <li><span class="ic">◆</span><span data-i18n="t3_l2">3 client seats, full year</span></li>
+          <li><span class="ic">◆</span><span data-i18n="t3_l3">Early access to Channel SDK</span></li>
+          <li><span class="ic">◆</span><span data-i18n="t3_l4">Direct line to the founders</span></li>
+          <li><span class="ic">◆</span><span data-i18n="t3_l5">Priority shipping (Q3 2026)</span></li>
+        </ul>
+        <a href="#reserve" class="cta" data-i18n="t3_cta">Reserve partner tier →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hw" id="hardware">
+  <div class="wrap">
+    <div class="lab" data-i18n="hw_lab">◆ ONE MORE THING ◆</div>
+    <h2 data-i18n="hw_h2">A device on your desk. <br>An <span class="accent">11-person team</span> in the cloud.</h2>
+    <div class="hw-box"><img src="/hero-hardware.png" alt="11.agents.ai hardware device — sleek black aluminum unit with amber accent" loading="lazy"></div>
+    <div class="render-note" data-i18n="hw_note">— Industrial design concept render. Final unit in production.</div>
+    <div class="hw-specs">
+      <div class="hw-spec"><div class="val">11</div><div class="label" data-i18n="hs1">agents on board</div></div>
+      <div class="hw-spec"><div class="val">33</div><div class="label" data-i18n="hs2">iron triangle roles</div></div>
+      <div class="hw-spec"><div class="val">365</div><div class="label" data-i18n="hs3">days of shipping</div></div>
+      <div class="hw-spec"><div class="val">$999</div><div class="label" data-i18n="hs4">one-time, all-in</div></div>
+    </div>
+    <div class="hw-cap" data-i18n="hw_cap"><strong>One box.</strong> Eleven specialists. <br>A complete GTM team, hired for a year.</div>
+    <a href="#reserve" class="cta-primary" data-i18n="hw_cta">Notify me on launch day →</a>
+  </div>
+</section>
+
+<section class="form-section" id="reserve">
+  <div class="wrap form-inner">
+    <div class="lab" data-i18n="form_lab">/ KICKSTARTER EARLY-BIRD LIST /</div>
+    <h2 data-i18n="form_h2">Be the first 250.</h2>
+    <p data-i18n="form_p">Drop your email and we'll alert you the moment the Kickstarter campaign goes live — so you can claim the <strong>$799 early-bird tier</strong> before it sells out. No spam, just the launch alert and a couple of build updates between now and Q3 2026.</p>
+    <form action="/api/signup" method="POST">
+      <input type="hidden" name="source" value="11agents.ai homepage v1.2">
+      <input type="email" name="email" placeholder="you@yourcompany.com" required data-i18n-ph="ph_email">
+      <div class="form-row">
+        <input type="text" name="name" placeholder="Your name" data-i18n-ph="ph_name">
+        <input type="text" name="company" placeholder="Company" data-i18n-ph="ph_company">
+      </div>
+      <select name="tier" required>
+        <option value="" disabled selected data-i18n="sel_default">Which tier interests you?</option>
+        <option value="early-bird-799" data-i18n="sel_eb">Early Bird — $799 (first 250)</option>
+        <option value="standard-999" data-i18n="sel_std">Standard — $999</option>
+        <option value="partner-2999" data-i18n="sel_p">Partner — $2,999 (agencies / builders)</option>
+        <option value="just-curious" data-i18n="sel_jc">Just curious — keep me posted</option>
+      </select>
+      <button type="submit" data-i18n="form_btn">Add me to the early-bird list →</button>
+      <div class="form-fine" data-i18n="form_fine">We'll only email about 11agents.ai. Unsubscribe any time.</div>
+    </form>
+  </div>
+</section>
+
+<section class="faq" id="faq">
+  <div class="wrap">
+    <div class="faq-head">
+      <div class="lab" data-i18n="faq_lab">/ FAQ /</div>
+      <h2 data-i18n="faq_h2">Answers, no fluff.</h2>
+    </div>
+    <div class="faq-list">
+      <details>
+        <summary data-i18n="q1">What is 11agents.ai exactly?</summary>
+        <p data-i18n="q1a">A swarm of 11 specialised AI agents, each running one growth channel for your business — X, Reddit, SEO, GEO, TikTok, KOC, KOL, MCP, Ads, owned channels, and EDM. You hire them once for $999/year. They publish GTM artifacts every week. Every artifact is reviewed before it ships.</p>
+      </details>
+      <details>
+        <summary data-i18n="q2">What exactly do I get for $999?</summary>
+        <p data-i18n="q2a">One lobster-box hardware unit, etched with your founders' edition number. The full 11-agent swarm working for your business for 365 days from activation. Weekly published artifacts across all 11 channels. Iron Triangle review on every output. No subscription. No metered usage. No upsell.</p>
+      </details>
+      <details>
+        <summary data-i18n="q3">When does the Kickstarter campaign go live?</summary>
+        <p data-i18n="q3a">Q3 2026 (July – September). The early-bird $799 tier is limited to the first 250 backers. Sign up now and you'll get the campaign link the moment it goes live — so you can grab early-bird pricing before it sells out.</p>
+      </details>
+      <details>
+        <summary data-i18n="q4">What counts as a "shipped GTM artifact"?</summary>
+        <p data-i18n="q4a">Anything published to its destination platform with a public URL. An X post is shipped when it's live on X. An SEO article is shipped when it's indexed. A KOL partnership is shipped when the contract is signed. We don't bill for drafts — only for outputs that hit the world.</p>
+      </details>
+      <details>
+        <summary data-i18n="q5">Is the hardware actually required?</summary>
+        <p data-i18n="q5a">For the Founders' Edition, yes — the box is your activation key. We're keeping the first year hardware-gated to keep the cohort small (limited to 1,000 founders). Software-only access opens 2027 with the Open Platform.</p>
+      </details>
+      <details>
+        <summary data-i18n="q6">Who reviews the agent outputs before they ship?</summary>
+        <p data-i18n="q6a">Every Iron Triangle has a Reviewer slot. For your founders' year, that's a real human on our team holding the bar against the channel's rubric. Future versions of the platform will let you appoint your own Reviewers — including yourself.</p>
+      </details>
+      <details>
+        <summary data-i18n="q7">What about my IP and brand voice?</summary>
+        <p data-i18n="q7a">You retain full ownership of everything we produce on your behalf. We train the agents on your existing voice (one onboarding call, a couple of past posts, your brand guide if you have one) and they ship in your voice forever after.</p>
+      </details>
+      <details>
+        <summary data-i18n="q8">What's the refund policy?</summary>
+        <p data-i18n="q8a">30 days from your activation date, no questions asked. We refund the full $999 (including shipping). After 30 days you can still cancel any future renewal — we just won't pro-rate the current year.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<section class="final">
+  <div class="wrap">
+    <h2 data-i18n="final_h2">Eleven specialists. <br><span class="accent">One hire.</span> $999.</h2>
+    <p class="sub" data-i18n="final_sub">Launching on Kickstarter Q3 2026. Be the first 250.</p>
+    <a href="#reserve" class="cta-primary" data-i18n="final_cta">Get on the early-bird list →</a>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div>
+      <a class="mark">11<span class="dot">.</span>agents<span class="tld">.ai</span></a>
+      <div class="tag" data-i18n="ft_tag">A swarm of eleven specialised GTM agents.<br>Built on the Iron Triangle doctrine.<br>Coming to Kickstarter Q3 2026.</div>
+    </div>
+    <div class="footer-col">
+      <h4 data-i18n="ft_h_product">Product</h4>
+      <a href="#agents" data-i18n="nav_agents2">The 11 Agents</a>
+      <a href="#pricing" data-i18n="ft_a_tiers">Kickstarter Tiers</a>
+      <a href="#hardware" data-i18n="ft_a_hw">Hardware</a>
+      <a href="#faq" data-i18n="ft_a_faq">FAQ</a>
+    </div>
+    <div class="footer-col">
+      <h4 data-i18n="ft_h_lang">Languages</h4>
+      <a href="#" onclick="setLang('en');return false;">English</a>
+      <a href="#" onclick="setLang('zh');return false;">中文</a>
+      <a href="#" onclick="setLang('ja');return false;">日本語</a>
+      <a href="#" onclick="setLang('de');return false;">Deutsch</a>
+    </div>
+    <div class="footer-col">
+      <h4 data-i18n="ft_h_company">Company</h4>
+      <a href="mailto:mguozhen03@gmail.com" data-i18n="ft_a_contact">Contact founder</a>
+      <a href="#reserve" data-i18n="ft_a_join">Join the list</a>
+      <a href="#" data-i18n="ft_a_platform">Open Platform (2027)</a>
+      <a href="/login.html" data-i18n="ft_a_admin">Admin sign-in</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 11agents.ai · all rights reserved</span>
+    <span>Build v1.1 · 2026-05-27</span>
+  </div>
+</footer>
+
+<script>
+const T = {
+  en: {
+    nav_agents: "The 11", nav_pricing: "Kickstarter", nav_hardware: "Hardware", nav_faq: "FAQ", nav_buy: "Notify me", nav_signin: "Sign in",
+    hero_eyebrow: "Launching on Kickstarter · Q3 2026",
+    hero_slogan: 'No business should struggle with <span class="gtm">GTM</span>.',
+    hero_sub: "<strong>Eleven specialised AI agents.</strong> One hire. One year. $999. One device on your desk. Coming to Kickstarter Q3 2026.",
+    hero_cta_primary: 'Get on the Kickstarter early-bird list <span class="price">→</span>',
+    hero_cta_secondary: "See how it works ↓",
+    hm_launch_l: "LAUNCH", hm_launch_v: "Kickstarter · Q3 2026",
+    hm_eb_l: "EARLY BIRD", hm_eb_v: "$799 · first 250 backers",
+    hm_dl_l: "DELIVERY", hm_dl_v: "Shipped GTM artifacts, weekly",
+    hm_dr_l: "DOCTRINE", hm_dr_v: "No Triangle = No Agent",
+    video_title: "Meet the device.",
+    video_sub: "SEEDANCE · TEASER · 2026",
+    promise_lab: "/ THE PROMISE /",
+    promise_h2: 'You\'ve hired <span class="accent">tools.</span><br>This time, <span class="accent">hire a team.</span>',
+    p1_h: "Not advice. <strong>Output.</strong>",
+    p1_p: "Other AI tools draft a plan and hand you a chatbot. We hand you 30 published posts, 12 ranked articles, 8 community threads, and a TikTok short — every week, reviewed before they ship.",
+    p2_h: "Not a subscription. <strong>A hire.</strong>",
+    p2_p: "$999 once. The full 11-agent team works for you for a year. No per-seat. No per-token. No metered overage. One price, eleven specialists, zero surprises on your card.",
+    p3_h: "Not 1 agent. <strong>11 specialists.</strong>",
+    p3_p: "X, Reddit, SEO, GEO, TikTok, KOC, KOL, MCP, Ads, owned channels, EDM — each in its own Iron Triangle (Builder + Reviewer + Cron). One team. Every channel that matters.",
+    agents_lab: "/ THE TEAM YOU HIRE /",
+    agents_h2: 'Eleven <span class="accent">specialists.</span><br>One swarm. Every channel.',
+    agents_p: "Each agent owns one growth channel end-to-end. Each is held in an Iron Triangle — a Builder who drafts, a Reviewer who decides, and a Cron who fires the loop. Nothing ships without all three.",
+    a1: "30 ICP-aligned posts /mo", a2: "8 community threads /mo", a3: "12 ranked articles + backlinks /mo",
+    a4: "AI-search citation pages", a5: "15 short-form videos /mo", a6: "20 micro-creator partnerships /mo",
+    a7: "4 tier-1 creator deals /qtr", a8: "Claude / Cursor / OpenAI tool listings",
+    a9: "launched + optimised campaigns /wk", a10: "8 owned-channels self-publishing", a11: "weekly newsletter + sequences",
+    a12: "24/7 customer support + ticket triage", a12_tag: "Included",
+    comp_lab: "/ VS. THE ALTERNATIVES /",
+    comp_h2: 'You\'ve tried <span class="accent">everything else.</span>',
+    comp_sub: "Straight numbers, no spin.",
+    c_h1: "GTM agency", c_h2: "Marketing hire", c_h3: "DIY GPT / Claude",
+    c_r1: "Annual cost", c_r2: "Channels covered", c_r3: "What you receive",
+    c_r3a: "advice + decks", c_r3b: "mixed bag", c_r3c: "prompts you wrote", c_r3d: "shipped GTM artifacts",
+    c_r4: "Onboarding", c_r4a: "4 – 8 weeks", c_r4b: "6 – 12 weeks", c_r4c: "same day", c_r4d: "24 hours",
+    c_r5: "Reviewer in loop", c_r5d: "✓ Iron Triangle",
+    c_r6: "Hardware included", c_r6d: "✓ Lobster box",
+    c_r7: "Subscription", c_r7a: "yearly retainer", c_r7b: "monthly salary", c_r7c: "per-token", c_r7d: "✓ None — single $999",
+    no: "— no", no2: "— no", no3: "— no", no4: "— no", no5: "— no",
+    pricing_lab: "/ KICKSTARTER TIERS · Q3 2026 /",
+    pricing_h2: 'Back us early. <br><span class="accent">Save up to $200.</span>',
+    t1_n: "Early Bird", t1_s: "First 250 backers only", t1_st: "◆ 250 / 250 still available",
+    t1_l1: "1 × lobster-box device", t1_l2: "11 agents, full year of service", t1_l3: "$200 off the retail price",
+    t1_l4: "Founders' edition serial number", t1_l5: "First-cohort shipping (Q3 2026)",
+    t1_cta: "Reserve early-bird spot →",
+    t2_r: "Most Popular", t2_n: "Standard", t2_s: "Kickstarter campaign price", t2_st: "◆ unlimited",
+    t2_l1: "1 × lobster-box device", t2_l2: "11 agents, full year of service",
+    t2_l3: "All channels included", t2_l4: "30-day refund guarantee", t2_l5: "Q3 – Q4 2026 shipping",
+    t2_cta: "Get notified at launch →",
+    t3_n: "Partner", t3_s: "Builders + agencies", t3_st: "◆ 50 spots",
+    t3_l1: "3 × lobster-box devices", t3_l2: "3 client seats, full year",
+    t3_l3: "Early access to Channel SDK", t3_l4: "Direct line to the founders", t3_l5: "Priority shipping (Q3 2026)",
+    t3_cta: "Reserve partner tier →",
+    hw_lab: "◆ ONE MORE THING ◆",
+    hw_h2: 'A device on your desk. <br>An <span class="accent">11-person team</span> in the cloud.',
+    hw_note: "— Final industrial design render in production. Early concept shown.",
+    hs1: "agents on board", hs2: "iron triangle roles", hs3: "days of shipping", hs4: "one-time, all-in",
+    hw_cap: '<strong>One box.</strong> Eleven specialists. <br>A complete GTM team, hired for a year.',
+    hw_cta: "Notify me on launch day →",
+    form_lab: "/ KICKSTARTER EARLY-BIRD LIST /",
+    form_h2: "Be the first 250.",
+    form_p: 'Drop your email and we\'ll alert you the moment the Kickstarter campaign goes live — so you can claim the <strong>$799 early-bird tier</strong> before it sells out. No spam, just the launch alert and a couple of build updates between now and Q3 2026.',
+    ph_email: "you@yourcompany.com", ph_name: "Your name", ph_company: "Company",
+    sel_default: "Which tier interests you?",
+    sel_eb: "Early Bird — $799 (first 250)", sel_std: "Standard — $999",
+    sel_p: "Partner — $2,999 (agencies / builders)", sel_jc: "Just curious — keep me posted",
+    form_btn: "Add me to the early-bird list →",
+    form_fine: "We'll only email about 11agents.ai. Unsubscribe any time.",
+    faq_lab: "/ FAQ /", faq_h2: "Answers, no fluff.",
+    q1: "What is 11agents.ai exactly?",
+    q1a: "A swarm of 11 specialised AI agents, each running one growth channel for your business — X, Reddit, SEO, GEO, TikTok, KOC, KOL, MCP, Ads, owned channels, and EDM. You hire them once for $999/year. They publish GTM artifacts every week. Every artifact is reviewed before it ships.",
+    q2: "What exactly do I get for $999?",
+    q2a: "One lobster-box hardware unit, etched with your founders' edition number. The full 11-agent swarm working for your business for 365 days from activation. Weekly published artifacts across all 11 channels. Iron Triangle review on every output. No subscription. No metered usage. No upsell.",
+    q3: "When does the Kickstarter campaign go live?",
+    q3a: "Q3 2026 (July – September). The early-bird $799 tier is limited to the first 250 backers. Sign up now and you'll get the campaign link the moment it goes live — so you can grab early-bird pricing before it sells out.",
+    q4: "What counts as a \"shipped GTM artifact\"?",
+    q4a: "Anything published to its destination platform with a public URL. An X post is shipped when it's live on X. An SEO article is shipped when it's indexed. A KOL partnership is shipped when the contract is signed. We don't bill for drafts — only for outputs that hit the world.",
+    q5: "Is the hardware actually required?",
+    q5a: "For the Founders' Edition, yes — the box is your activation key. We're keeping the first year hardware-gated to keep the cohort small (limited to 1,000 founders). Software-only access opens 2027 with the Open Platform.",
+    q6: "Who reviews the agent outputs before they ship?",
+    q6a: "Every Iron Triangle has a Reviewer slot. For your founders' year, that's a real human on our team holding the bar against the channel's rubric. Future versions of the platform will let you appoint your own Reviewers — including yourself.",
+    q7: "What about my IP and brand voice?",
+    q7a: "You retain full ownership of everything we produce on your behalf. We train the agents on your existing voice (one onboarding call, a couple of past posts, your brand guide if you have one) and they ship in your voice forever after.",
+    q8: "What's the refund policy?",
+    q8a: "30 days from your activation date, no questions asked. We refund the full $999 (including shipping). After 30 days you can still cancel any future renewal — we just won't pro-rate the current year.",
+    final_h2: 'Eleven specialists. <br><span class="accent">One hire.</span> $999.',
+    final_sub: "Launching on Kickstarter Q3 2026. Be the first 250.",
+    final_cta: "Get on the early-bird list →",
+    ft_tag: "A swarm of eleven specialised GTM agents.<br>Built on the Iron Triangle doctrine.<br>Coming to Kickstarter Q3 2026.",
+    ft_h_product: "Product", nav_agents2: "The 11 Agents", ft_a_tiers: "Kickstarter Tiers", ft_a_hw: "Hardware", ft_a_faq: "FAQ",
+    ft_h_lang: "Languages",
+    ft_h_company: "Company", ft_a_contact: "Contact founder", ft_a_join: "Join the list", ft_a_platform: "Open Platform (2027)", ft_a_admin: "Admin sign-in"
+  },
+  zh: {
+    nav_agents: "11 位员工", nav_pricing: "Kickstarter", nav_hardware: "硬件", nav_faq: "常见问题", nav_buy: "等通知", nav_signin: "登录",
+    hero_eyebrow: "Kickstarter · 2026 Q3 上线",
+    hero_slogan: '让天下没有难做的 <span class="gtm">GTM</span>。',
+    hero_sub: "<strong>11 位专业 AI 增长员工。</strong>一次雇佣，一年期限，999 美金。一个设备摆在桌上。Kickstarter 2026 Q3 上线。",
+    hero_cta_primary: '加入 Kickstarter 早鸟通知 <span class="price">→</span>',
+    hero_cta_secondary: "看看它怎么运作 ↓",
+    hm_launch_l: "上线", hm_launch_v: "Kickstarter · 2026 Q3",
+    hm_eb_l: "早鸟价", hm_eb_v: "$799 · 限前 250 名",
+    hm_dl_l: "交付", hm_dl_v: "每周交付 GTM 成果物",
+    hm_dr_l: "原则", hm_dr_v: "没有铁三角就没有 Agent",
+    video_title: "认识这台设备。",
+    video_sub: "SEEDANCE · 预告 · 2026",
+    promise_lab: "/ 我们的承诺 /",
+    promise_h2: '你已经雇过<span class="accent">工具</span>了。<br>这次，<span class="accent">雇一支团队</span>。',
+    p1_h: "不是建议。<strong>是产出。</strong>",
+    p1_p: "其他 AI 工具给你一份方案 + 一个对话框。我们交付：每周 30 条已发布的推文、12 篇收录的 SEO 文章、8 条社区帖子、1 条 TikTok 短视频 —— 每一份都经过审核才上线。",
+    p2_h: "不是订阅。<strong>是雇佣。</strong>",
+    p2_p: "$999 一次性。11 位员工为你工作整整一年。没有按席位，没有按 token，没有超额计费。一个价格，11 位专家，账单上不会有任何意外。",
+    p3_h: "不是 1 个 Agent。<strong>是 11 位专家。</strong>",
+    p3_p: "X、Reddit、SEO、GEO、TikTok、KOC、KOL、MCP、Ads、自有渠道、EDM —— 每一位都在自己的铁三角中（Builder + Reviewer + Cron）。一支团队，覆盖所有重要渠道。",
+    agents_lab: "/ 你雇佣的团队 /",
+    agents_h2: '11 位 <span class="accent">专家</span>。<br>一个集群。覆盖每一个增长渠道。',
+    agents_p: "每位 Agent 负责一个增长渠道，端到端。每位都由一个铁三角守护 —— Builder 起草、Reviewer 决策、Cron 触发循环。三个角色缺一不可，否则什么也不发布。",
+    a1: "每月 30 条精准推文", a2: "每月 8 条社区帖", a3: "每月 12 篇文章 + 反向链接",
+    a4: "AI 搜索引擎收录页", a5: "每月 15 条短视频", a6: "每月 20 个 KOC 合作",
+    a7: "每季度 4 个头部 KOL", a8: "上 Claude / Cursor / OpenAI 工具栏",
+    a9: "每周投放 + 优化广告", a10: "8 个自有渠道自动发布", a11: "周刊 + 邮件序列",
+    a12: "24/7 客户服务 + 工单分流", a12_tag: "随团包含",
+    comp_lab: "/ 对比其他选项 /",
+    comp_h2: '你试过<span class="accent">其他所有办法</span>了。',
+    comp_sub: "硬数字，不绕弯。",
+    c_h1: "GTM 代理公司", c_h2: "全职市场员工", c_h3: "自己 DIY GPT",
+    c_r1: "年成本", c_r2: "覆盖渠道", c_r3: "你得到什么",
+    c_r3a: "建议 + PPT", c_r3b: "混合产出", c_r3c: "你自己写的 prompt", c_r3d: "已发布的 GTM 成果物",
+    c_r4: "入职周期", c_r4a: "4 – 8 周", c_r4b: "6 – 12 周", c_r4c: "当天", c_r4d: "24 小时内",
+    c_r5: "审核机制", c_r5d: "✓ 铁三角",
+    c_r6: "包含硬件", c_r6d: "✓ Lobster box",
+    c_r7: "订阅", c_r7a: "年度合约", c_r7b: "月薪", c_r7c: "按 token 计费", c_r7d: "✓ 无 —— 一次性 $999",
+    no: "— 无", no2: "— 无", no3: "— 无", no4: "— 无", no5: "— 无",
+    pricing_lab: "/ Kickstarter 档位 · 2026 Q3 /",
+    pricing_h2: '早鸟支持。<br><span class="accent">最多省 $200。</span>',
+    t1_n: "早鸟档", t1_s: "限前 250 名支持者", t1_st: "◆ 还剩 250 / 250 名额",
+    t1_l1: "1 × lobster-box 设备", t1_l2: "11 个 Agent 全年服务", t1_l3: "比零售价省 $200",
+    t1_l4: "创始版编号", t1_l5: "首批发货（2026 Q3）",
+    t1_cta: "锁定早鸟名额 →",
+    t2_r: "热门选择", t2_n: "标准档", t2_s: "Kickstarter 活动价", t2_st: "◆ 不限量",
+    t2_l1: "1 × lobster-box 设备", t2_l2: "11 个 Agent 全年服务",
+    t2_l3: "全部渠道", t2_l4: "30 天无理由退款", t2_l5: "2026 Q3 – Q4 发货",
+    t2_cta: "上线时通知我 →",
+    t3_n: "合伙档", t3_s: "服务商 + 团队", t3_st: "◆ 限 50 名",
+    t3_l1: "3 × lobster-box 设备", t3_l2: "3 个客户席位，全年",
+    t3_l3: "Channel SDK 早期访问", t3_l4: "直通创始人通道", t3_l5: "优先发货（2026 Q3）",
+    t3_cta: "锁定合伙档 →",
+    hw_lab: "◆ 还有一件事 ◆",
+    hw_h2: '桌面上的一台设备。<br>云端的 <span class="accent">11 人团队</span>。',
+    hw_note: "— 最终工业设计渲染图制作中，本图为概念稿。",
+    hs1: "Agent 数量", hs2: "铁三角岗位", hs3: "服务天数", hs4: "一次性买断",
+    hw_cap: '<strong>一个盒子。</strong>11 位专家。<br>一支完整的 GTM 团队，雇佣一整年。',
+    hw_cta: "上线日通知我 →",
+    form_lab: "/ Kickstarter 早鸟名单 /",
+    form_h2: "成为前 250 人。",
+    form_p: '留下你的邮箱，Kickstarter 上线那一刻我们立即通知你 —— 抢到 <strong>$799 早鸟档位</strong> 再被卖完之前。没有垃圾邮件，只有上线通知和零星的开发更新。',
+    ph_email: "you@yourcompany.com", ph_name: "你的名字", ph_company: "公司",
+    sel_default: "你对哪个档位感兴趣？",
+    sel_eb: "早鸟 — $799（限前 250）", sel_std: "标准 — $999",
+    sel_p: "合伙 — $2,999（服务商 / 团队）", sel_jc: "只是看看 — 保持关注",
+    form_btn: "把我加进早鸟名单 →",
+    form_fine: "我们只会发送与 11agents.ai 相关的邮件。随时退订。",
+    faq_lab: "/ 常见问题 /", faq_h2: "干货答案，不绕弯。",
+    q1: "11agents.ai 到底是什么？",
+    q1a: "11 位专精的 AI Agent 组成的集群，每位负责一个增长渠道 —— X、Reddit、SEO、GEO、TikTok、KOC、KOL、MCP、Ads、自有渠道、EDM。你一次性花 $999 雇佣一年。他们每周发布 GTM 成果物，每一份都经过审核才上线。",
+    q2: "$999 到底买到什么？",
+    q2a: "一台 lobster-box 硬件设备，蚀刻你的创始版编号。11 位 Agent 为你的业务工作 365 天。所有 11 个渠道每周都有产出。每份产出由铁三角审核。无订阅，无按量计费，无后续追加。",
+    q3: "Kickstarter 活动什么时候上线？",
+    q3a: "2026 年第三季度（7 – 9 月）。$799 早鸟档限前 250 名支持者。现在留下邮箱，活动一上线我们立即把链接发给你 —— 让你赶在早鸟卖完之前下手。",
+    q4: "「已发布的 GTM 成果物」具体是什么意思？",
+    q4a: "任何已经发布到目标平台并拥有公开 URL 的内容。推文在 X 上线就算已发布。SEO 文章被 Google 收录就算已发布。KOL 合作签约就算已发布。我们不为草稿计费 —— 只为真正上线的产出计费。",
+    q5: "硬件是必需的吗？",
+    q5a: "对于创始版来说，是的 —— 盒子是你的激活密钥。我们故意把首年限制成硬件激活，把首批客户控制在 1000 人以内。纯软件访问会在 2027 年随开放平台一起推出。",
+    q6: "Agent 输出在发布前由谁审核？",
+    q6a: "每个铁三角都有一个 Reviewer 角色。在你的创始年，由我们团队的真人按照该渠道的标尺把关。未来版本会允许你指定自己的 Reviewer，包括你自己。",
+    q7: "我的知识产权和品牌调性怎么保护？",
+    q7a: "我们生产的所有内容归你所有。我们会基于你现有的语言风格训练 Agent（一次入职电话、几条过往帖子、品牌指南如有），之后他们一直用你的口吻发布。",
+    q8: "退款政策是怎样的？",
+    q8a: "激活日起 30 天内无理由退款，全额 $999（含运费）。30 天后你仍然可以取消未来续约，只是本年不按比例退款。",
+    final_h2: '11 位专家。<br><span class="accent">一次雇佣。</span>$999。',
+    final_sub: "Kickstarter 2026 Q3 上线。成为前 250 人。",
+    final_cta: "加入早鸟名单 →",
+    ft_tag: "11 位专精 GTM Agent 组成的集群。<br>基于铁三角原则构建。<br>Kickstarter 2026 Q3 上线。",
+    ft_h_product: "产品", nav_agents2: "11 位员工", ft_a_tiers: "Kickstarter 档位", ft_a_hw: "硬件", ft_a_faq: "常见问题",
+    ft_h_lang: "语言",
+    ft_h_company: "公司", ft_a_contact: "联系创始人", ft_a_join: "加入名单", ft_a_platform: "开放平台（2027）", ft_a_admin: "管理员登录"
+  },
+  ja: {
+    nav_agents: "11 名のチーム", nav_pricing: "Kickstarter", nav_hardware: "ハードウェア", nav_faq: "よくある質問", nav_buy: "通知を受け取る", nav_signin: "ログイン",
+    hero_eyebrow: "Kickstarter にて 2026 Q3 ローンチ",
+    hero_slogan: 'すべての企業に、難しくない <span class="gtm">GTM</span> を。',
+    hero_sub: "<strong>11 名の専門 AI エージェント。</strong>一度の採用、1 年契約、999 ドル。デスクに 1 台のデバイス。Kickstarter にて 2026 Q3 ローンチ予定。",
+    hero_cta_primary: 'Kickstarter 早期割引リストに登録 <span class="price">→</span>',
+    hero_cta_secondary: "仕組みを見る ↓",
+    hm_launch_l: "ローンチ", hm_launch_v: "Kickstarter · 2026 Q3",
+    hm_eb_l: "早期割引", hm_eb_v: "$799 · 先着 250 名",
+    hm_dl_l: "成果物", hm_dl_v: "毎週、公開済みの GTM 成果物を",
+    hm_dr_l: "原則", hm_dr_v: "トライアングルなければエージェントもなし",
+    video_title: "このデバイスを。",
+    video_sub: "SEEDANCE · ティーザー · 2026",
+    promise_lab: "/ お約束 /",
+    promise_h2: 'これまで <span class="accent">ツール</span> を雇ってきた。<br>今度は <span class="accent">チーム</span> を雇う番だ。',
+    p1_h: "提案ではない。<strong>成果物だ。</strong>",
+    p1_p: "他の AI ツールはプランを書いてチャットボットを渡すだけ。私たちは毎週、公開済みの投稿 30 本、ランクインした記事 12 本、コミュニティスレッド 8 本、そして TikTok ショート 1 本 —— すべてレビューを通過してから世に出る。",
+    p2_h: "サブスクではない。<strong>採用だ。</strong>",
+    p2_p: "$999 を一度だけ。11 名のチームが 1 年間あなたのために働く。席数課金もトークン課金も超過課金もない。1 つの価格、11 名のスペシャリスト、請求書にサプライズなし。",
+    p3_h: "1 体のエージェントではない。<strong>11 名のスペシャリストだ。</strong>",
+    p3_p: "X、Reddit、SEO、GEO、TikTok、KOC、KOL、MCP、Ads、自社チャネル、EDM —— それぞれが独自のアイアントライアングル（Builder + Reviewer + Cron）に守られている。1 つのチーム、すべての重要なチャネル。",
+    agents_lab: "/ あなたが雇うチーム /",
+    agents_h2: '11 名の <span class="accent">スペシャリスト</span>。<br>1 つの群れ。すべてのチャネル。',
+    agents_p: "各エージェントは 1 つの成長チャネルを最初から最後まで担当します。それぞれがアイアントライアングルに守られている —— 起草する Builder、判定する Reviewer、ループを駆動する Cron。3 つ揃わなければ何も世に出ません。",
+    a1: "ICP に沿った投稿 30 本/月", a2: "コミュニティスレッド 8 本/月", a3: "ランクイン記事 12 本 + 被リンク/月",
+    a4: "AI 検索エンジン引用ページ", a5: "ショート動画 15 本/月", a6: "マイクロインフルエンサー連携 20 件/月",
+    a7: "トップ KOL 案件 4 件/四半期", a8: "Claude / Cursor / OpenAI ツール一覧へ掲載",
+    a9: "毎週、配信開始 + 最適化済み広告キャンペーン", a10: "自社チャネル 8 つで自動配信", a11: "週次ニュースレター + シーケンス",
+    a12: "24/7 カスタマーサポート + チケット仕分け", a12_tag: "込み",
+    comp_lab: "/ 他の選択肢との比較 /",
+    comp_h2: 'すでに <span class="accent">他の手段</span> は試した。',
+    comp_sub: "数字で語る、誇張なし。",
+    c_h1: "GTM 代理店", c_h2: "マーケ採用", c_h3: "自前 GPT / Claude",
+    c_r1: "年間コスト", c_r2: "対応チャネル数", c_r3: "受け取れるもの",
+    c_r3a: "助言 + 資料", c_r3b: "混在", c_r3c: "自分で書いた prompt", c_r3d: "公開済みの GTM 成果物",
+    c_r4: "オンボーディング", c_r4a: "4 – 8 週間", c_r4b: "6 – 12 週間", c_r4c: "当日", c_r4d: "24 時間以内",
+    c_r5: "レビューあり", c_r5d: "✓ アイアントライアングル",
+    c_r6: "ハードウェア込み", c_r6d: "✓ Lobster box",
+    c_r7: "サブスク", c_r7a: "年間契約", c_r7b: "月給", c_r7c: "トークン課金", c_r7d: "✓ なし — 一度きりの $999",
+    no: "— なし", no2: "— なし", no3: "— なし", no4: "— なし", no5: "— なし",
+    pricing_lab: "/ Kickstarter ティア · 2026 Q3 /",
+    pricing_h2: '早期にバックアップ。<br><span class="accent">最大 $200 オフ。</span>',
+    t1_n: "早期割引", t1_s: "先着 250 名限定", t1_st: "◆ 残り 250 / 250 枠",
+    t1_l1: "Lobster-box デバイス × 1", t1_l2: "エージェント 11 名、フル年間サービス", t1_l3: "通常価格より $200 オフ",
+    t1_l4: "ファウンダーズ版シリアル番号", t1_l5: "第 1 ロット出荷（2026 Q3）",
+    t1_cta: "早期割引枠を確保 →",
+    t2_r: "人気", t2_n: "スタンダード", t2_s: "Kickstarter キャンペーン価格", t2_st: "◆ 数量無制限",
+    t2_l1: "Lobster-box デバイス × 1", t2_l2: "エージェント 11 名、フル年間サービス",
+    t2_l3: "全チャネル込み", t2_l4: "30 日返金保証", t2_l5: "2026 Q3 – Q4 出荷",
+    t2_cta: "ローンチ時に通知 →",
+    t3_n: "パートナー", t3_s: "ビルダー + 代理店", t3_st: "◆ 限定 50 名",
+    t3_l1: "Lobster-box デバイス × 3", t3_l2: "クライアント席 3 枠、フル年間",
+    t3_l3: "Channel SDK 先行アクセス", t3_l4: "創業者直通ライン", t3_l5: "優先出荷（2026 Q3）",
+    t3_cta: "パートナーティアを確保 →",
+    hw_lab: "◆ ワン・モア・シング ◆",
+    hw_h2: 'デスクには 1 台のデバイス。<br>クラウドには <span class="accent">11 名のチーム</span>。',
+    hw_note: "— 最終工業デザインのレンダリングは制作中。本図はコンセプト案です。",
+    hs1: "搭載エージェント", hs2: "アイアントライアングル役割", hs3: "稼働日数", hs4: "一括、すべて込み",
+    hw_cap: '<strong>1 つの箱。</strong>11 名のスペシャリスト。<br>1 年間雇用される、完全な GTM チーム。',
+    hw_cta: "ローンチ日に通知 →",
+    form_lab: "/ Kickstarter 早期割引リスト /",
+    form_h2: "先着 250 名になる。",
+    form_p: 'メールアドレスをご登録いただければ、Kickstarter キャンペーン開始の瞬間にお知らせします —— <strong>$799 の早期割引ティア</strong> が完売する前に確保できます。スパムなし、ローンチ通知と数件の進捗アップデートのみ。',
+    ph_email: "you@yourcompany.com", ph_name: "お名前", ph_company: "会社名",
+    sel_default: "ご興味のあるティアは？",
+    sel_eb: "早期割引 — $799（先着 250 名）", sel_std: "スタンダード — $999",
+    sel_p: "パートナー — $2,999（代理店 / ビルダー）", sel_jc: "情報が欲しいだけ",
+    form_btn: "早期割引リストに登録 →",
+    form_fine: "11agents.ai に関するメールのみ送信します。いつでも配信停止可能。",
+    faq_lab: "/ よくある質問 /", faq_h2: "本質的な答え、回りくどさなし。",
+    q1: "11agents.ai とは正確には何ですか？",
+    q1a: "11 名の専門 AI エージェントの群れです。それぞれが御社の成長チャネルを 1 つずつ担当します —— X、Reddit、SEO、GEO、TikTok、KOC、KOL、MCP、Ads、自社チャネル、EDM。一度きりの $999/年で雇用。毎週 GTM 成果物が公開され、すべてレビュー後に世に出ます。",
+    q2: "$999 で具体的に何が手に入りますか？",
+    q2a: "ファウンダーズ版シリアル番号が刻印された Lobster-box ハードウェア 1 台。アクティベーション日から 365 日間、11 名のエージェント群が御社のために稼働。11 チャネルすべてで毎週成果物を公開。すべての出力にアイアントライアングルレビュー付き。サブスクなし、従量課金なし、アップセルなし。",
+    q3: "Kickstarter キャンペーンはいつ開始されますか？",
+    q3a: "2026 年第 3 四半期（7 月 – 9 月）。$799 の早期割引ティアは先着 250 名限定。今登録しておけば、キャンペーン開始の瞬間にリンクをお送りします —— 早期割引が完売する前に確保できます。",
+    q4: "「公開済みの GTM 成果物」とは具体的に何ですか？",
+    q4a: "目標プラットフォームに公開され、公開 URL を持つすべてのコンテンツのことです。X 投稿は X 上で公開されたら出荷扱い。SEO 記事はインデックスされたら出荷扱い。KOL 連携は契約締結時点で出荷扱い。下書きには課金しません —— 世に出た出力に対してのみ課金します。",
+    q5: "ハードウェアは必須ですか？",
+    q5a: "ファウンダーズ版についてはイエス —— 箱がアクティベーションキーです。最初の 1 年はハードウェアゲートを維持し、コホートを 1,000 ファウンダー以内に抑えます。ソフトウェアのみのアクセスは 2027 年のオープンプラットフォームと共に開放されます。",
+    q6: "エージェント出力は公開前に誰がレビューしますか？",
+    q6a: "各アイアントライアングルには Reviewer 枠があります。ファウンダーズイヤーでは、当社チームの実際の人間がチャネル別ルーブリックに照らして判定します。将来のバージョンでは、お客様自身を含めた独自の Reviewer を指名できるようになります。",
+    q7: "知的財産と私のブランドボイスはどうなりますか？",
+    q7a: "私たちが御社のために制作するすべてのコンテンツは御社に帰属します。既存のボイス（オンボーディングコール 1 回、過去の投稿数本、ブランドガイドがあればそれ）でエージェントを訓練し、その後は永続的に御社のボイスで公開します。",
+    q8: "返金ポリシーは？",
+    q8a: "アクティベーション日から 30 日間、理由なしで返金可能。$999 全額（送料込み）を返金。30 日以降も将来の更新はキャンセル可能ですが、当年度については日割り返金しません。",
+    final_h2: '11 名のスペシャリスト。<br><span class="accent">一度の採用。</span>$999。',
+    final_sub: "Kickstarter にて 2026 Q3 ローンチ。先着 250 名に。",
+    final_cta: "早期割引リストに登録 →",
+    ft_tag: "11 名の専門 GTM エージェントの群れ。<br>アイアントライアングル原則に基づく。<br>Kickstarter にて 2026 Q3 ローンチ。",
+    ft_h_product: "プロダクト", nav_agents2: "11 名のチーム", ft_a_tiers: "Kickstarter ティア", ft_a_hw: "ハードウェア", ft_a_faq: "よくある質問",
+    ft_h_lang: "言語",
+    ft_h_company: "会社", ft_a_contact: "創業者へ連絡", ft_a_join: "リストに参加", ft_a_platform: "オープンプラットフォーム（2027）", ft_a_admin: "管理者ログイン"
+  },
+  de: {
+    nav_agents: "Die 11", nav_pricing: "Kickstarter", nav_hardware: "Hardware", nav_faq: "FAQ", nav_buy: "Benachrichtigen", nav_signin: "Anmelden",
+    hero_eyebrow: "Kickstarter-Launch · Q3 2026",
+    hero_slogan: 'Kein Geschäft soll an <span class="gtm">GTM</span> scheitern.',
+    hero_sub: "<strong>Elf spezialisierte KI-Agenten.</strong> Einmal anstellen. Ein Jahr. $999. Ein Gerät auf deinem Schreibtisch. Kickstarter-Launch Q3 2026.",
+    hero_cta_primary: 'In die Kickstarter-Frühbucher-Liste eintragen <span class="price">→</span>',
+    hero_cta_secondary: "Sieh, wie es funktioniert ↓",
+    hm_launch_l: "LAUNCH", hm_launch_v: "Kickstarter · Q3 2026",
+    hm_eb_l: "FRÜHBUCHER", hm_eb_v: "$799 · erste 250 Unterstützer",
+    hm_dl_l: "LIEFERUNG", hm_dl_v: "Wöchentlich veröffentlichte GTM-Artefakte",
+    hm_dr_l: "DOKTRIN", hm_dr_v: "Kein Triangel = Kein Agent",
+    video_title: "Triff das Gerät.",
+    video_sub: "SEEDANCE · TEASER · 2026",
+    promise_lab: "/ DAS VERSPRECHEN /",
+    promise_h2: 'Du hast <span class="accent">Tools</span> angestellt.<br>Diesmal stell ein <span class="accent">Team</span> an.',
+    p1_h: "Keine Ratschläge. <strong>Output.</strong>",
+    p1_p: "Andere KI-Tools entwerfen einen Plan und geben dir einen Chatbot. Wir liefern: 30 veröffentlichte Posts, 12 gerankte Artikel, 8 Community-Threads und einen TikTok-Short — jede Woche, jeweils geprüft, bevor sie online gehen.",
+    p2_h: "Kein Abo. <strong>Eine Anstellung.</strong>",
+    p2_p: "Einmal $999. Das vollständige 11-Agenten-Team arbeitet ein Jahr lang für dich. Kein Pro-Sitz-Modell. Keine Pro-Token-Abrechnung. Keine Überzahlungen. Ein Preis, elf Spezialisten, keine Überraschungen auf der Rechnung.",
+    p3_h: "Kein einzelner Agent. <strong>Elf Spezialisten.</strong>",
+    p3_p: "X, Reddit, SEO, GEO, TikTok, KOC, KOL, MCP, Ads, eigene Kanäle, EDM — jeder in seinem eigenen Eisernen Dreieck (Builder + Reviewer + Cron). Ein Team. Jeder Kanal, der zählt.",
+    agents_lab: "/ DAS TEAM, DAS DU ANSTELLST /",
+    agents_h2: 'Elf <span class="accent">Spezialisten.</span><br>Ein Schwarm. Jeder Kanal.',
+    agents_p: "Jeder Agent verantwortet einen Wachstumskanal von Anfang bis Ende. Jeder wird in einem Eisernen Dreieck gehalten — ein Builder, der entwirft, ein Reviewer, der entscheidet, und ein Cron, der die Schleife auslöst. Ohne alle drei wird nichts veröffentlicht.",
+    a1: "30 ICP-relevante Posts /Mo.", a2: "8 Community-Threads /Mo.", a3: "12 gerankte Artikel + Backlinks /Mo.",
+    a4: "KI-Suchmaschinen-Zitate", a5: "15 Short-Form-Videos /Mo.", a6: "20 Mikro-Influencer-Kooperationen /Mo.",
+    a7: "4 Top-KOL-Deals /Quartal", a8: "Claude / Cursor / OpenAI Tool-Listings",
+    a9: "wöchentlich gelaunchte + optimierte Kampagnen", a10: "8 eigene Kanäle, automatische Veröffentlichung", a11: "wöchentlicher Newsletter + Sequenzen",
+    a12: "24/7 Kundensupport + Ticket-Triage", a12_tag: "Inklusive",
+    comp_lab: "/ VS. DIE ALTERNATIVEN /",
+    comp_h2: 'Du hast <span class="accent">alles andere</span> ausprobiert.',
+    comp_sub: "Harte Zahlen, ohne Schönfärberei.",
+    c_h1: "GTM-Agentur", c_h2: "Marketing-Anstellung", c_h3: "DIY GPT / Claude",
+    c_r1: "Jahreskosten", c_r2: "Abgedeckte Kanäle", c_r3: "Was du bekommst",
+    c_r3a: "Ratschläge + Decks", c_r3b: "gemischt", c_r3c: "selbst geschriebene Prompts", c_r3d: "veröffentlichte GTM-Artefakte",
+    c_r4: "Onboarding", c_r4a: "4 – 8 Wochen", c_r4b: "6 – 12 Wochen", c_r4c: "noch heute", c_r4d: "24 Stunden",
+    c_r5: "Reviewer in der Schleife", c_r5d: "✓ Eisernes Dreieck",
+    c_r6: "Hardware enthalten", c_r6d: "✓ Lobster-Box",
+    c_r7: "Abo", c_r7a: "jährlicher Retainer", c_r7b: "Monatsgehalt", c_r7c: "pro Token", c_r7d: "✓ Keines — einmalig $999",
+    no: "— nein", no2: "— nein", no3: "— nein", no4: "— nein", no5: "— nein",
+    pricing_lab: "/ KICKSTARTER-TIERS · Q3 2026 /",
+    pricing_h2: 'Unterstütze früh. <br><span class="accent">Spare bis zu $200.</span>',
+    t1_n: "Frühbucher", t1_s: "Nur erste 250 Unterstützer", t1_st: "◆ 250 / 250 Plätze verfügbar",
+    t1_l1: "1 × Lobster-Box-Gerät", t1_l2: "11 Agenten, vollständiges Jahr Service", t1_l3: "$200 unter dem Listenpreis",
+    t1_l4: "Founders'-Edition-Seriennummer", t1_l5: "Erst-Kohorten-Versand (Q3 2026)",
+    t1_cta: "Frühbucher-Platz sichern →",
+    t2_r: "Beliebteste", t2_n: "Standard", t2_s: "Kickstarter-Kampagnenpreis", t2_st: "◆ unlimitiert",
+    t2_l1: "1 × Lobster-Box-Gerät", t2_l2: "11 Agenten, vollständiges Jahr Service",
+    t2_l3: "Alle Kanäle enthalten", t2_l4: "30-Tage-Rückgabegarantie", t2_l5: "Q3 – Q4 2026 Versand",
+    t2_cta: "Beim Launch benachrichtigen →",
+    t3_n: "Partner", t3_s: "Builder + Agenturen", t3_st: "◆ 50 Plätze",
+    t3_l1: "3 × Lobster-Box-Geräte", t3_l2: "3 Kunden-Plätze, vollständiges Jahr",
+    t3_l3: "Frühzugang zum Channel-SDK", t3_l4: "Direktverbindung zu den Gründern", t3_l5: "Prioritätsversand (Q3 2026)",
+    t3_cta: "Partner-Tier sichern →",
+    hw_lab: "◆ EINS NOCH ◆",
+    hw_h2: 'Ein Gerät auf deinem Schreibtisch. <br>Ein <span class="accent">11-Personen-Team</span> in der Cloud.',
+    hw_note: "— Finale Industriedesign-Renderings folgen. Frühes Konzept abgebildet.",
+    hs1: "Agenten an Bord", hs2: "Eiserne-Dreieck-Rollen", hs3: "Tage Versand", hs4: "einmalig, alles inklusive",
+    hw_cap: '<strong>Eine Box.</strong> Elf Spezialisten. <br>Ein komplettes GTM-Team, für ein Jahr angestellt.',
+    hw_cta: "Am Launch-Tag benachrichtigen →",
+    form_lab: "/ KICKSTARTER-FRÜHBUCHER-LISTE /",
+    form_h2: "Sei unter den ersten 250.",
+    form_p: 'Trag deine E-Mail-Adresse ein und wir benachrichtigen dich im Moment des Launches — damit du die <strong>$799-Frühbucher-Tier</strong> sichern kannst, bevor sie ausverkauft ist. Kein Spam, nur die Launch-Benachrichtigung und einige Build-Updates bis Q3 2026.',
+    ph_email: "du@deinunternehmen.com", ph_name: "Dein Name", ph_company: "Unternehmen",
+    sel_default: "Welcher Tier interessiert dich?",
+    sel_eb: "Frühbucher — $799 (erste 250)", sel_std: "Standard — $999",
+    sel_p: "Partner — $2.999 (Agenturen / Builder)", sel_jc: "Nur neugierig — halt mich auf dem Laufenden",
+    form_btn: "Auf die Frühbucher-Liste setzen →",
+    form_fine: "Wir senden ausschließlich E-Mails zu 11agents.ai. Jederzeit abbestellbar.",
+    faq_lab: "/ FAQ /", faq_h2: "Antworten, ohne Geschwätz.",
+    q1: "Was ist 11agents.ai genau?",
+    q1a: "Ein Schwarm aus 11 spezialisierten KI-Agenten, jeder verantwortlich für einen Wachstumskanal — X, Reddit, SEO, GEO, TikTok, KOC, KOL, MCP, Ads, eigene Kanäle und EDM. Du stellst sie einmalig für $999/Jahr an. Sie veröffentlichen wöchentlich GTM-Artefakte. Jedes Artefakt wird vor Veröffentlichung geprüft.",
+    q2: "Was bekomme ich genau für $999?",
+    q2a: "Ein Lobster-Box-Hardwareeinheit, graviert mit deiner Founders'-Edition-Nummer. Der vollständige 11-Agenten-Schwarm arbeitet 365 Tage ab Aktivierung für dein Unternehmen. Wöchentliche veröffentlichte Artefakte über alle 11 Kanäle hinweg. Eisernes-Dreieck-Review für jeden Output. Kein Abo. Keine verbrauchsabhängige Abrechnung. Kein Upsell.",
+    q3: "Wann startet die Kickstarter-Kampagne?",
+    q3a: "Q3 2026 (Juli – September). Die $799-Frühbucher-Tier ist auf die ersten 250 Unterstützer begrenzt. Melde dich jetzt an und du bekommst den Kampagnen-Link in dem Moment, in dem er live geht — damit du die Frühbucher-Preise sicherst, bevor sie ausverkauft sind.",
+    q4: "Was zählt als „veröffentlichtes GTM-Artefakt“?",
+    q4a: "Alles, was auf der Zielplattform mit öffentlicher URL veröffentlicht wird. Ein X-Post gilt als versendet, sobald er auf X live ist. Ein SEO-Artikel gilt als versendet, sobald er indexiert ist. Eine KOL-Partnerschaft gilt als versendet, sobald der Vertrag unterzeichnet ist. Wir berechnen keine Entwürfe — nur Outputs, die die Welt erreichen.",
+    q5: "Ist die Hardware wirklich erforderlich?",
+    q5a: "Für die Founders'-Edition ja — die Box ist dein Aktivierungsschlüssel. Wir halten das erste Jahr hardwaregebunden, um die Kohorte klein zu halten (begrenzt auf 1.000 Founders). Reiner Software-Zugang öffnet 2027 mit der Open Platform.",
+    q6: "Wer prüft die Agent-Outputs vor der Veröffentlichung?",
+    q6a: "Jedes Eiserne Dreieck hat einen Reviewer-Slot. Für dein Founders'-Jahr ist das eine echte Person aus unserem Team, die die Latte gegen den Kanal-Rubrik hochhält. Spätere Plattform-Versionen erlauben dir, eigene Reviewer zu ernennen — einschließlich dir selbst.",
+    q7: "Was ist mit meinem geistigen Eigentum und meiner Markenstimme?",
+    q7a: "Du behältst das volle Eigentum an allem, was wir in deinem Namen produzieren. Wir trainieren die Agenten auf deiner bestehenden Stimme (ein Onboarding-Gespräch, ein paar vergangene Posts, dein Brand-Guide, falls vorhanden) und sie veröffentlichen danach immer in deiner Stimme.",
+    q8: "Wie ist die Rückerstattungsrichtlinie?",
+    q8a: "30 Tage ab deinem Aktivierungsdatum, ohne Rückfragen. Wir erstatten den vollen $999 (inkl. Versand). Nach 30 Tagen kannst du immer noch jede zukünftige Verlängerung kündigen — wir berechnen das laufende Jahr einfach nicht anteilig.",
+    final_h2: 'Elf Spezialisten. <br><span class="accent">Eine Anstellung.</span> $999.',
+    final_sub: "Kickstarter-Launch Q3 2026. Sei unter den ersten 250.",
+    final_cta: "In die Frühbucher-Liste eintragen →",
+    ft_tag: "Ein Schwarm aus elf spezialisierten GTM-Agenten.<br>Aufgebaut auf der Eisernen-Dreieck-Doktrin.<br>Kickstarter-Launch Q3 2026.",
+    ft_h_product: "Produkt", nav_agents2: "Die 11 Agenten", ft_a_tiers: "Kickstarter-Tiers", ft_a_hw: "Hardware", ft_a_faq: "FAQ",
+    ft_h_lang: "Sprachen",
+    ft_h_company: "Unternehmen", ft_a_contact: "Gründer kontaktieren", ft_a_join: "Liste beitreten", ft_a_platform: "Open Platform (2027)", ft_a_admin: "Admin-Login"
+  }
+};
+
+function setLang(lang) {
+  if (!T[lang]) lang = 'en';
+  document.documentElement.lang = lang;
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.dataset.i18n;
+    if (T[lang][key] !== undefined) el.innerHTML = T[lang][key];
+  });
+  document.querySelectorAll('[data-i18n-ph]').forEach(el => {
+    const key = el.dataset.i18nPh;
+    if (T[lang][key] !== undefined) el.placeholder = T[lang][key];
+  });
+  document.querySelectorAll('.lang-switch button').forEach(b => {
+    b.classList.toggle('active', b.dataset.lang === lang);
+  });
+  try { localStorage.setItem('11agents_lang', lang); } catch (e) {}
+}
+
+document.querySelectorAll('.lang-switch button').forEach(b => {
+  b.addEventListener('click', () => setLang(b.dataset.lang));
+});
+
+(function initLang() {
+  let saved;
+  try { saved = localStorage.getItem('11agents_lang'); } catch (e) {}
+  if (saved && T[saved]) { setLang(saved); return; }
+  const nav = (navigator.language || 'en').slice(0, 2).toLowerCase();
+  const map = { en: 'en', zh: 'zh', ja: 'ja', de: 'de' };
+  setLang(map[nav] || 'en');
+})();
+</script>
+
+</body>
+</html>
