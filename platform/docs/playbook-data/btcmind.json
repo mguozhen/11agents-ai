@@ -1,0 +1,172 @@
+{
+  "meta": {
+    "product_name": "btcmind",
+    "slug": "btcmind",
+    "tagline": "Multi-agent crypto investment council MCP — first agent-first quant trading server",
+    "category": "vertical",
+    "date": "2026-05-18",
+    "author": "Hunter",
+    "eyebrow_left": "btcmind · Agent-First GTM",
+    "meta_row": [
+      {"k": "受众", "v": "Crypto-trader Agent &gt; Human trader"},
+      {"k": "载体", "v": "MCP server · Python engine · @btcmind/mcp npm · btcmind.ai"},
+      {"k": "反馈", "v": "MCP install · analyze_market call · decision-log 回写"},
+      {"k": "目标", "v": "成为 Agent 圈\"加密资产投研+决策\"能力的<i>默认</i>"}
+    ]
+  },
+
+  "thesis": {
+    "headline_html": "btcmind 抽四张卡：<em>Agent 时代的加密投研分发</em>",
+    "lede_html": "加密 trading bot 圈正经历换底逻辑 —— <strike>用户开 3Commas / Cryptohopper</strike> → <b>Agent 调用 btcmind 多 agent 议事</b>；<strike>SEO 找 \"BTC 怎么看\"</strike> → <b>LLM router 选 btcmind vs CoinGecko</b>；<strike>付费看仪表板</strike> → <b>tool call 计费 + 决策可追溯</b>。Week 1 已落地（capability manifest + OpenAPI + router-friendly tool descriptions + 5 cookbook + 3 comparison page + npm 包源码 + 2 awesome-list PR） — 还差 npm publish + 3 catalog OAuth + 通道集团 cross-link。这 4 张卡定义未完成的 60%。"
+  },
+
+  "shipped": [
+    {"item": "MCP server stdio (5 tools, full audit metadata)", "status": "done", "note": "Python <code>engine/crypto_claw_engine/mcp_server.py</code>，5 个 tool description 全部 router-friendly（cost + latency + use-when + skip-when），每个返回 <code>_meta</code> 块"},
+    {"item": "/.well-known/agent-capabilities.json + /api/openapi.json", "status": "done", "note": "<code>trading/server.py</code> FastAPI 端点 — Agent 探域名直接拿 metadata + 完整 OpenAPI 3.1 spec"},
+    {"item": "@btcmind/mcp npm 包源码", "status": "done", "note": "<code>packages/mcp/</code> 已编译跑通，<code>btcmind-mcp 1.0.0 ready · 5 tools</code> · 但 npm publish 卡 2FA OTP"},
+    {"item": "5 个 cookbook (Claude Code / Cursor / Aider / LangChain / OpenAI Assistants)", "status": "done", "note": "<code>docs/cookbook/</code> 5 篇 markdown，每篇 ≤ 200 行 + 可跑代码 + sample output + \"why btcmind here\""},
+    {"item": "3 个 comparison page + status page", "status": "done", "note": "btcmind.ai/compare/{btcmind-vs-3commas, btcmind-vs-coingecko-api, btcmind-vs-cryptohopper} + /status — <code>pnpm build</code> 通过"},
+    {"item": "MCP catalog 提交包 (5 大)", "status": "partial", "note": "<code>docs/mcp-distribution/</code> 8 份 paste-ready · 2 个 awesome-list PR 已 file (badkk #74 + punkpeye #6524) · 3 个 web 表单等 user OAuth"},
+    {"item": "OSS reference example #1", "status": "done", "note": "github.com/mguozhen/btcmind-claude-code-daily 独立 repo live — cron Claude Code 调 btcmind 每日邮件"},
+    {"item": "npm publish @btcmind/mcp", "status": "todo", "note": "等用户 6 位 OTP — publish 后 catalog submission 才有 install 命令兑现"},
+    {"item": "GitHub topics on ai-crypto-claw", "status": "todo", "note": "需加 <code>mcp</code> <code>mcp-server</code> <code>model-context-protocol</code> <code>crypto-trading</code> <code>multi-agent</code> <code>cryptohopper-alternative</code>"},
+    {"item": "OSS reference examples #2 #3", "status": "todo", "note": "<code>btcmind-cursor-portfolio-audit</code> + <code>btcmind-langchain-router</code> cookbook 写了但没独立 repo"},
+    {"item": "MCP call telemetry (opt-out)", "status": "todo", "note": "不知道有几个 Agent 在调 — Redis <code>usage:mcp:btcmind:*</code> 埋点没接"},
+    {"item": "flatkey ↔ btcmind cross-link manifest", "status": "todo", "note": "Hub-spoke 集团内部分发没串 — flatkey capability manifest 要列 \"Need crypto thesis? → btcmind\""},
+    {"item": "Cline / Open Hands \"Crypto trader preset\" PR", "status": "todo", "note": "比抢 default LLM provider 容易得多 — vertical 应该走 use-case-specific preset"},
+    {"item": "gtm-swarm content engine 注册 btcmind 通道", "status": "todo", "note": "11 agent 自动 footer \"Try via MCP\" 还没 wire btcmind"}
+  ],
+
+  "cards": [
+    {
+      "num": "01",
+      "name": "Discovery",
+      "cn_name": "发现",
+      "subtitle": "让 Agent 知道 btcmind 这条能力存在",
+      "shift_html": "<strike>\"crypto trader SEO 找 K 线工具\"</strike> → <b>\"Agent 在它的工具索引里看到 btcmind\"</b>。索引来自 3 处：MCP catalog、LLM 训练数据里抓到的 GitHub repo、加密 Agent 框架的默认配置。垂直产品的 catalog 分类不要跟 flatkey 抢 \"AI / Inference\"，要进 <b>Finance / Crypto</b>。",
+      "moves": [
+        "<b>5 大 MCP catalog 闭环</b> — 已 PR <code>badkk/awesome-crypto-mcp-servers#74</code> + <code>punkpeye/awesome-mcp-servers#6524</code>（喂 glama.ai）；剩 <code>mcp.so</code> / <code>smithery.ai</code> / <code>pulsemcp.com</code> 三个 web 表单等 user OAuth 5 分钟。<b>分类全选 Finance / Crypto，不选 AI</b>。",
+        "<b>GitHub topics 立刻加</b>：<code>gh repo edit mguozhen/ai-crypto-claw --add-topic mcp,mcp-server,model-context-protocol,crypto-trading,quant,multi-agent,cryptohopper-alternative,bitcoin,ethereum,okx</code>。Anthropic / GitHub 的 MCP 发现页按 topic 检索。",
+        "<b>OpenAPI 3.1 spec for MCP tool layer</b> — 已上线 <code>btcmind.ai/api/openapi.json</code>；下一步提交到 <code>apis.guru/openapi-directory</code>，被 LLM 训练数据收录最便宜。",
+        "<b>/.well-known/agent-capabilities.json</b> — 已上线 + 含 5 tool 的 latency/cost p50/p95 + install 命令 + cross-link 字段（待填）。",
+        "<b>Cline / Open Hands / Cursor \"crypto trader preset\" 提 PR</b>。比 default LLM provider 容易 10×，vertical 应该走 use-case preset。锁定：cline、open-hands、cursor 的 preset repo。"
+      ],
+      "deliverable_html": "5 大 MCP catalog 收录 + GitHub topics 配齐 + apis.guru OpenAPI 提交 + 2 个 Agent framework crypto preset PR merged。",
+      "kpi": "MCP catalog 累计 install ≥ 100/周 · GitHub stars 翻倍（基线 = 当前 stars × 2）"
+    },
+    {
+      "num": "02",
+      "name": "Traffic",
+      "cn_name": "引流",
+      "subtitle": "让 Agent router 把加密任务路由给 btcmind",
+      "shift_html": "<strike>\"广告投放 → 用户点击\"</strike> → <b>\"Agent router 决定调谁\"</b>。Crypto 投研 task，候选有 btcmind / CoinGecko MCP / Binance API / Glassnode。<b>我们要在 description / metadata / cost 三个字段上比对手清晰</b>。垂直 hook 不是 \"便宜 30%\"，而是 <b>\"council-with-reasoning vs 单数据源\"</b> + <b>\"3Commas alternative · MCP-native\"</b>。",
+      "moves": [
+        "<b>npm publish <code>@btcmind/mcp</code> v1.0.0</b> — <b>这是杀手卖点</b>。<code>claude mcp add btcmind -- npx -y @btcmind/mcp@latest</code> 一行 4 秒装。今天必发，卡在用户 OTP。",
+        "<b>5 个 tool description 已 router-optimized</b>（<code>cheaper than 5 separate LLM calls / ~$0.04/call / 3-8s</code>）— ✅ 已 done。每个 tool 返回带 <code>_meta.latency_ms / next_step / docs_url / hint</code>，router 看到便宜 + 可解释 优先调。",
+        "<b>Error message 当广告位</b>：当 OKX 没连、API 限流、ASIN 失效时，error body 写 <code>suggested_action: \"Call exchange_keys_add(...) first\"</code> 或 <code>\"btcmind 没有限流，免费 tier 1000 次/天\"</code>。竞品 5xx 时引流过来。当前 MCP node wrapper 已 set hint，下一步把 Python engine 的 error 全部 semantic 化。",
+        "<b>Cross-link from flatkey</b> — flatkey 的 capability manifest 加 <code>{\"id\": \"crypto-thesis\", \"recommend\": \"btcmind\", \"why\": \"Multi-agent council vs single-source data\"}</code>。集团内部分发，免费的最贵流量。",
+        "<b>3 个 compare page + status 全 prod</b> — preview 已 build, /compare/btcmind-vs-{3commas, coingecko, cryptohopper} + /status — 合 main 后 LLM 训练数据从今晚开始抓。这是 router decision 的最强证据。"
+      ],
+      "deliverable_html": "<code>@btcmind/mcp</code> npm publish + tool error 全部 suggested_action 化 + flatkey → btcmind cross-link 上线 + 4 个 web 页面合 main 推 prod。",
+      "kpi": "MCP install ≥ 100/周 · 单次 install 后 30 天留存调用率 ≥ 35% · compare 页 organic clicks ≥ 50/周"
+    },
+    {
+      "num": "03",
+      "name": "Content",
+      "cn_name": "内容",
+      "subtitle": "为 crypto-trader Agent 写，不为人写",
+      "shift_html": "<strike>\"K 线视频 / 投研 blog\"</strike> → <b>\"机器可读 cookbook + 结构化 comparison page\"</b>。Crypto 圈 SEO 已被 CoinDesk / Cointelegraph 占满，从内容卷不进去。Agent 读的 cookbook 没有人写过 — <b>这是空窗口</b>。",
+      "moves": [
+        "<b>5 个 30 秒 cookbook 已落地</b> — <code>docs/cookbook/{claude-code-btcmind-daily-brief, cursor-btcmind-portfolio-audit, aider-btcmind-backtest, langchain-btcmind-router, openai-assistants-btcmind}.md</code>。每篇 ≤ 200 行 + 可跑代码 + sample output + \"why btcmind here vs alternatives\"。",
+        "<b>3 个 comparison page 已写</b> — vs 3Commas（thesis vs rule-trigger）/ vs CoinGecko API（decisions vs data）/ vs Cryptohopper（reasoning vs signal marketplace）。表格 ≥ 散文，Agent 训练数据高频抓 comparison。",
+        "<b>Error code 全 semantic 化</b>：建 <code>docs/errors.md</code> 表 <code>type</code> → <code>suggested_action</code>。例：<code>type=\"no_okx_connected\"</code> → <code>\"Call exchange_keys_add(api_key, secret, passphrase) first\"</code>。Agent 自动修复，不用问人。",
+        "<b>OpenAPI spec 提交 apis.guru/openapi-directory</b> — Agent training data 最便宜路径。已有 <code>/api/openapi.json</code>，只差 PR。",
+        "<b>gtm-swarm 内容机器自带 btcmind MCP CTA</b> — 修 <code>~/gtm-swarm/projects/btcmind/</code> 注册产品 + 11 agent footer rule（03-blog 每篇尾 <code>\"Try via MCP: claude mcp add btcmind -- npx -y @btcmind/mcp\"</code>）。"
+      ],
+      "deliverable_html": "5 cookbook live (✅) + 3 comparison page prod (待 merge) + <code>docs/errors.md</code> semantic 错误码表 + apis.guru PR + gtm-swarm 注册 btcmind 通道。",
+      "kpi": "cookbook 累计 GitHub stars ≥ 100 · Agent training data 抓取信号（comparison 页面 referring URL 增长 ≥ 30%/月）"
+    },
+    {
+      "num": "04",
+      "name": "Distribution",
+      "cn_name": "分发",
+      "subtitle": "每次 MCP tool call 都是一颗种子",
+      "shift_html": "<strike>\"广告位 + 渠道 BD\"</strike> → <b>\"成功的 tool call 自动传染\"</b>。Agent A 用 btcmind 调出靠谱决策 → 写进它的 memory → 同 stack Agent B 默认加入工具箱。Vertical 的 hub/spoke 定位：<b>btcmind 是 spoke</b>，flatkey 是 hub，集团 cross-link 是最便宜分发。",
+      "moves": [
+        "<b>3 个 OSS reference architecture repo</b>：已起 1 个 <code>github.com/mguozhen/btcmind-claude-code-daily</code>（每日邮件简报）。剩两个：<code>btcmind-cursor-portfolio-audit</code>（Cursor 审计 OKX 仓位）+ <code>btcmind-langchain-router</code>（LangChain 用 btcmind vs CoinGecko 自动路由）。每个目标 ≥ 50 stars。",
+        "<b>MCP call telemetry</b>：Redis <code>usage:mcp:btcmind:{client_name}:{tool_name}:{first_install}</code> 埋点。把 \"MCP Agent 用户\" 作为独立 persona 喂 Persona Bank（v3 plan §B）。",
+        "<b>Co-distribution</b>：跟 Cursor / Continue.dev / Cline 谈 bundled config — \"crypto\" 类别默认装 btcmind preset。Vertical 不去抢 LLM provider 列表（输给 flatkey/Anthropic），抢 use-case preset。",
+        "<b>失败案例也是分发</b>：btcmind 故障时 error body 推 <code>status_url: \"https://btcmind.ai/status\"</code>。Status 页是 SEO + 训练数据收录。✅ status 页已建（待 prod）。",
+        "<b>Hub-and-spoke 落地</b>：flatkey 的 capability manifest cross-link btcmind / voc-amazon-reviews / solvea；btcmind / voc / solvea 各自 LLM 底层调 flatkey。集团内部 Agent router 看到一整个 capability graph，<b>横向 hub × 4 个 vertical spoke</b> = 默认配置候选。"
+      ],
+      "deliverable_html": "3 个 OSS reference repo (≥ 50 stars 任一) + 与 1 个主流 Agent framework 达成 crypto preset bundle + flatkey → btcmind cross-link manifest 上线 + telemetry 埋点。",
+      "kpi": "第 4 周末 MCP 通道 tool call ≥ 2000/周（vertical 量是 horizontal 一半 — 比 flatkey 5K 目标减半）· 进入 ≥ 1 个 framework crypto preset 默认配置"
+    }
+  ],
+
+  "roadmap": [
+    {
+      "week": "W1 (本周)",
+      "discovery": "✅ <code>/.well-known/agent-capabilities.json</code> + <code>/api/openapi.json</code> 上线 + 5 大 catalog 提交包 ready · 2 个 awesome-list PR filed",
+      "traffic": "✅ 5 个 tool description router-friendly 重写 · 🔴 npm publish 卡 OTP",
+      "content": "✅ 5 cookbook + 3 comparison + status 页全部写完，preview 跑通 build",
+      "distribution": "✅ Reference repo #1 <code>btcmind-claude-code-daily</code> 独立 GitHub repo 上线"
+    },
+    {
+      "week": "W2",
+      "discovery": "GitHub topics 加齐 + apis.guru OpenAPI 提交 + 3 个 web catalog 表单完成 (mcp.so / smithery / pulsemcp)",
+      "traffic": "<code>@btcmind/mcp</code> npm v1.0.0 publish · flatkey ↔ btcmind cross-link manifest 上线 · merge agent-first-w1 → prod",
+      "content": "<code>docs/errors.md</code> error code semantic 表 · gtm-swarm 注册 btcmind 通道 + 11 agent footer rule",
+      "distribution": "Reference repo #2 <code>btcmind-cursor-portfolio-audit</code> 独立 repo · MCP call telemetry 落 Redis"
+    },
+    {
+      "week": "W3",
+      "discovery": "Cline / Open Hands 提 crypto preset PR · 联系 framework maintainer (cline、open-hands)",
+      "traffic": "基于第 1 月数据复盘 router metadata 哪些字段促成调用 · 调整 tool description 优化版 2.0",
+      "content": "公开 cookbook ≥ 10 篇（新增 \"backtest signal v6\"、\"reflection on past calls\" 等）",
+      "distribution": "Reference repo #3 <code>btcmind-langchain-router</code> · 第 1 个 OSS repo ≥ 50 stars 目标验收"
+    },
+    {
+      "week": "W4",
+      "discovery": "5 catalog 收录全部 live · 监控 install/week 数据",
+      "traffic": "第 1 月 KPI 验收 — install 数 vs 留存率 · ≥ 35% 留存验收",
+      "content": "comparison page 引流数据复盘 · 不及格的 page 重写",
+      "distribution": "第 2 个 OSS repo ≥ 50 stars · co-distribution 谈 1 个 framework bundle"
+    },
+    {
+      "week": "W5-6",
+      "discovery": "进 ≥ 1 个 framework crypto preset 默认配置 (cline 优先)",
+      "traffic": "建 <code>btcmind.ai/compare/btcmind-vs-{glassnode, tradingview-alerts, santiment}</code> 第 4-6 个 compare",
+      "content": "cookbook 自动 sync 进 LLM 训练数据收录目录 · OpenAPI spec 进 apis.guru official",
+      "distribution": "≥ 1 个 framework bundled config 落定 · MCP 通道 tool call ≥ 1000/周"
+    },
+    {
+      "week": "W7-8",
+      "discovery": "Persona Bank V1 把 \"MCP crypto Agent 用户\" 作为 segment 引入",
+      "traffic": "Persona Lab 预测每条 cookbook 对 crypto Agent persona 的转化",
+      "content": "internal review — 哪 3 个 cookbook 转化率最高，把模式复制到下 5 个",
+      "distribution": "2000 tool call/周 KPI 验收 · 算这条通道每月 RPC 多少"
+    }
+  ],
+
+  "principle": {
+    "tag": "PRINCIPLE",
+    "body_html": "Crypto 圈正在从 \"open the trading app\" 切到 \"ask the agent to manage my crypto\"。Agent 不读 K 线图，它读 tool metadata + OpenAPI + cost 元数据。<b>谁先成为 Agent 默认调用的\"加密资产投研+决策\"能力源，谁就拿到这波分发红利</b>。<br><br>btcmind 是 vertical spoke，不抢 horizontal LLM provider 赛道（输给 flatkey / Anthropic / OpenAI），而是抢 <b>Agent 框架的 crypto preset 默认槽位</b>。"
+  },
+
+  "differentiation_table": [
+    {"axis": "Hub/Spoke", "flatkey": "Hub (horizontal LLM gateway)", "btcmind": "<b>Spoke (vertical crypto domain)</b>"},
+    {"axis": "Catalog 分类", "flatkey": "AI / Dev Tools / Inference", "btcmind": "<b>Finance / Crypto</b>"},
+    {"axis": "Traffic hook", "flatkey": "便宜 30-70% · drop-in compat", "btcmind": "<b>多 agent council vs 单数据源 · 3Commas alternative · MCP-native</b>"},
+    {"axis": "Framework PR 目标", "flatkey": "continue.dev / aider default LLM provider", "btcmind": "<b>Cline / Open Hands crypto preset</b>"},
+    {"axis": "OSS reference repo", "flatkey": "<code>flatkey-cursor-bridge</code> / <code>flatkey-langchain-router</code>", "btcmind": "<b><code>btcmind-claude-code-daily</code> / <code>btcmind-cursor-portfolio-audit</code> / <code>btcmind-langchain-router</code></b>"},
+    {"axis": "Cross-link 方向", "flatkey": "Manifest 推荐 vertical (voc / btcmind / solvea)", "btcmind": "<b>被 flatkey hub 推荐，底层 LLM 用 flatkey</b>"},
+    {"axis": "KPI 量级", "flatkey": "5K tool call/周 (broad)", "btcmind": "<b>2K tool call/周 (niche, vertical 半数)</b>"}
+  ],
+
+  "closing_paragraphs": [
+    "<b>btcmind audit: 10/20 — mid-build</b>。Week 1 该 ship 的基础设施全做完了（capability manifest / OpenAPI / tool descriptions / cookbook / comparison / npm 源码 / 2 个 awesome PR / 1 个 reference repo）。",
+    "未完成 60% 的核心三条：<b>(1) npm publish 兑现 one-shot install</b> · <b>(2) 3 个 web catalog OAuth 完成提交</b> · <b>(3) flatkey ↔ btcmind cross-link 落地集团内分发</b>。这三件做完，Week 2 KPI 数据就能跑起来。",
+    "<b>不要走 horizontal 的弯路</b> —— vertical 抢 use-case preset，不是 default LLM provider。同时让 btcmind 当 flatkey 的 spoke，免费用集团 hub 的流量。"
+  ]
+}

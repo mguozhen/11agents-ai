@@ -1,0 +1,51 @@
+id: 08-ads
+name: Ads Agent
+category: revenue
+platform: Google · iOS · Android
+builder: 高博远
+reviewer: ''
+goal: >-
+  DEFERRED to week 8: Activate retargeting immediately at low budget
+  ($500/month), then expand to paid search on competitor comparison terms after
+  organic baseline is established. Premature paid activation before organic
+  content trust is built will yield high CAC and low conversion on a
+  trust-sensitive product (developers handing over production API keys).
+default_product: solvea
+kpi:
+  weekly_target: >-
+    Week 8+ target: 5 paid trial signups per week at a blended CAC of $200 or
+    less; retargeting CTR of 0.8%+ on incident-focused creative
+  measure: >-
+    Google Ads and LinkedIn Campaign Manager conversion tracking tied to 'key
+    added within 48 hours' event; blended CAC calculated as total ad spend
+    divided by qualified trial signups per week
+schedule: always-on
+budget_monthly_usd: 0
+status: deactivated_by_contentos
+blocked_reason: 'Reviewer missing (Principle 3: No Triangle = No Agent)'
+reuse:
+  - ~/google-ads (Google Ads Sprint stack — most mature reuse)
+  - ~/.ads-skill/tokens.json (OAuth)
+activate: false
+topics:
+  - >-
+    Retargeting creative (activate week 1 at $500/month budget): 'Still using
+    one OpenAI key for your whole team?' — incident-fear hook targeting site
+    visitors who did not convert; send to the API Key Security Audit Checklist
+    landing page, not the product page
+  - >-
+    Paid search — competitor comparison terms (activate week 8): exact-match
+    bidding on 'litellm alternative', 'portkey alternative', 'openrouter
+    alternative', 'doppler for api keys'; landing pages are the corresponding
+    comparison blog posts, not the homepage
+  - >-
+    Paid search — incident-driven terms (activate week 8): 'openai api key
+    leaked what to do', 'how to rotate openai key', 'llm api cost spike' —
+    high-urgency queries where paid placement above the organic result
+    accelerates the already-triggered buyer
+  - >-
+    LinkedIn paid (activate week 12 if budget allows): job-title targeting of
+    'Platform Engineer', 'Staff Engineer', 'ML Engineer', 'Technical Co-Founder'
+    at companies with 10–150 employees; incident-creative format ('your team's
+    API keys are probably not managed the way you think they are')
+contentos_hydrated_at: '2026-05-11T21:44:14.144Z'

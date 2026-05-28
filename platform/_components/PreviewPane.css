@@ -1,0 +1,211 @@
+.dj-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.dj-preview-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  display: flex;
+  flex-direction: column;
+}
+
+.dj-preview-hero {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 18px;
+  background: linear-gradient(135deg, #fff7ed 0%, #fce7f3 100%);
+  border-bottom: 1px solid var(--border);
+}
+
+.dj-preview-hero-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-md);
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  box-shadow: var(--shadow-sm);
+}
+
+.dj-preview-hero-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.dj-preview-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--pink-deep);
+  background: var(--pink-light);
+  padding: 3px 8px;
+  border-radius: var(--radius-pill);
+  align-self: flex-start;
+}
+
+.dj-preview-id {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-sub);
+}
+
+.dj-preview-body { padding: 14px 16px 0; }
+
+.dj-preview-card-inner {
+  background: #1f2937;
+  color: #fff;
+  border-radius: var(--radius-md);
+  padding: 18px;
+  position: relative;
+  overflow: hidden;
+}
+
+.dj-preview-card-inner::before {
+  content: '';
+  position: absolute;
+  inset: -40% -20% auto auto;
+  width: 220px;
+  height: 220px;
+  background: radial-gradient(circle, rgba(244, 63, 158, 0.4), transparent 60%);
+}
+
+.dj-preview-card-eyebrow {
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.7;
+  margin: 0 0 6px;
+}
+
+.dj-preview-card-headline {
+  margin: 0 0 8px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.dj-preview-card-copy {
+  margin: 0;
+  font-size: 11px;
+  opacity: 0.75;
+  line-height: 1.4;
+}
+
+.dj-preview-card-mock-cta {
+  display: inline-block;
+  margin-top: 14px;
+  padding: 6px 10px;
+  background: rgba(255,255,255,0.15);
+  border-radius: var(--radius-sm);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.dj-preview-tip {
+  margin: 12px 0 16px;
+  padding: 8px 12px;
+  background: var(--pink-soft);
+  border-radius: var(--radius-md);
+  font-size: 11px;
+  color: var(--pink-deep);
+  font-weight: 500;
+  text-align: center;
+}
+
+.dj-preview-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-top: 1px solid var(--border);
+  background: #fafafa;
+}
+
+.dj-preview-handle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dj-preview-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.dj-preview-handle-name {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.dj-preview-handle-sub {
+  font-size: 10px;
+  color: var(--text-sub);
+}
+
+.dj-preview-swipe {
+  font-size: 11px;
+  color: var(--text-sub);
+  font-weight: 600;
+}
+
+.dj-preview-tip-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 14px 18px;
+  box-shadow: var(--shadow-sm);
+}
+
+.dj-preview-tip-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 12px;
+  background: var(--pink-light);
+  color: var(--pink-deep);
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: var(--radius-pill);
+}
+
+.dj-preview-tip-text {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.dj-preview-empty {
+  padding: 60px 20px;
+  text-align: center;
+  color: var(--text-faint);
+  background: var(--card);
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-lg);
+}
+.dj-preview-empty .pe-icon {
+  font-size: 28px;
+  color: var(--border-strong);
+  margin-bottom: 10px;
+}

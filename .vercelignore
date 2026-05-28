@@ -1,0 +1,6 @@
+platform/
+*.png
+!hero-hardware.png
+!hero-video.mp4
+live-*.png
+*.local

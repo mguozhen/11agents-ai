@@ -1,0 +1,397 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>gtm-swarm · Check-in Report · 2026-05-24</title>
+<style>
+:root{
+  --ink:#1a2620; --mut:#5c6b62; --faint:#8a978d;
+  --green:#2f6b3f; --green-soft:#e8f1ea; --green-line:#bcd6c3;
+  --paper:#fbfcfb; --card:#ffffff; --line:#e2e7e3;
+  --red:#b4452f; --red-soft:#faf3f1; --red-line:#e8cfc7;
+  --amber:#b67d1e; --amber-soft:#fdf7e9; --amber-line:#ecd9a8;
+  --blue:#2d5b8f; --blue-soft:#e9eff7; --blue-line:#bccde0;
+  --pink:#c43d6e; --pink-soft:#fbe8ee;
+  --mono:'SF Mono',ui-monospace,Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--paper);color:var(--ink);
+  font-family:-apple-system,'Helvetica Neue',Arial,'PingFang SC','Hiragino Sans GB',sans-serif;
+  line-height:1.62;-webkit-font-smoothing:antialiased;padding:0 0 90px}
+.wrap{max-width:1020px;margin:0 auto;padding:0 28px}
+code,.m{font-family:var(--mono);font-size:.86em}
+code{background:var(--green-soft);color:var(--green);padding:.1em .4em;border-radius:4px}
+header{padding:60px 0 36px;border-bottom:3px solid var(--ink)}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--pink);font-weight:700}
+h1{font-size:44px;line-height:1.14;margin:14px 0 14px;letter-spacing:-.02em;font-weight:800}
+h1 em{font-style:normal;color:var(--pink)}
+.thesis{font-size:18px;color:var(--mut);max-width:800px;margin-bottom:14px}
+.thesis b{color:var(--ink)}
+.meta-row{font-family:var(--mono);font-size:12.5px;color:var(--faint);
+  padding-top:14px;border-top:1px dashed var(--line);margin-top:18px}
+.meta-row span{margin-right:22px} .meta-row b{color:var(--ink)}
+section{padding:46px 0;border-bottom:1px solid var(--line)}
+.snum{font-family:var(--mono);font-size:12px;color:var(--faint);letter-spacing:.1em}
+h2{font-size:28px;margin:6px 0 16px;letter-spacing:-.01em;font-weight:800}
+h2 em{font-style:normal;color:var(--pink)}
+h3{font-size:17.5px;margin:18px 0 8px;font-weight:800}
+p{margin:12px 0;max-width:840px} .lead{font-size:16.5px} .mut{color:var(--mut)}
+
+/* TL;DR card */
+.tldr{background:var(--ink);color:#fff;padding:30px 30px;border-radius:14px;margin:24px 0 0}
+.tldr h3{color:#fff;font-size:18px;margin:0 0 14px;letter-spacing:.04em;font-family:var(--mono);text-transform:uppercase}
+.tldr .row{display:grid;grid-template-columns:140px 1fr;gap:18px;padding:10px 0;border-top:1px solid #2e3934}
+.tldr .row:first-of-type{border-top:0}
+.tldr .lbl{color:#9aa49e;font-family:var(--mono);font-size:12.5px;text-transform:uppercase;letter-spacing:.08em;padding-top:3px}
+.tldr .val{font-size:15.5px}
+.tldr .val b{color:#f6d36a}
+
+/* Diff table */
+.changes{margin:18px 0}
+.change{display:grid;grid-template-columns:46px 1fr 80px;gap:14px;padding:14px 16px;
+  border:1px solid var(--line);border-radius:10px;background:var(--card);margin-bottom:10px;
+  align-items:center}
+.change .sigil{font-family:var(--mono);font-size:18px;font-weight:800;text-align:center;
+  width:46px;height:46px;line-height:46px;border-radius:50%;flex-shrink:0}
+.change.add .sigil{background:var(--green-soft);color:var(--green);border:1px solid var(--green-line)}
+.change.git .sigil{background:var(--blue-soft);color:var(--blue);border:1px solid var(--blue-line)}
+.change.mem .sigil{background:var(--amber-soft);color:var(--amber);border:1px solid var(--amber-line)}
+.change.zero .sigil{background:var(--red-soft);color:var(--red);border:1px solid var(--red-line)}
+.change .body b{display:block;font-size:15.5px;margin-bottom:3px}
+.change .body span{color:var(--mut);font-size:13.5px;font-family:var(--mono)}
+.change .size{font-family:var(--mono);font-size:12.5px;color:var(--faint);text-align:right}
+
+/* Diagram */
+.diagram{background:#f6f8f7;border:1px solid var(--line);border-radius:12px;padding:24px;margin:22px 0;
+  font-family:var(--mono);font-size:13px;line-height:1.7;color:var(--ink);overflow-x:auto;white-space:pre}
+.diagram .red{color:var(--red);font-weight:700}
+.diagram .green{color:var(--green);font-weight:700}
+.diagram .blue{color:var(--blue);font-weight:700}
+.diagram .faint{color:var(--faint)}
+
+/* Layer cards */
+.layers{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin:22px 0}
+.layer{border:1px solid var(--line);border-radius:12px;background:var(--card);padding:20px;display:flex;flex-direction:column}
+.layer .badge{display:inline-block;font-family:var(--mono);font-size:11px;padding:3px 9px;
+  border-radius:999px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;align-self:flex-start;margin-bottom:8px}
+.layer.cheap .badge{background:var(--green-soft);color:var(--green);border:1px solid var(--green-line)}
+.layer.med .badge{background:var(--amber-soft);color:var(--amber);border:1px solid var(--amber-line)}
+.layer.hard .badge{background:var(--red-soft);color:var(--red);border:1px solid var(--red-line)}
+.layer h3{font-size:17px;margin:4px 0 8px}
+.layer .what{font-size:13.5px;color:var(--mut);margin-bottom:10px;line-height:1.55}
+.layer ul{list-style:none;padding:0;margin:8px 0 0;border-top:1px dashed var(--line);padding-top:10px}
+.layer li{font-size:13px;padding:5px 0;color:var(--mut)}
+.layer li b{color:var(--ink);font-family:var(--mono);font-size:.9em}
+.layer .est{margin-top:auto;padding-top:12px;border-top:1px solid var(--line);font-family:var(--mono);font-size:12px;color:var(--ink)}
+
+/* Timeline */
+.timeline{margin:18px 0;border-left:2px solid var(--ink);padding-left:22px;position:relative}
+.tl{position:relative;padding:8px 0 14px}
+.tl::before{content:"";position:absolute;left:-29px;top:14px;width:12px;height:12px;border-radius:50%;background:var(--paper);border:2px solid var(--ink)}
+.tl.done::before{background:var(--green);border-color:var(--green)}
+.tl.todo::before{background:#fff;border-color:var(--faint)}
+.tl .ts{font-family:var(--mono);font-size:11.5px;color:var(--faint);letter-spacing:.05em;text-transform:uppercase}
+.tl b{font-size:14.5px;display:block;margin:2px 0}
+.tl span{color:var(--mut);font-size:13.5px}
+
+/* Recommendation */
+.rec{background:var(--green-soft);border:1px solid var(--green-line);border-radius:12px;padding:24px;margin:22px 0}
+.rec h3{font-size:18px;margin:0 0 12px;color:var(--green);font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em}
+.rec ol{margin:8px 0 0;padding-left:22px}
+.rec li{padding:7px 0;font-size:15px}
+.rec li b{color:var(--ink)}
+.rec .note{margin-top:14px;font-size:13px;color:var(--mut);padding-top:12px;border-top:1px solid var(--green-line);font-style:italic}
+
+/* Risk pills */
+.risks{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0}
+.risk{border-left:4px solid var(--red);background:var(--red-soft);padding:14px 18px;border-radius:6px}
+.risk b{display:block;font-size:14.5px;margin-bottom:4px;color:var(--ink)}
+.risk span{font-size:13px;color:var(--mut)}
+
+footer{font-family:var(--mono);font-size:12px;color:var(--faint);padding:40px 0 0;text-align:center}
+</style>
+</head>
+<body>
+
+<header class="wrap">
+  <div class="eyebrow">Check-in Report · 2026-05-24</div>
+  <h1>Pre-checkin 透明账单 ——<br>实际改了什么 / 我的<em>观点</em>是什么 / 不该现在 commit 的是什么</h1>
+  <p class="thesis">
+    在动 <code>git add</code> 之前先盘清。
+    <b>过去 2 次会话(2026-05-22 + 2026-05-24)我做的实际改动很少</b>:0 行 app code、0 个新 commit。
+    主要是 <b>git 拓扑切换 + 2 份文档 + 1 份 memory rewrite</b>。
+    今天用户给的「合并到 solvea 主线」是 3 层动作,目前还是<b>计划阶段,5 个 task 已创建但 0 个执行</b>。
+  </p>
+  <div class="meta-row">
+    <span>Working dir: <b>~/gtm-swarm</b></span>
+    <span>Branch: <b>main</b></span>
+    <span>HEAD: <b>792c415</b></span>
+    <span>Untracked: <b>18 files</b></span>
+    <span>App code touched: <b style="color:#b4452f">0</b></span>
+  </div>
+</header>
+
+<!-- ================ TL;DR ================ -->
+<section class="wrap">
+  <div class="tldr">
+    <h3>TL;DR — 给我 30 秒</h3>
+    <div class="row"><div class="lbl">实际改了</div><div class="val">Git remote 切换(SolveaCX = canonical · mguozhen archive)+ <b>1 个 plan deck</b>(<code>replan-2026-05-22-platform-line.html</code>)+ <b>1 个 memory 文件</b>。</div></div>
+    <div class="row"><div class="lbl">没改</div><div class="val"><b>0 行 Next.js 代码</b>、<b>0 行 SQL / migration</b>、<b>0 个新 commit</b>、<b>0 个 DNS 改动</b>。<code>~/gtm-swarm</code> 的 18 个 untracked 文件按你的指示保持原状。</div></div>
+    <div class="row"><div class="lbl">建议顺序</div><div class="val">先做<b>叙事 + 域名</b>(便宜、可回退),最后做<b>代码合并</b>(贵、难回退)。不该混一次 commit 进去。</div></div>
+    <div class="row"><div class="lbl">风险点</div><div class="val">代码合并最容易踩雷的是 <b>schema 同名冲突</b>、<b>路由命名占用</b>、<b>双 DB(GTM + Multica)环境变量怎么处理</b>。这些要在 plan deck 里先答完。</div></div>
+  </div>
+</section>
+
+<!-- ================ §01 实际 diff ================ -->
+<section class="wrap">
+  <div class="snum">§ 01 · WHAT I ACTUALLY CHANGED</div>
+  <h2>实际改动盘点 —— <em>3 项 + 1 项「没做」</em></h2>
+
+  <div class="changes">
+    <div class="change git">
+      <div class="sigil">⇄</div>
+      <div class="body">
+        <b>Git remote 拓扑切换</b>
+        <span>solveacx → origin · 旧 origin → mguozhen-archive · gh repo archive mguozhen/gtm-swarm</span>
+      </div>
+      <div class="size">远端</div>
+    </div>
+
+    <div class="change add">
+      <div class="sigil">+</div>
+      <div class="body">
+        <b>新建:<code>docs/replan-2026-05-22-platform-line.html</code></b>
+        <span>11 Agent 平台化主线规划 deck · 三道 Gate × 4 周节奏 · untracked,未入库</span>
+      </div>
+      <div class="size">18.7 KB</div>
+    </div>
+
+    <div class="change mem">
+      <div class="sigil">M</div>
+      <div class="body">
+        <b>重写:<code>~/.claude/.../memory/project_agent_gtm.md</code></b>
+        <span>从「skill 锻造场 + showcase deck」改为「Next.js 平台 · 11 Agent · Iron Triangle」</span>
+      </div>
+      <div class="size">4.2 KB</div>
+    </div>
+
+    <div class="change zero">
+      <div class="sigil">0</div>
+      <div class="body">
+        <b>没做:任何 app code / SQL / 新 commit</b>
+        <span>app/ engines/ server/ migrations/ projects/ 下一个文件都没动过 · git log 没变 · workspace 干净度同昨天</span>
+      </div>
+      <div class="size">—</div>
+    </div>
+  </div>
+</section>
+
+<!-- ================ §02 Git 拓扑图 ================ -->
+<section class="wrap">
+  <div class="snum">§ 02 · BEFORE / AFTER (GIT TOPOLOGY)</div>
+  <h2>git 拓扑变化 —— <em>从两个 personal repo 收敛到 SolveaCX</em></h2>
+
+<div class="diagram">
+<span class="faint">BEFORE (2026-05-22 之前)</span>
+
+  本机 ~/gtm-swarm
+    ├──<span class="blue">origin</span>     ──► github.com/mguozhen/gtm-swarm   <span class="faint">(个人账号 · live)</span>
+    └──<span class="blue">solveacx</span>   ──► github.com/SolveaCX/gtm-swarm    <span class="faint">(组织账号 · 落后 1 commit)</span>
+
+    本地 main: 792c415  ┐
+    mguozhen/main:      ┴── 落后 3 commits
+    SolveaCX/main:      ┴── 落后 1 commit
+
+<span class="faint">AFTER (2026-05-22 已落)</span>
+
+  本机 ~/gtm-swarm
+    ├──<span class="green">origin</span>             ──► github.com/SolveaCX/gtm-swarm   <span class="green">★ canonical</span>
+    └──<span class="faint">mguozhen-archive</span>   ──► github.com/mguozhen/gtm-swarm   <span class="red">🔒 archived</span>
+
+    本地 main:        792c415
+    SolveaCX/main:    792c415       <span class="green">[ 同步 ]</span>
+    mguozhen/main:    792c415       <span class="faint">[ 同步后冻结 ]</span>
+</div>
+</section>
+
+<!-- ================ §03 3 层合并我的观点 ================ -->
+<section class="wrap">
+  <div class="snum">§ 03 · MY VIEW — 3 LAYERS, DIFFERENT COSTS</div>
+  <h2>「合并到 solvea 主线」三层 —— <em>不该同时做</em></h2>
+
+  <p class="lead">你选了 3 层都做:<b>域名</b> + <b>叙事</b> + <b>代码</b>。我的强观点 —— 这三层成本和不可逆性差 10 倍,应该按 <b>便宜→贵</b> 顺序推,而不是一次性 PR。</p>
+
+  <div class="layers">
+    <div class="layer cheap">
+      <span class="badge">便宜 · 可秒回退</span>
+      <h3>① 产品叙事</h3>
+      <div class="what">改 README / repo description / solvea.cx 官网 product 页。本质是「文字工程」,不动一行后端代码。</div>
+      <ul>
+        <li><b>SolveaCX/gtm-swarm</b> 描述改成「Solvea 旗下 GTM 子产品」</li>
+        <li><b>solvea.cx</b> 官网 product 区块加 1 张 GTM Swarm 卡片</li>
+        <li>对外:从「Open multi-product GTM platform」改成「Solvea GTM Console」</li>
+      </ul>
+      <div class="est">⏱ 半天 · 风险 ★☆☆☆☆</div>
+    </div>
+
+    <div class="layer med">
+      <span class="badge">中等 · DNS 可秒切回</span>
+      <h3>② 域名搬迁</h3>
+      <div class="what"><code>*.up.railway.app</code> → <code>gtm.solvea.cx</code>。Railway 加 custom domain,solvea.cx 域名服务商 CNAME 指过去,等 SSL 颁发。</div>
+      <ul>
+        <li>solvea.cx DNS 加 <b>CNAME gtm → railway 子域</b></li>
+        <li>Railway 项目 settings → custom domain 验证</li>
+        <li>过渡期保留 <b>*.railway.app 兜底</b>(双地址 1–2 周)</li>
+        <li>若启用 SSO,加 <code>gtm.solvea.cx</code> 到 callback URL</li>
+      </ul>
+      <div class="est">⏱ 1–2 天(等 DNS / SSL) · 风险 ★★☆☆☆</div>
+    </div>
+
+    <div class="layer hard">
+      <span class="badge">贵 · 不可逆</span>
+      <h3>③ 代码合并</h3>
+      <div class="what">把 <code>~/gtm-swarm</code> 整套 Next 15 + PG 应用 合进 <code>solvea.cx</code> 仓库,作为 <code>/admin/gtm</code> 模块。两套 schema、两套依赖、两套环境变量混合。</div>
+      <ul>
+        <li>路由命名空间不冲突:gtm 全部移到 <code>/admin/gtm/*</code></li>
+        <li>双 DB 处理:GTM_DATABASE + MULTICA_DATABASE_URL 进 solvea 环境</li>
+        <li>migrations 合并 / 表名前缀 <code>gtm_</code>(避免占名)</li>
+        <li>package.json 依赖去重(Anthropic SDK / pg / supabase)</li>
+        <li><b>原 SolveaCX/gtm-swarm 改 read-only reference</b>,以后只在 solvea.cx 改</li>
+      </ul>
+      <div class="est">⏱ 2–4 天 · 风险 ★★★★★</div>
+    </div>
+  </div>
+
+  <div class="risks">
+    <div class="risk">
+      <b>风险 1 · Schema 冲突</b>
+      <span>solvea.cx 如果已有 <code>workspaces</code> / <code>content_items</code> / <code>accounts</code> 同名表,合并即灾难。Plan deck 第一件事就是 grep 比对。</span>
+    </div>
+    <div class="risk">
+      <b>风险 2 · 路由占用</b>
+      <span>solvea.cx 可能已有 <code>/admin</code> 自己的页面。需要 namespacing 到 <code>/admin/gtm</code>,确认 middleware / auth 兼容。</span>
+    </div>
+    <div class="risk">
+      <b>风险 3 · 双 DB 环境</b>
+      <span>solvea.cx 一般只用 Supabase 单库。引入 GTM PG + Multica PG = 3 个 DB 连接池,部署平台(Vercel?)的连接数限额要算。</span>
+    </div>
+    <div class="risk">
+      <b>风险 4 · 部署平台错配</b>
+      <span>gtm-swarm 现在跑 Railway(有持久磁盘 / 长任务 cron)。solvea.cx 多半在 Vercel(serverless · 无 cron · 10s 超时)。<code>node-cron</code> 不能直接搬到 Vercel,要改 Vercel Cron 或外部 trigger。</span>
+    </div>
+  </div>
+</section>
+
+<!-- ================ §04 时间线 ================ -->
+<section class="wrap">
+  <div class="snum">§ 04 · TIMELINE</div>
+  <h2>这条线发生了什么(过去 2 天 + 接下来 1 周)</h2>
+
+  <div class="timeline">
+    <div class="tl done">
+      <span class="ts">2026-05-22 · Session 1</span>
+      <b>恢复 memory + git 拓扑切换</b>
+      <span>SolveaCX → origin · mguozhen archive · 出 <code>replan-2026-05-22-platform-line.html</code> deck · 改写 memory</span>
+    </div>
+    <div class="tl done">
+      <span class="ts">2026-05-24 · Session 2 早段</span>
+      <b>memory 恢复 + Railway 看板确认</b>
+      <span>用户给出 Railway 看板截图(VOC AI · 9/11 active agents · 4/4 strategy briefs · built 05-11)</span>
+    </div>
+    <div class="tl done">
+      <span class="ts">2026-05-24 · Session 2 中段</span>
+      <b>用户决策:3 层合并到 Solvea 主线</b>
+      <span>选了 域名 + 叙事 + 代码 三层都做</span>
+    </div>
+    <div class="tl done">
+      <span class="ts">2026-05-24 · Session 2 后段(刚做)</span>
+      <b>创建 5 个 Task + 出本份 check-in report</b>
+      <span>等用户审阅后再继续 —— 没有 commit、没有改 app code</span>
+    </div>
+    <div class="tl todo">
+      <span class="ts">下一步(待你拍板)</span>
+      <b>Task #1 · 定位 solvea.cx 主仓库</b>
+      <span>需要你告诉我 solvea.cx 仓库位置(GitHub org/name)、技术栈,或允许我去 grep 你本机</span>
+    </div>
+    <div class="tl todo">
+      <span class="ts">+1 天</span>
+      <b>Task #2 · 写代码合并 plan deck</b>
+      <span>schema 对比 / 路由对比 / 环境变量列表 / 部署平台决策(留 Railway 还是搬 Vercel)</span>
+    </div>
+    <div class="tl todo">
+      <span class="ts">+2 天</span>
+      <b>Task #3 · 域名搬迁(便宜先做)</b>
+      <span>DNS + custom domain,验证 gtm.solvea.cx 可访问</span>
+    </div>
+    <div class="tl todo">
+      <span class="ts">+3 天</span>
+      <b>Task #4 · 叙事更新</b>
+      <span>README + repo description + solvea.cx 官网 product 卡片</span>
+    </div>
+    <div class="tl todo">
+      <span class="ts">+5~7 天</span>
+      <b>Task #5 · 代码合并执行(最后做)</b>
+      <span>按 plan deck 一步一步搬 / 跑端到端冒烟 / 冻结 SolveaCX/gtm-swarm 写入</span>
+    </div>
+  </div>
+</section>
+
+<!-- ================ §05 我的强观点 ================ -->
+<section class="wrap">
+  <div class="snum">§ 05 · MY STRONG OPINIONS</div>
+  <h2>关键判断 —— <em>3 件该做 · 2 件不该做</em></h2>
+
+  <div class="rec">
+    <h3>✓ 该做的</h3>
+    <ol>
+      <li><b>顺序倒过来推</b>:叙事 → 域名 → 代码,而不是「all-in-one PR」。每一层都能独立 ship + 独立回退。</li>
+      <li><b>代码合并前先冻结 SolveaCX/gtm-swarm 的新功能</b>。否则一边迁、一边新功能进来,merge conflict 会爆炸。</li>
+      <li><b>留下 <code>SolveaCX/gtm-swarm</code> 作为 read-only history archive</b>,不要删 —— 万一 solvea.cx 集成出问题,有完整 fallback。</li>
+    </ol>
+    <h3 style="margin-top:18px">✗ 不该做的</h3>
+    <ol>
+      <li><b>不要现在就 commit 那 18 个 untracked 文件</b>。你前两天明确说「先不动」,大部分是 <code>_*_deploy/</code>、<code>claude-mem.db</code> 这类生成物,应该 gitignore 而不是入库。</li>
+      <li><b>不要先做代码合并</b>。它是 3 层里唯一不可逆的,放最后。前两层(叙事 + 域名)如果在过程中发现新认知,可以直接调整目标。</li>
+    </ol>
+    <div class="note">合并代码本质上是把 gtm-swarm 这个独立项目「降级」成 solvea.cx 的一个子模块。这个决策 commit 后再回滚成本很高 —— 所以建议<b>先把前两层做了,等 1–2 周确认叙事和域名都顺,再动代码</b>。</div>
+  </div>
+</section>
+
+<!-- ================ §06 我需要你回答的 ================ -->
+<section class="wrap">
+  <div class="snum">§ 06 · WHAT I NEED FROM YOU TO PROCEED</div>
+  <h2>3 个我答不了 · 你来定的问题</h2>
+
+  <table style="width:100%;border-collapse:collapse;margin:14px 0;font-size:14.5px">
+    <thead>
+      <tr style="background:#fafbfa">
+        <th style="text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);font-size:11.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--faint)">问题</th>
+        <th style="text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);font-size:11.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--faint)">为什么我答不了</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top"><b>solvea.cx 主仓库在哪?</b><br><span style="color:var(--mut);font-size:13px">GitHub org/name · 本机路径(<code>~/MKT/solvea</code>?<code>~/solvea</code>?)</span></td>
+        <td style="padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top;color:var(--mut)">memory 里只有 <code>~/MKT/solvea-mcp</code> 和 solvea.cx 域名,没有主 app 仓库路径</td>
+      </tr>
+      <tr>
+        <td style="padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top"><b>solvea.cx 用什么栈、什么部署?</b><br><span style="color:var(--mut);font-size:13px">Next.js?同 15?用 Supabase 单库?Vercel?</span></td>
+        <td style="padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top;color:var(--mut)">这决定代码合并的可行性和部署平台问题(Railway → Vercel cron 不兼容)</td>
+      </tr>
+      <tr>
+        <td style="padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top"><b>合并后 gtm.solvea.cx 谁能进?</b><br><span style="color:var(--mut);font-size:13px">仅内部(Founder/Reviewer)?接 SSO?对外开放展示页?</span></td>
+        <td style="padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top;color:var(--mut)">现在 Railway 部署看起来是公开 URL · auth 边界不清</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<footer class="wrap">
+  <p>gtm-swarm · check-in report · 2026-05-24 · Hunter</p>
+  <p style="margin-top:6px">⛔ 等你审阅后再继续 —— 现在没有 git commit、没有改 app code</p>
+</footer>
+
+</body>
+</html>

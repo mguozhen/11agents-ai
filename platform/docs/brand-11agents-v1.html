@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>11agents.ai · brand v1 · terminal brutalist</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0e0f0e;
+    --bg-2: #16181a;
+    --fg: #d4d4cb;
+    --fg-muted: rgba(212, 212, 203, 0.55);
+    --fg-dim: rgba(212, 212, 203, 0.3);
+    --red: #c33;
+    --line: rgba(212, 212, 203, 0.18);
+    --line-strong: #d4d4cb;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 100%; }
+  body {
+    font-family: 'IBM Plex Mono', monospace;
+    background: var(--bg);
+    color: var(--fg);
+    line-height: 1.5;
+    overflow-x: hidden;
+  }
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(0deg, transparent 0, transparent 2px, rgba(255,255,255,.02) 2px, rgba(255,255,255,.02) 3px);
+    pointer-events: none;
+    z-index: 100;
+  }
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.4) 100%);
+    pointer-events: none;
+    z-index: 99;
+  }
+  section {
+    padding: 80px;
+    border-bottom: 1px solid var(--line);
+    position: relative;
+  }
+  .section-num {
+    position: absolute;
+    top: 24px;
+    left: 32px;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    color: var(--fg-dim);
+  }
+  .section-tag {
+    position: absolute;
+    top: 24px;
+    right: 32px;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    color: var(--fg-dim);
+  }
+  .red { color: var(--red); }
+  .muted { color: var(--fg-muted); }
+  .dim { color: var(--fg-dim); }
+
+  /* ============================================================
+     SECTION 0 — TOP CHROME
+     ============================================================ */
+  .chrome {
+    padding: 16px 32px;
+    border-bottom: 1px solid var(--line-strong);
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+  }
+  .chrome span { display: inline-flex; align-items: center; gap: 8px; }
+  .chrome .dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--red);
+    box-shadow: 0 0 6px var(--red);
+  }
+
+  /* ============================================================
+     SECTION 1 — HERO BRAND MARK
+     ============================================================ */
+  .hero {
+    padding: 120px 80px 80px;
+    text-align: left;
+  }
+  .hero-mark {
+    font-size: clamp(140px, 22vw, 320px);
+    line-height: 0.85;
+    font-weight: 700;
+    letter-spacing: -0.05em;
+    margin-bottom: 32px;
+  }
+  .hero-mark .dot { color: var(--red); }
+  .hero-mark .tld { color: var(--fg-muted); font-weight: 400; }
+  .hero-cn {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(36px, 5vw, 64px);
+    font-weight: 300;
+    line-height: 1.15;
+    margin-bottom: 24px;
+    letter-spacing: -0.01em;
+    color: #fff;
+  }
+  .hero-cn .gtm {
+    color: var(--red);
+    font-weight: 500;
+  }
+  .hero-en {
+    font-size: 14px;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+    margin-bottom: 64px;
+  }
+  .hero-meta {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 32px;
+    padding-top: 32px;
+    border-top: 1px solid var(--line);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+  .hero-meta .label { color: var(--fg-dim); display: block; margin-bottom: 8px; font-size: 9px; }
+  .hero-meta .val { color: #fff; font-size: 14px; letter-spacing: 0.05em; text-transform: none; }
+
+  /* ============================================================
+     SECTION 2 — SLOGAN LOCKUP
+     ============================================================ */
+  .lockup {
+    background: var(--bg-2);
+    padding: 100px 80px;
+  }
+  .lockup-grid {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 80px;
+    align-items: center;
+  }
+  .lockup-side {
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--fg-dim);
+    line-height: 2;
+  }
+  .lockup-side h4 {
+    color: var(--fg);
+    margin-bottom: 16px;
+    letter-spacing: 0.3em;
+  }
+  .lockup-main {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(48px, 7vw, 96px);
+    font-weight: 300;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: #fff;
+  }
+  .lockup-main .gtm {
+    color: var(--red);
+    font-weight: 500;
+    position: relative;
+  }
+  .lockup-main .gtm::after {
+    content: '';
+    position: absolute;
+    left: -8px; right: -8px;
+    bottom: -4px;
+    height: 1px;
+    background: var(--red);
+  }
+  .lockup-attr {
+    margin-top: 32px;
+    font-size: 12px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--fg-dim);
+    font-family: 'IBM Plex Mono', monospace;
+  }
+
+  /* ============================================================
+     SECTION 3 — 11 AGENT CANONICAL ARRAY
+     ============================================================ */
+  .roster-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-bottom: 24px;
+    border-bottom: 2px solid var(--line-strong);
+    margin-bottom: 0;
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+  }
+  .roster-head h2 {
+    font-size: 24px;
+    letter-spacing: 0.1em;
+    color: #fff;
+  }
+  .roster {
+    display: grid;
+    grid-template-columns: repeat(11, 1fr);
+    border-bottom: 1px solid var(--line-strong);
+  }
+  .roster-cell {
+    border-right: 1px solid var(--line);
+    padding: 32px 12px 24px;
+    text-align: center;
+    min-height: 220px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+  }
+  .roster-cell:last-child { border-right: 0; }
+  .roster-cell.live {
+    background: rgba(204, 51, 51, 0.04);
+  }
+  .roster-cell.live::before {
+    content: '●';
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    color: var(--red);
+    font-size: 8px;
+  }
+  .roster-cell .num {
+    font-size: 42px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    margin-bottom: 4px;
+    color: #fff;
+  }
+  .roster-cell.live .num { color: var(--red); }
+  .roster-cell .codename {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--fg);
+    margin-bottom: 12px;
+    font-weight: 600;
+  }
+  .roster-cell .triangle {
+    font-size: 8px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+    line-height: 1.6;
+  }
+  .roster-cell .status {
+    margin-top: 12px;
+    font-size: 8px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 4px 0;
+    border-top: 1px dashed var(--line);
+    color: var(--fg-muted);
+  }
+  .roster-cell.live .status { color: var(--red); }
+
+  .roster-foot {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+    padding-top: 24px;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+  }
+  .roster-foot .k { color: #fff; font-size: 28px; font-weight: 700; display: block; letter-spacing: -0.02em; }
+
+  /* ============================================================
+     SECTION 4 — IRON TRIANGLE
+     ============================================================ */
+  .triangle-section {
+    padding: 100px 80px;
+  }
+  .triangle-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+  .triangle-title {
+    font-size: 48px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.0;
+    color: #fff;
+    margin-bottom: 24px;
+  }
+  .triangle-title .red { color: var(--red); }
+  .triangle-doctrine {
+    font-family: 'Inter', sans-serif;
+    font-size: 18px;
+    line-height: 1.7;
+    color: var(--fg);
+    margin-bottom: 32px;
+    max-width: 560px;
+  }
+  .triangle-roles {
+    list-style: none;
+  }
+  .triangle-roles li {
+    padding: 16px 0;
+    border-top: 1px solid var(--line);
+    display: grid;
+    grid-template-columns: 80px 140px 1fr;
+    gap: 16px;
+    align-items: baseline;
+    font-size: 13px;
+  }
+  .triangle-roles li:last-child { border-bottom: 1px solid var(--line); }
+  .triangle-roles .role-num {
+    color: var(--red);
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    font-size: 11px;
+  }
+  .triangle-roles .role-name {
+    color: #fff;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    font-size: 14px;
+  }
+  .triangle-roles .role-desc {
+    color: var(--fg-muted);
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+  }
+
+  .triangle-svg {
+    width: 100%;
+    aspect-ratio: 1;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  /* ============================================================
+     SECTION 5 — DESIGN TOKENS
+     ============================================================ */
+  .tokens {
+    background: var(--bg-2);
+  }
+  .tokens-head {
+    margin-bottom: 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--line);
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+  }
+  .tokens-head h2 {
+    font-size: 24px;
+    letter-spacing: 0.1em;
+    color: #fff;
+  }
+  .tokens-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 48px;
+  }
+  .token-block h3 {
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--line);
+  }
+  .token-row {
+    display: grid;
+    grid-template-columns: 60px 1fr auto;
+    gap: 16px;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px dashed var(--line);
+    font-size: 11px;
+  }
+  .token-row:last-child { border-bottom: 0; }
+  .token-swatch {
+    width: 48px;
+    height: 32px;
+    border: 1px solid var(--fg-muted);
+  }
+  .token-label {
+    color: var(--fg);
+    font-weight: 500;
+    letter-spacing: 0.1em;
+  }
+  .token-val {
+    color: var(--fg-muted);
+    font-size: 10px;
+    letter-spacing: 0.05em;
+  }
+  .font-sample {
+    margin-top: 12px;
+    padding: 12px 16px;
+    border: 1px solid var(--line);
+    background: rgba(0,0,0,0.3);
+    font-size: 13px;
+    color: #fff;
+    letter-spacing: 0.02em;
+  }
+  .font-sample.inter { font-family: 'Inter', sans-serif; font-weight: 300; font-size: 22px; }
+  .font-sample.mono { font-family: 'IBM Plex Mono', monospace; font-weight: 500; }
+
+  /* ============================================================
+     SECTION 6 — LOCKUP VARIANTS
+     ============================================================ */
+  .variants {
+    padding: 100px 80px;
+  }
+  .variants-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    margin-top: 48px;
+  }
+  .variant {
+    aspect-ratio: 4 / 3;
+    border: 1px solid var(--line);
+    padding: 48px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+  }
+  .variant .v-tag {
+    position: absolute;
+    top: 12px;
+    left: 16px;
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--fg-dim);
+  }
+  .variant .v-mark {
+    font-size: 72px;
+    font-weight: 700;
+    letter-spacing: -0.05em;
+    line-height: 0.9;
+  }
+  .variant .v-mark .dot { color: var(--red); }
+  .variant .v-mark .tld { color: var(--fg-muted); font-weight: 400; }
+  .variant .v-foot {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+  }
+  .v-dark { background: var(--bg); color: var(--fg); }
+  .v-light { background: #f5f0e8; color: #111; }
+  .v-light .v-mark .tld { color: #888; }
+  .v-light .v-foot { color: #555; }
+  .v-light .v-tag { color: #888; }
+  .v-red {
+    background: var(--red);
+    color: #fff;
+  }
+  .v-red .v-mark { color: #fff; }
+  .v-red .v-mark .dot { color: #111; }
+  .v-red .v-mark .tld { color: rgba(255,255,255,0.6); }
+  .v-red .v-foot { color: rgba(255,255,255,0.7); }
+  .v-red .v-tag { color: rgba(255,255,255,0.6); }
+  .v-stack {
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+  }
+  .v-stack .v-mark { font-size: 56px; }
+  .v-stack .stack-cn {
+    font-family: 'Inter', sans-serif;
+    font-size: 18px;
+    font-weight: 300;
+    color: var(--fg);
+    margin-top: 12px;
+  }
+  .v-stack .stack-cn .gtm { color: var(--red); font-weight: 500; }
+
+  /* ============================================================
+     SECTION 7 — MANIFESTO
+     ============================================================ */
+  .manifesto {
+    padding: 120px 80px;
+    background: var(--bg-2);
+    text-align: center;
+  }
+  .manifesto-eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 32px;
+  }
+  .manifesto-text {
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+    font-size: 32px;
+    line-height: 1.6;
+    color: #fff;
+    max-width: 880px;
+    margin: 0 auto 48px;
+    letter-spacing: -0.005em;
+  }
+  .manifesto-text .red { color: var(--red); font-weight: 500; }
+  .manifesto-text em { font-style: italic; opacity: 0.7; }
+  .manifesto-sig {
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+  }
+
+  /* ============================================================
+     FOOTER
+     ============================================================ */
+  footer {
+    padding: 32px 80px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--fg-dim);
+    border-top: 1px solid var(--line);
+  }
+</style>
+</head>
+<body>
+
+<!-- ============================ CHROME ============================ -->
+<div class="chrome">
+  <span><span class="dot"></span>11AGENTS.AI &nbsp;·&nbsp; BRAND SYSTEM v1</span>
+  <span>STYLE A &nbsp;·&nbsp; TERMINAL BRUTALIST</span>
+  <span>BUILD 2026.05.27</span>
+</div>
+
+<!-- ============================ 1. HERO ============================ -->
+<section class="hero">
+  <span class="section-num">SEC 01 / 07</span>
+  <span class="section-tag">PRIMARY MARK</span>
+
+  <div class="hero-mark">11<span class="dot">.</span>agents<span class="tld">.ai</span></div>
+  <div class="hero-cn">让天下没有难做的 <span class="gtm">GTM</span>。</div>
+  <div class="hero-en">MAKE <span class="red">GTM</span> EASY · ANYWHERE · ANY BUSINESS</div>
+
+  <div class="hero-meta">
+    <div><span class="label">[ STATUS ]</span><span class="val">6 of 11 live · platform v0.7</span></div>
+    <div><span class="label">[ DOCTRINE ]</span><span class="val">No Triangle = No Agent</span></div>
+    <div><span class="label">[ TRUTH ]</span><span class="val">Multica DB · single source</span></div>
+    <div><span class="label">[ STACK ]</span><span class="val">Next 15 · PostgreSQL · Anthropic</span></div>
+  </div>
+</section>
+
+<!-- ============================ 2. SLOGAN LOCKUP ============================ -->
+<section class="lockup">
+  <span class="section-num" style="color: rgba(212,212,203,.5)">SEC 02 / 07</span>
+  <span class="section-tag" style="color: rgba(212,212,203,.5)">SLOGAN LOCKUP</span>
+
+  <div class="lockup-grid">
+    <div class="lockup-side">
+      <h4>FROM</h4>
+      <div class="dim">「让天下没有难做的生意」</div>
+      <div class="dim">— Jack Ma · 1999</div>
+      <br>
+      <h4>TO</h4>
+      <div>「让天下没有难做的 <span class="red">GTM</span>」</div>
+      <div class="dim">— 11agents · 2026</div>
+    </div>
+    <div>
+      <div class="lockup-main">让天下没有难做的<br><span class="gtm">GTM</span>。</div>
+      <div class="lockup-attr">PRIMARY SLOGAN · CN · DISPLAY 64–96PX · INTER 300</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ 3. ROSTER ============================ -->
+<section>
+  <span class="section-num">SEC 03 / 07</span>
+  <span class="section-tag">CANONICAL ROSTER</span>
+
+  <div class="roster-head">
+    <h2>THE 11 AGENT ROSTER</h2>
+    <span>ELEVEN SPECIALISTS · ONE SWARM · ANY GTM</span>
+  </div>
+
+  <div class="roster">
+    <div class="roster-cell live"><div><div class="num">01</div><div class="codename">FOUNDATION</div><div class="triangle">Builder<br>Reviewer<br>Cron</div></div><div class="status">DEPLOYED</div></div>
+    <div class="roster-cell live"><div><div class="num">02</div><div class="codename">KOL · KOC</div><div class="triangle">Builder<br>Reviewer<br>Cron</div></div><div class="status">DEPLOYED</div></div>
+    <div class="roster-cell live"><div><div class="num">03</div><div class="codename">BLOG</div><div class="triangle">Builder<br>Reviewer<br>Cron</div></div><div class="status">DEPLOYED</div></div>
+    <div class="roster-cell"><div><div class="num">04</div><div class="codename">BACKLINK</div><div class="triangle">— Builder<br>— Reviewer<br>Cron</div></div><div class="status">PENDING</div></div>
+    <div class="roster-cell live"><div><div class="num">05</div><div class="codename">VIDEO</div><div class="triangle">Builder<br>Reviewer<br>Cron</div></div><div class="status">DEPLOYED</div></div>
+    <div class="roster-cell live"><div><div class="num">06</div><div class="codename">REDDIT</div><div class="triangle">Builder<br>Reviewer<br>Cron</div></div><div class="status">PILOT → PROD</div></div>
+    <div class="roster-cell live"><div><div class="num">07</div><div class="codename">SOCIAL</div><div class="triangle">Builder<br>Reviewer<br>Cron</div></div><div class="status">DEPLOYED</div></div>
+    <div class="roster-cell"><div><div class="num">08</div><div class="codename">ADS</div><div class="triangle">Builder<br>— Reviewer<br>Cron</div></div><div class="status">PENDING</div></div>
+    <div class="roster-cell"><div><div class="num">09</div><div class="codename">EDM</div><div class="triangle">— Builder<br>— Reviewer<br>Cron</div></div><div class="status">PENDING</div></div>
+    <div class="roster-cell"><div><div class="num">10</div><div class="codename">YELP</div><div class="triangle">— Builder<br>— Reviewer<br>Cron</div></div><div class="status">PENDING</div></div>
+    <div class="roster-cell"><div><div class="num">11</div><div class="codename">POSTER</div><div class="triangle">— Builder<br>— Reviewer<br>Cron</div></div><div class="status">PENDING</div></div>
+  </div>
+
+  <div class="roster-foot">
+    <div><span class="k">11</span>SPECIALISED AGENTS IN THE CANONICAL ROSTER</div>
+    <div><span class="k">33</span>IRON TRIANGLE ROLES (BUILDER · REVIEWER · CRON)</div>
+    <div><span class="k">6 / 11</span>DEPLOYED LIVE · 5 PENDING HIRE / BUILD</div>
+  </div>
+</section>
+
+<!-- ============================ 4. IRON TRIANGLE ============================ -->
+<section class="triangle-section">
+  <span class="section-num">SEC 04 / 07</span>
+  <span class="section-tag">DOCTRINE · IRON TRIANGLE</span>
+
+  <div class="triangle-grid">
+    <div>
+      <h2 class="triangle-title">No <span class="red">Triangle</span>.<br>No Agent.</h2>
+      <p class="triangle-doctrine">An agent ships only when three roles hold together. Take one away and the agent collapses — no LLM, no founder heroics, no shortcuts. Claude cannot stand in for the Reviewer.</p>
+      <ol class="triangle-roles">
+        <li><span class="role-num">/01</span><span class="role-name">BUILDER</span><span class="role-desc">writes the artifact — the agent's actual output</span></li>
+        <li><span class="role-num">/02</span><span class="role-name">REVIEWER</span><span class="role-desc">accepts or rejects against rubric — must be human-grade judgment</span></li>
+        <li><span class="role-num">/03</span><span class="role-name">CRON</span><span class="role-desc">node-cron tick that fires the loop on schedule, owns SLO</span></li>
+      </ol>
+    </div>
+
+    <svg class="triangle-svg" viewBox="0 0 400 400">
+      <defs>
+        <pattern id="dot" x="0" y="0" width="8" height="8" patternUnits="userSpaceOnUse">
+          <circle cx="1" cy="1" r="0.6" fill="rgba(212,212,203,0.25)"/>
+        </pattern>
+      </defs>
+      <rect width="400" height="400" fill="url(#dot)"/>
+      <polygon points="200,40 360,340 40,340" fill="none" stroke="#d4d4cb" stroke-width="2"/>
+      <polygon points="200,40 360,340 40,340" fill="rgba(204,51,51,0.05)"/>
+      <circle cx="200" cy="40" r="38" fill="#0e0f0e" stroke="#c33" stroke-width="2"/>
+      <text x="200" y="46" text-anchor="middle" fill="#c33" font-family="IBM Plex Mono" font-size="14" font-weight="700" letter-spacing="2">BUILDER</text>
+      <circle cx="360" cy="340" r="40" fill="#0e0f0e" stroke="#c33" stroke-width="2"/>
+      <text x="360" y="346" text-anchor="middle" fill="#c33" font-family="IBM Plex Mono" font-size="13" font-weight="700" letter-spacing="2">REVIEWER</text>
+      <circle cx="40" cy="340" r="34" fill="#0e0f0e" stroke="#c33" stroke-width="2"/>
+      <text x="40" y="346" text-anchor="middle" fill="#c33" font-family="IBM Plex Mono" font-size="14" font-weight="700" letter-spacing="2">CRON</text>
+      <text x="200" y="200" text-anchor="middle" fill="#d4d4cb" font-family="IBM Plex Mono" font-size="20" font-weight="700" letter-spacing="3">1 AGENT</text>
+      <text x="200" y="225" text-anchor="middle" fill="rgba(212,212,203,0.6)" font-family="IBM Plex Mono" font-size="10" letter-spacing="3">× 11 = SWARM</text>
+    </svg>
+  </div>
+</section>
+
+<!-- ============================ 5. DESIGN TOKENS ============================ -->
+<section class="tokens">
+  <span class="section-num" style="color: rgba(212,212,203,.5)">SEC 05 / 07</span>
+  <span class="section-tag" style="color: rgba(212,212,203,.5)">DESIGN TOKENS</span>
+
+  <div class="tokens-head">
+    <h2>SYSTEM PRIMITIVES</h2>
+    <span>v1 · 2026.05.27</span>
+  </div>
+
+  <div class="tokens-grid">
+    <div class="token-block">
+      <h3>PALETTE</h3>
+      <div class="token-row">
+        <div class="token-swatch" style="background:#0e0f0e;border-color:#333"></div>
+        <div class="token-label">crt-charcoal</div>
+        <div class="token-val">#0E0F0E</div>
+      </div>
+      <div class="token-row">
+        <div class="token-swatch" style="background:#16181a"></div>
+        <div class="token-label">surface-2</div>
+        <div class="token-val">#16181A</div>
+      </div>
+      <div class="token-row">
+        <div class="token-swatch" style="background:#d4d4cb"></div>
+        <div class="token-label">phosphor</div>
+        <div class="token-val">#D4D4CB</div>
+      </div>
+      <div class="token-row">
+        <div class="token-swatch" style="background:#c33"></div>
+        <div class="token-label">hazard-red</div>
+        <div class="token-val">#CC3333</div>
+      </div>
+      <div class="token-row">
+        <div class="token-swatch" style="background:#fff"></div>
+        <div class="token-label">pure-white</div>
+        <div class="token-val">#FFFFFF</div>
+      </div>
+    </div>
+
+    <div class="token-block">
+      <h3>TYPOGRAPHY</h3>
+      <div class="font-sample mono">IBM Plex Mono &nbsp;·&nbsp; 11agents.ai</div>
+      <div class="token-row" style="grid-template-columns: 1fr auto">
+        <div class="token-label">UI · CODE · MONO</div>
+        <div class="token-val">400 / 500 / 700</div>
+      </div>
+      <div class="font-sample inter">让天下没有难做的 GTM。</div>
+      <div class="token-row" style="grid-template-columns: 1fr auto">
+        <div class="token-label">DISPLAY · SLOGAN</div>
+        <div class="token-val">Inter 300 / 500</div>
+      </div>
+    </div>
+
+    <div class="token-block">
+      <h3>VOICE</h3>
+      <div class="token-row" style="grid-template-columns: 1fr">
+        <div style="font-family: 'Inter', sans-serif; font-size: 13px; line-height: 1.6; color: var(--fg);">
+          <strong style="color:#fff">Terse, technical, candid.</strong><br>
+          <span class="muted">No marketing fluff. Numbers cited. Doctrine quoted. Trade-offs named. Sentences clipped. ASCII over emoji. Hazard-red used sparingly — for status, not decoration.</span>
+        </div>
+      </div>
+      <div class="token-row" style="grid-template-columns: 1fr; padding-top: 24px;">
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.15em; color: var(--red);">
+          DO &nbsp;·&nbsp; "6/11 live"<br>
+          DON'T &nbsp;·&nbsp; "we're empowering ..."
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ 6. LOCKUP VARIANTS ============================ -->
+<section class="variants">
+  <span class="section-num">SEC 06 / 07</span>
+  <span class="section-tag">LOCKUP VARIANTS</span>
+
+  <div class="tokens-head">
+    <h2>FOUR CANONICAL LOCKUPS</h2>
+    <span>USE THESE · DO NOT IMPROVISE</span>
+  </div>
+
+  <div class="variants-grid">
+    <div class="variant v-dark">
+      <span class="v-tag">01 · PRIMARY (DARK)</span>
+      <div class="v-mark">11<span class="dot">.</span>agents<span class="tld">.ai</span></div>
+      <div class="v-foot">DEFAULT · PRODUCT · WEB · DOCS</div>
+    </div>
+    <div class="variant v-light">
+      <span class="v-tag">02 · INVERTED (LIGHT)</span>
+      <div class="v-mark">11<span class="dot" style="color:#c33">.</span>agents<span class="tld">.ai</span></div>
+      <div class="v-foot">PRINT · PRESS · INVOICE</div>
+    </div>
+    <div class="variant v-red">
+      <span class="v-tag">03 · HAZARD</span>
+      <div class="v-mark">11<span class="dot">.</span>agents<span class="tld">.ai</span></div>
+      <div class="v-foot">LAUNCH · WARNING · KEYNOTE COVER</div>
+    </div>
+    <div class="variant v-dark v-stack">
+      <span class="v-tag">04 · STACKED WITH SLOGAN</span>
+      <div class="v-mark">11<span class="dot">.</span>agents<span class="tld">.ai</span></div>
+      <div class="stack-cn">让天下没有难做的 <span class="gtm">GTM</span>。</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ 7. MANIFESTO ============================ -->
+<section class="manifesto">
+  <span class="section-num" style="color: rgba(212,212,203,.5)">SEC 07 / 07</span>
+  <span class="section-tag" style="color: rgba(212,212,203,.5)">MANIFESTO</span>
+
+  <div class="manifesto-eyebrow">/ MANIFESTO / 2026 /</div>
+  <div class="manifesto-text">
+    GTM was always the bottleneck.<br>
+    Not the product. Not the funding. Not even the founder.<br><br>
+    Eleven <span class="red">specialised</span> agents, each in an Iron Triangle,<br>
+    take over the channels you never had time to run.<br><br>
+    <em>You ship the product.</em><br>
+    <span class="red">We sell it.</span>
+  </div>
+  <div class="manifesto-sig">— 11agents.ai · doctrine v1</div>
+</section>
+
+<!-- ============================ FOOTER ============================ -->
+<footer>
+  <span>11AGENTS.AI · BRAND SYSTEM v1</span>
+  <span>STYLE A · TERMINAL BRUTALIST</span>
+  <span>BUILD 2026.05.27</span>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,859 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Agent-GTM · 六产品落地 · 锻造一个 Skill</title>
+<style>
+  :root{
+    --paper:#f6f2e9;--paper-2:#efeadc;--ink:#1a1a1a;--muted:#7a7060;
+    --line:#d8cfb8;--accent:#c95400;--accent-2:#2a6f4e;--warning:#b35d3d;
+    --serif:"Iowan Old Style","Charter","Source Serif Pro",Georgia,serif;
+    --sans:-apple-system,"SF Pro Text","Inter","Helvetica Neue",Arial,sans-serif;
+    --mono:"JetBrains Mono","SF Mono",Menlo,monospace;
+    --c1:#f0e8d5;--c2:#e8e3d3;--c3:#ecdfc8;--c4:#e3decd;
+  }
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    background-image:
+      radial-gradient(circle at 12% 18%,rgba(201,84,0,.04),transparent 28%),
+      radial-gradient(circle at 88% 78%,rgba(42,111,78,.04),transparent 32%);
+    color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1280px;margin:0 auto;padding:0 36px 140px;}
+  .tabbar{
+    position:sticky;top:0;z-index:50;background:rgba(246,242,233,.96);
+    backdrop-filter:blur(8px);border-bottom:1px solid var(--line);
+    margin:0 -36px;padding:14px 36px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;
+  }
+  .tabbar .brand{font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin-right:8px;}
+  .tab{
+    font-family:var(--mono);font-size:12px;padding:7px 13px;border-radius:5px;
+    border:1px solid var(--line);background:#fff;cursor:pointer;color:var(--muted);transition:all .12s;
+  }
+  .tab:hover{color:var(--ink);border-color:var(--accent);}
+  .tab.active{background:var(--ink);color:var(--paper);border-color:var(--ink);}
+  .tab.ov.active{background:var(--accent);border-color:var(--accent);}
+  .page{display:none;padding-top:54px;}
+  .page.active{display:block;}
+
+  header{border-bottom:1px solid var(--line);padding-bottom:34px;margin-bottom:14px;}
+  .eyebrow{
+    font-family:var(--mono);font-size:11px;letter-spacing:.26em;text-transform:uppercase;
+    color:var(--muted);margin-bottom:14px;display:flex;justify-content:space-between;align-items:baseline;
+  }
+  .eyebrow .date{color:var(--accent);}
+  .cat-pill{
+    display:inline-block;font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+    padding:3px 9px;border-radius:3px;margin-bottom:12px;
+    background:rgba(42,111,78,.12);color:var(--accent-2);border:1px solid rgba(42,111,78,.3);
+  }
+  .cat-pill.hub{background:rgba(201,84,0,.12);color:var(--accent);border-color:rgba(201,84,0,.35);}
+  h1{font-family:var(--serif);font-size:54px;line-height:1.04;margin:0 0 16px;letter-spacing:-.015em;font-weight:600;}
+  h1 em{font-style:italic;color:var(--accent);}
+  .lede{font-family:var(--serif);font-size:20px;line-height:1.5;color:var(--ink);max-width:1000px;margin:0 0 20px;}
+  .lede b{font-weight:700;} .lede i{color:var(--accent);font-style:italic;}
+  .lede strike{text-decoration-thickness:2.5px;color:var(--warning);}
+  .meta-row{display:flex;gap:26px;flex-wrap:wrap;font-family:var(--mono);font-size:11.5px;color:var(--muted);margin-top:10px;}
+  .meta-row b{color:var(--ink);font-weight:500;}
+  .meta-row i{color:var(--accent);font-style:normal;}
+
+  .funnel{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin:18px 0 0;align-items:center;}
+  .fstage{background:#fff;border:1px solid var(--line);border-radius:4px;padding:9px 10px;text-align:center;font-family:var(--mono);}
+  .fstage.before{background:rgba(179,93,61,.1);border-color:rgba(179,93,61,.4);}
+  .fstage.after{background:rgba(42,111,78,.1);border-color:rgba(42,111,78,.4);}
+  .fstage b{color:var(--ink);font-family:var(--sans);font-weight:600;font-size:12.5px;}
+  .fstage .label{font-size:9.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:3px;}
+  .farrow{font-family:var(--mono);color:var(--muted);text-align:center;font-size:13px;}
+
+  section{margin-top:60px;}
+  h2{font-family:var(--serif);font-size:34px;line-height:1.1;margin:0 0 8px;font-weight:600;}
+  .h2-sub{
+    font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.16em;text-transform:uppercase;
+    margin-bottom:24px;padding-bottom:14px;border-bottom:1px solid var(--line);
+  }
+
+  /* shipped audit table */
+  .shipped{display:grid;grid-template-columns:1fr 96px 1.6fr;border:1px solid var(--line);border-radius:6px;overflow:hidden;background:#fff;}
+  .shipped .sh,.shipped .sc{padding:11px 15px;border-bottom:1px solid var(--line);font-size:12.5px;line-height:1.45;}
+  .shipped .sh{background:var(--paper-2);font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-weight:600;}
+  .shipped .sc.it{font-weight:600;}
+  .shipped .sc.status-done{color:var(--accent-2);font-family:var(--mono);font-weight:600;font-size:11px;}
+  .shipped .sc.status-partial{color:#b58900;font-family:var(--mono);font-weight:600;font-size:11px;}
+  .shipped .sc.status-todo{color:var(--warning);font-family:var(--mono);font-weight:600;font-size:11px;}
+  .audit-bar{display:flex;gap:6px;height:8px;border-radius:4px;overflow:hidden;margin:0 0 14px;max-width:420px;}
+  .audit-bar span{display:block;}
+  .ab-done{background:var(--accent-2);} .ab-partial{background:#b58900;} .ab-todo{background:var(--warning);}
+
+  /* cards */
+  .deck{display:grid;grid-template-columns:repeat(2,1fr);gap:26px;margin:8px 0 0;}
+  @media(max-width:900px){.deck{grid-template-columns:1fr;}.funnel{grid-template-columns:1fr;}.farrow{display:none;}.shipped{grid-template-columns:1fr;}.shipped .sh{display:none;}}
+  .card{background:var(--c1);border-radius:8px;padding:28px 30px;border:1px solid var(--line);box-shadow:0 1px 0 rgba(0,0,0,.04),0 8px 24px -16px rgba(0,0,0,.12);}
+  .card.cc2{background:var(--c2);}.card.cc3{background:var(--c3);}.card.cc4{background:var(--c4);}
+  .card-num{font-family:var(--mono);font-size:10.5px;letter-spacing:.22em;color:var(--accent);text-transform:uppercase;margin-bottom:5px;}
+  .card-name{font-family:var(--serif);font-size:29px;line-height:1.08;margin:0 0 12px;font-weight:600;}
+  .card-name .cn{color:var(--accent);font-size:18px;}
+  .card-shift{border-left:3px solid var(--accent);padding:8px 0 8px 14px;margin:14px 0 16px;font-family:var(--serif);font-size:15px;line-height:1.45;font-style:italic;}
+  .card-shift strike{color:var(--warning);}
+  .card-shift b{font-style:normal;color:var(--accent);font-weight:700;}
+  .h-move{font-family:var(--mono);font-size:10px;letter-spacing:.2em;color:var(--muted);text-transform:uppercase;margin:18px 0 8px;}
+  .move-list{padding-left:0;list-style:none;margin:0 0 16px;counter-reset:move;}
+  .move-list li{padding:8px 0 8px 26px;border-bottom:1px dashed rgba(0,0,0,.1);position:relative;font-size:13px;line-height:1.5;}
+  .move-list li:last-child{border-bottom:0;}
+  .move-list li::before{content:counter(move)".";counter-increment:move;position:absolute;left:0;top:8px;font-family:var(--mono);font-size:11px;color:var(--accent);font-weight:600;}
+  code{font-family:var(--mono);font-size:11px;background:rgba(0,0,0,.06);padding:1px 5px;border-radius:3px;}
+  .move-list b,.ship-content b,.shipped b{color:var(--ink);font-weight:700;}
+  .ship-block{background:#fff;border-radius:6px;padding:13px 16px;margin:0 0 12px;border:1px solid var(--line);}
+  .h-ship{font-family:var(--mono);font-size:10px;letter-spacing:.2em;color:var(--accent-2);text-transform:uppercase;margin-bottom:5px;}
+  .ship-content{font-size:12.5px;line-height:1.5;}
+  .kpi{display:flex;justify-content:space-between;align-items:baseline;gap:14px;padding:10px 14px;background:rgba(0,0,0,.04);border-radius:4px;margin-top:12px;}
+  .kpi-l{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;color:var(--muted);text-transform:uppercase;white-space:nowrap;}
+  .kpi-v{font-family:var(--mono);font-size:11.5px;color:var(--ink);font-weight:600;text-align:right;}
+
+  /* sprint */
+  .sprint{display:grid;grid-template-columns:88px 1fr 1fr 1fr 1fr;border:1px solid var(--line);border-radius:6px;overflow:hidden;background:#fff;}
+  .sprint .rh,.sprint .rc{padding:12px 13px;border-bottom:1px solid var(--line);border-right:1px solid var(--line);font-size:12.5px;line-height:1.42;}
+  .sprint .rh{background:var(--paper-2);font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:600;}
+  .sprint .rc:last-child{border-right:0;}
+  .sprint .day{background:var(--c1);font-family:var(--mono);font-size:11px;font-weight:700;color:var(--accent);text-align:center;}
+  .sprint .rc strong{color:var(--ink);}
+
+  .principle{background:#1a1a1a;color:#f4ecd8;padding:28px 34px;margin:20px 0;border-radius:6px;font-family:var(--serif);font-size:18px;line-height:1.5;position:relative;}
+  .principle::before{content:"§";font-size:52px;position:absolute;top:8px;right:28px;color:var(--accent);opacity:.5;}
+  .ptag{font-family:var(--mono);font-size:10px;letter-spacing:.22em;color:var(--accent);text-transform:uppercase;margin-bottom:10px;display:block;}
+  .principle em{color:var(--accent);font-style:italic;}
+  .principle b{color:#fff;}
+  .close-paragraphs p{font-family:var(--serif);font-size:16.5px;line-height:1.6;max-width:900px;margin:14px 0 0;}
+  .close-paragraphs b{color:var(--ink);font-weight:700;}
+  .close-paragraphs i{color:var(--accent);font-style:italic;}
+
+  .banner{background:rgba(201,84,0,.08);border:1px solid rgba(201,84,0,.3);border-radius:6px;padding:12px 16px;font-size:12.5px;font-family:var(--mono);color:var(--accent);margin-bottom:16px;line-height:1.5;}
+
+  .four-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:8px;}
+  @media(max-width:900px){.four-grid{grid-template-columns:1fr 1fr;}.loop{grid-template-columns:1fr!important;}}
+  .fcell{background:#fff;border:1px solid var(--line);border-radius:6px;padding:18px;}
+  .fcell .fc-n{font-family:var(--mono);font-size:10px;letter-spacing:.2em;color:var(--accent);text-transform:uppercase;}
+  .fcell h4{font-family:var(--serif);font-size:21px;margin:6px 0 8px;font-weight:600;}
+  .fcell p{font-size:13px;line-height:1.5;margin:0;}
+  .fcell .old{color:var(--warning);text-decoration:line-through;}
+  .fcell .new{color:var(--accent-2);font-weight:600;}
+  .arch{background:#fff;border:1px solid var(--line);border-radius:8px;padding:24px;margin-top:8px;}
+  .arch svg{display:block;width:100%;height:auto;}
+  .loop{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:8px;}
+  .lstep{background:#fff;border:1px solid var(--line);border-radius:6px;padding:15px 14px;position:relative;}
+  .lstep .ln{font-family:var(--mono);font-size:10px;color:var(--accent);letter-spacing:.16em;}
+  .lstep h5{font-family:var(--serif);font-size:16px;margin:5px 0 6px;font-weight:600;}
+  .lstep p{font-size:12px;line-height:1.45;margin:0;color:var(--muted);}
+  .lstep::after{content:"→";position:absolute;right:-12px;top:50%;transform:translateY(-50%);color:var(--accent);font-family:var(--mono);z-index:2;}
+  .loop .lstep:last-child::after{content:"";}
+  .prod-table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);border-radius:6px;overflow:hidden;font-size:13px;}
+  .prod-table th,.prod-table td{padding:11px 14px;text-align:left;border-bottom:1px solid var(--line);}
+  .prod-table th{background:var(--paper-2);font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);}
+  .prod-table td b{color:var(--ink);}
+  .prod-table tr:last-child td{border-bottom:0;}
+  .badge{font-family:var(--mono);font-size:10px;padding:2px 7px;border-radius:3px;}
+  .badge.hub{background:rgba(201,84,0,.12);color:var(--accent);}
+  .badge.v{background:rgba(42,111,78,.12);color:var(--accent-2);}
+  footer{border-top:1px solid var(--line);padding-top:24px;margin-top:80px;font-family:var(--mono);font-size:11px;color:var(--muted);line-height:1.7;}
+  footer b{color:var(--ink);}
+  .intro-p{font-family:var(--serif);font-size:17px;line-height:1.62;max-width:920px;margin:18px 0;}
+  .intro-p b{font-weight:700;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <nav class="tabbar" id="tabbar">
+    <span class="brand">Agent-GTM</span>
+    <button class="tab ov active" data-tab="overview">总览 · Overview</button>
+    <button class="tab" data-tab="voc">voc-amazon-reviews</button>
+    <button class="tab" data-tab="btcmind">btcmind</button>
+    <button class="tab" data-tab="solvea">solvea</button>
+    <button class="tab" data-tab="flatkey">flatkey</button>
+    <button class="tab" data-tab="p101">101pay</button>
+    <button class="tab" data-tab="smartcrawler">smartcrawler</button>
+  </nav>
+
+  <!-- ───────── OVERVIEW ───────── -->
+  <div class="page active" id="page-overview">
+    <header>
+      <div class="eyebrow"><span>Solvea Group · Agent-First GTM</span><span class="date">2026-05-18 · Hunter</span></div>
+      <h1>六个产品落地，<em>锻造一个 Skill</em></h1>
+      <p class="lede">
+        <b>agent-gtm</b> 是一个 skill —— 把任意产品翻译成「<b>发现 → 引流 → 内容 → 分发</b>」四张卡的
+        Agent 时代 GTM 打法。<strike>把它写完整再用</strike> →
+        <b>用六个真实产品各跑一周,每次落地都把 skill 磨得更利</b>。产品是试验场,<em>skill 才是要交付的东西</em>。
+      </p>
+      <div class="meta-row">
+        <span><b>方法</b>：4-card 打法 × 1 周冲刺</span>
+        <span><b>试验场</b>：6 产品（1 hub + 5 spoke）</span>
+        <span><b>产物</b>：被实战验证过的 agent-gtm skill</span>
+        <span><b>模板</b>：每个产品 tab = btcmind playbook 完整结构</span>
+      </div>
+    </header>
+
+    <section style="margin-top:36px">
+      <div class="principle">
+        <span class="ptag">PRINCIPLES.md · §06</span>
+        Agents 是新的分发渠道 —— 量级等同于 App Store / SEO / 公众号 / TikTok 各自的拐点。
+        <b>Agent 不调用你的 UI,它调用你的能力。</b>
+        只有界面没有 API 的产品会被绕过；API 不够 Agent-friendly 的,输给更 friendly 的那个。
+        <em>谁先成为某类能力的默认调用源,谁就拿到这波分发红利。</em>
+      </div>
+    </section>
+
+    <section>
+      <h2>四张卡是什么</h2>
+      <div class="h2-sub">旧漏斗每个环节都要再做一份「面向 Agent」的版本 · 不是替换,是叠加</div>
+      <div class="funnel">
+        <div class="fstage before"><div class="label">旧·发现</div><b>App Store / SEO</b></div><div class="farrow">→</div>
+        <div class="fstage before"><div class="label">旧·引流</div><b>落地页 / 广告</b></div><div class="farrow">→</div>
+        <div class="fstage before"><div class="label">旧·内容</div><b>Blog / 视频</b></div><div class="farrow">→</div>
+        <div class="fstage before"><div class="label">旧·分发</div><b>多渠道发帖</b></div>
+      </div>
+      <div class="funnel" style="margin-top:8px">
+        <div class="fstage after"><div class="label">新·发现</div><b>MCP catalog</b></div><div class="farrow">→</div>
+        <div class="fstage after"><div class="label">新·引流</div><b>Capability manifest</b></div><div class="farrow">→</div>
+        <div class="fstage after"><div class="label">新·内容</div><b>OpenAPI / Cookbook</b></div><div class="farrow">→</div>
+        <div class="fstage after"><div class="label">新·分发</div><b>Tool call & 默认工具箱</b></div>
+      </div>
+      <div class="four-grid" style="margin-top:26px">
+        <div class="fcell"><div class="fc-n">Card 01</div><h4>发现</h4><p><span class="old">用户搜到你</span> → <span class="new">Agent 工具索引里看到你</span>。索引来自 MCP 目录、LLM 训练数据、框架默认配置。</p></div>
+        <div class="fcell"><div class="fc-n">Card 02</div><h4>引流</h4><p><span class="old">广告买点击</span> → <span class="new">Agent router 决定调谁</span>。靠 tool description、cost 元数据、一行安装的相对优势胜出。</p></div>
+        <div class="fcell"><div class="fc-n">Card 03</div><h4>内容</h4><p><span class="old">为人写 blog</span> → <span class="new">为 Agent 写 cookbook</span>。OpenAPI、可跑示例、语义化错误码 ＞ 散文。</p></div>
+        <div class="fcell"><div class="fc-n">Card 04</div><h4>分发</h4><p><span class="old">渠道 BD</span> → <span class="new">成功 tool call 自动传染</span>。OSS 参考架构、框架 preset、hub-spoke 互链。</p></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>架构 · Hub-and-Spoke</h2>
+      <div class="h2-sub">flatkey 横向 hub（LLM 基础设施）· 5 个 vertical spoke 各占一个领域 · capability manifest 双向互链</div>
+      <div class="arch">
+        <svg viewBox="0 0 880 460" xmlns="http://www.w3.org/2000/svg" font-family="JetBrains Mono, monospace">
+          <g stroke="#c95400" stroke-width="1.6" stroke-dasharray="4 4" opacity="0.55">
+            <line x1="440" y1="230" x2="180" y2="95"/><line x1="440" y1="230" x2="700" y2="95"/>
+            <line x1="440" y1="230" x2="120" y2="300"/><line x1="440" y1="230" x2="760" y2="300"/>
+            <line x1="440" y1="230" x2="440" y2="410"/>
+          </g>
+          <circle cx="440" cy="230" r="74" fill="#1a1a1a"/>
+          <text x="440" y="222" fill="#f4ecd8" font-size="20" font-weight="700" text-anchor="middle">flatkey</text>
+          <text x="440" y="244" fill="#c95400" font-size="10.5" text-anchor="middle">HUB · LLM 网关</text>
+          <text x="440" y="261" fill="#9a9485" font-size="9" text-anchor="middle">所有 spoke 的底层 LLM</text>
+          <g font-size="12.5" font-weight="700" text-anchor="middle">
+            <g><rect x="92" y="62" width="176" height="66" rx="8" fill="#fff" stroke="#2a6f4e" stroke-width="1.6"/>
+               <text x="180" y="90" fill="#1a1a1a">voc-amazon-reviews</text><text x="180" y="110" fill="#2a6f4e" font-size="9.5" font-weight="400">电商 · Amazon VoC</text></g>
+            <g><rect x="612" y="62" width="176" height="66" rx="8" fill="#fff" stroke="#2a6f4e" stroke-width="1.6"/>
+               <text x="700" y="90" fill="#1a1a1a">btcmind</text><text x="700" y="110" fill="#2a6f4e" font-size="9.5" font-weight="400">加密 · 投研议事</text></g>
+            <g><rect x="32" y="268" width="176" height="66" rx="8" fill="#fff" stroke="#2a6f4e" stroke-width="1.6"/>
+               <text x="120" y="296" fill="#1a1a1a">solvea</text><text x="120" y="316" fill="#2a6f4e" font-size="9.5" font-weight="400">客服 · CS Agent</text></g>
+            <g><rect x="672" y="268" width="176" height="66" rx="8" fill="#fff" stroke="#2a6f4e" stroke-width="1.6"/>
+               <text x="760" y="296" fill="#1a1a1a">smartcrawler</text><text x="760" y="316" fill="#2a6f4e" font-size="9.5" font-weight="400">竞品情报 · DTC</text></g>
+            <g><rect x="352" y="380" width="176" height="66" rx="8" fill="#fff" stroke="#c95400" stroke-width="1.6"/>
+               <text x="440" y="408" fill="#1a1a1a">101pay</text><text x="440" y="428" fill="#c95400" font-size="9.5" font-weight="400">支付 · Agent 经济收银</text></g>
+          </g>
+          <text x="440" y="30" fill="#7a7060" font-size="10" text-anchor="middle" letter-spacing="2">CAPABILITY GRAPH · Agent router 看到一整张能力图</text>
+        </svg>
+      </div>
+      <p class="intro-p">
+        每个 spoke 的 <code>/.well-known/agent-capabilities.json</code> 里列 flatkey 当 <code>relation:"hub"</code>；
+        flatkey 的 <code>related_capabilities</code> 反向推荐 5 个 spoke。Agent router 探到任意节点,就能顺 manifest 走完整张图 ——
+        <b>横向 hub × 5 个 vertical spoke = 一个默认配置候选包</b>。集团内部互链是最便宜的流量。
+      </p>
+    </section>
+
+    <section>
+      <h2>为什么是「锻造 skill」而不是「做 GTM」</h2>
+      <div class="h2-sub">六次落地 = 六次对 skill 的压力测试 · 每次把缺口回写进 skill</div>
+      <div class="loop">
+        <div class="lstep"><div class="ln">STEP 1</div><h5>选产品</h5><p>6 个真实产品,覆盖 hub + 4 个 vertical 领域,差异越大越能暴露盲点。</p></div>
+        <div class="lstep"><div class="ln">STEP 2</div><h5>跑四张卡</h5><p>用 agent-gtm skill 当场生成 4-card + 1 周冲刺,不手工绕过。</p></div>
+        <div class="lstep"><div class="ln">STEP 3</div><h5>落地执行</h5><p>一周内真正 ship:catalog、manifest、cookbook、cross-link。</p></div>
+        <div class="lstep"><div class="ln">STEP 4</div><h5>暴露缺口</h5><p>哪一步 skill 给不出动作 / 分类错 / 模板不通用 —— 记下来。</p></div>
+        <div class="lstep"><div class="ln">STEP 5</div><h5>回写 skill</h5><p>缺口变成 references/ 规则、examples/ 案例。skill 变利,下个产品更快。</p></div>
+      </div>
+      <p class="intro-p" style="margin-top:36px">
+        btcmind 这一轮已回写三条:<b>(1)</b> 垂直产品 catalog 分类不能跟 hub 抢 "AI/Inference",要进领域分类；
+        <b>(2)</b> 语义化错误码不只是文档,<code>docs/errors.md</code> 必须配引擎里真实的 <code>type+suggested_action</code>；
+        <b>(3)</b> cross-link manifest 要双向落代码,不是 PPT 概念。
+        skill 已开源:<b>github.com/mguozhen/agent-gtm</b>。<b>六个产品跑完,agent-gtm 就是被六种业态验证过的 skill。</b>
+      </p>
+    </section>
+
+    <section>
+      <h2>六产品 · 一周冲刺总览</h2>
+      <div class="h2-sub">点上方 tab 看每个产品的当前状态盘点 + 四张卡 + Day1-7 冲刺</div>
+      <table class="prod-table">
+        <thead><tr><th>产品</th><th>类型</th><th>领域</th><th>当前 audit</th><th>一周冲刺核心</th></tr></thead>
+        <tbody>
+          <tr><td><b>voc-amazon-reviews</b></td><td><span class="badge v">Spoke</span></td><td>电商 / Amazon VoC</td><td>8✅ 2🟡 3❌</td><td>链路已跑通,剩 PyPI publish + 3 catalog OAuth</td></tr>
+          <tr><td><b>btcmind</b></td><td><span class="badge v">Spoke</span></td><td>加密 / 投研决策</td><td>11✅ 1🟡 3❌</td><td>剩 npm publish + catalog OAuth + 通道注册</td></tr>
+          <tr><td><b>solvea</b></td><td><span class="badge v">Spoke</span></td><td>客服 / CS Agent</td><td>7✅ 1🟡 4❌</td><td>链路代码层已通,剩独立仓库 + PyPI + catalog OAuth</td></tr>
+          <tr><td><b>flatkey</b></td><td><span class="badge hub">Hub</span></td><td>LLM 网关（横向）</td><td>11✅ 1🟡 2❌</td><td>链路已通,剩 OSS repo + framework provider PR</td></tr>
+          <tr><td><b>101pay</b></td><td><span class="badge hub">Infra</span></td><td>支付 / Agent 经济结算</td><td>外部标的 · 战略推演</td><td>x402 收银端点 + runtime 集成</td></tr>
+          <tr><td><b>smartcrawler</b></td><td><span class="badge v">Spoke</span></td><td>竞品情报 / 跨境 DTC</td><td>8✅ 1🟡 3❌</td><td>链路已通,剩仓库转 public + npm + status 页</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <footer>
+      Generated <b>2026-05-18</b> · Solvea Group · agent-gtm skill 实战锻造<br>
+      skill 开源: <b>github.com/mguozhen/agent-gtm</b> · 模板: agent-first-gtm-playbook-btcmind.html · 单文件可分享
+    </footer>
+  </div>
+
+  <div id="product-pages"></div>
+</div>
+
+<script>
+const PRINCIPLE = {
+  tag:"PRINCIPLES.md · §06",
+  body:'Agents Are the New Distribution Channel —— External AI Agents 是一个新的分发渠道,量级等同 App Store / SEO / 公众号 / TikTok 各自的拐点。Agent <em>不调用你的 UI,它调用你的能力</em>。只有界面没有 API 的产品会被绕过;API 不够 Agent-friendly 的,输给更 friendly 的那个。'
+};
+
+const PRODUCTS = [
+  {
+    slug:"voc", tab:"voc", cat:"Vertical · 电商", catClass:"",
+    h1:'voc-amazon-reviews 抽四张卡：<em>Amazon-VoC 的 Agent 分发</em>',
+    lede:'Amazon 卖家工具圈换底 —— <strike>卖家打开 Helium 10</strike> → <b>Agent 调 voc-amazon-reviews</b>；<strike>SEO 找 review intelligence</strike> → <b>MCP catalog 被 router 选中</b>；<strike>买 SaaS dashboard</strike> → <b>tool call 计费</b>。MCP server（FastMCP · 6 tools）5/15 已上线,SKILL.md 已发 clawhub —— 这一周补完 manifest / cookbook / 分发 三块。',
+    meta:[["受众","Amazon-seller Agent"],["载体","MCP server · voc.ai · clawhub skill"],["反馈","analyze / voc_full tool call"],["目标","成为 Agent「选品+VoC」<i>默认</i>能力"]],
+    shipped:[
+      ["MCP server（FastMCP · 6 tools）","done","<code>mcp_server/server.py</code> —— <code>fetch_reviews / analyze_reviews / voc_full / extract_listing_improvements / analyze_csv / render_dashboard</code>"],
+      ["SKILL.md 发布 clawhub","done","<code>clawhub install voc-amazon-reviews</code> 已 ready"],
+      ["/.well-known/agent-capabilities.json + OpenAPI","done","本轮已建 —— <code>.well-known/agent-capabilities.json</code>(6 tool 全列 latency/cost)+ <code>docs/openapi.json</code> OpenAPI 3.1"],
+      ["docs/errors.md 语义错误码","done","本轮已建 —— <code>server.py</code> 加 <code>_safe</code> 包装,异常→<code>{type,suggested_action,retryable}</code> + errors.md 8 类错误表"],
+      ["cross-link manifest","done","本轮已落 —— agent-capabilities.json 的 <code>related_capabilities</code> 推 flatkey hub + smartcrawler/btcmind sibling"],
+      ["cookbook","done","本轮已建 <code>docs/cookbook/</code> 3 篇 —— Claude Code 日报 / Cursor listing 审计 / LangChain VoC router,每篇可跑"],
+      ["comparison page","done","本轮已建 <code>docs/compare/</code> 3 篇 —— vs Helium 10 / vs Jungle Scout / vs Data Dive"],
+      ["GitHub topics","done","本轮加齐 12 个 —— <code>amazon,ecommerce,voice-of-customer,jungle-scout-alternative,helium10-alternative…</code>"],
+      ["MCP catalog 提交","partial","awesome-mcp-servers #6528 + cline #1602 PR open · Glama 自动索引 · 本轮已写 <code>docs/mcp-distribution/</code> 提交包(mcp.so/smithery/pulsemcp 待 OAuth)"],
+      ["npm / PyPI one-shot install","todo","Python-only —— <code>server.json</code> 已就绪,待 publish <code>voc-mcp</code> 到 PyPI(官方 registry 提交的前提)"],
+      ["status page","partial","<code>docs/GTM.md</code> 当 roadmap,无公开 /status 页"],
+      ["MCP call telemetry","todo","<code>mcp_server/</code> 无 Redis / 埋点,不知道几个 Agent 在调"],
+      ["OSS reference repo","todo","无独立 example repo"]
+    ],
+    cards:[
+      {num:"01 / Discovery",name:"发现",cn:"让 Agent 知道这条 capability 存在",
+       shift:'<strike>"卖家 SEO 找工具"</strike> → <b>"Agent 在 MCP 目录 Ecommerce 分类看到 voc"</b>。垂直产品进领域分类,不抢 AI。',
+       moves:['建 <code>/.well-known/agent-capabilities.json</code> + <code>openapi.json</code> —— 6 个 tool 全列 latency/cost 元数据。当前完全缺失,是最大窟窿。',
+              '5 大 MCP catalog 闭环:已 file <code>awesome-mcp-servers#6528</code> + <code>cline/mcp-marketplace#1602</code>,补 mcp.so / smithery / pulsemcp,分类全选 <b>Ecommerce / Research</b>。',
+              'GitHub topics:<code>gh repo edit --add-topic mcp,mcp-server,amazon,review-analysis,voice-of-customer,helium10-alternative,ecommerce</code>。',
+              'OpenAPI 3.1 提交 <code>apis.guru/openapi-directory</code> —— 被 LLM 训练数据收录最便宜。',
+              'clawhub 已发布的 SKILL.md 反向引到 MCP install —— skill 用户 → MCP 用户的转化路径。'],
+       deliverable:'capability manifest + OpenAPI 上线 · 5 catalog 收录 · GitHub topics 配齐 · apis.guru PR filed。',
+       kpi:'MCP catalog 累计 install ≥ 80/周 · GitHub stars 翻倍'},
+      {num:"02 / Traffic",name:"引流",cn:"让 Agent 路由 Amazon 任务给我们",
+       shift:'<strike>"投广告抢卖家点击"</strike> → <b>"router 在 \'analyze this ASIN\' 任务上选 voc"</b>。hook:<b>结构化 sentiment+pain point+listing fix vs 通用模型</b>。',
+       moves:['打 PyPI / npm 包 —— <code>pip install voc-mcp</code> 或 <code>npx -y @voc/mcp</code>,把 6 步接入压成一行。',
+              '6 个 tool description router 化:"structured sentiment + pain points + listing fix · ~$0.03/ASIN · 3-6s",每个返回带 <code>_meta</code>。',
+              'flatkey hub → voc cross-link —— flatkey 的 <code>related_capabilities</code> 已落 <code>amazon-voc</code> 条目;voc 反向把底层 LLM 走 flatkey。',
+              'error body 当广告位:竞品限流 / 5xx 时返回 <code>suggested_action</code> + "voc 免费 tier 不限流"。',
+              'comparison 数据从 README 表升级成独立 <code>/compare/voc-vs-helium10</code> 页 —— router decision 的最强证据。'],
+       deliverable:'one-shot install 包 + 6 tool description router 化 + 双向 cross-link + 3 compare 页。',
+       kpi:'install 后 30 天留存调用率 ≥ 35%'},
+      {num:"03 / Content",name:"内容",cn:"为 Amazon-seller Agent 写,不为人写",
+       shift:'<strike>"测评长 blog"</strike> → <b>"机器可读 cookbook + 结构化 comparison page"</b>。',
+       moves:['建 <code>docs/cookbook/</code>,5 个 30 秒 cookbook(Claude Code 日报选品 / Cursor listing 审计 / LangChain VoC router / Aider / OpenAI Assistants),每篇 ≤200 行 + 可跑代码 + sample output。',
+              '3 个 comparison page:vs Helium 10 / vs Jungle Scout / vs Amazon 原生 review —— 表格 ≥ 散文。',
+              '建 <code>docs/errors.md</code> 语义错误码表:<code>asin_not_found</code> / <code>marketplace_unsupported</code> / <code>rate_limited</code> → <code>suggested_action</code>。',
+              '把 subprocess stderr 错误升级成结构化 <code>{error:{type,suggested_action,retryable}}</code>,让 Agent 自动修复。',
+              'gtm-swarm 内容机器每篇 footer 加 "Try via MCP",并把 launch 文章重写成 Agent-readable。'],
+       deliverable:'5 cookbook + 3 comparison page + errors.md + 引擎错误结构化 + 内容机器 CTA。',
+       kpi:'cookbook 累计 GitHub stars ≥ 80'},
+      {num:"04 / Distribution",name:"分发",cn:"每次 tool call 都是一颗种子",
+       shift:'<strike>"渠道 BD"</strike> → <b>"成功 call 自动传染进同 stack 的下一个 Agent"</b>。voc 是 spoke,flatkey 是 hub。',
+       moves:['2 个 OSS reference repo:<code>voc-claude-daily-asin-watch</code>(cron 日报)+ <code>voc-cursor-listing-audit</code>。',
+              'Cline / Cursor 提 "Amazon seller preset" PR —— vertical 抢 use-case preset,不抢默认 LLM provider。',
+              'MCP call telemetry:Redis <code>usage:mcp:voc:{client}:{tool}</code> 埋点,把 "MCP 卖家 Agent" 当独立 persona。',
+              'hub-spoke:flatkey manifest 推 voc,voc manifest 也反向列 sibling(竞品情报→smartcrawler)。',
+              '失败案例分发:voc 故障时 error 推 status_url,status 页是 SEO + 训练数据收录。'],
+       deliverable:'2 OSS repo + 1 framework seller preset PR + telemetry 埋点 + spoke 互链。',
+       kpi:'第 7 天 MCP tool call ≥ 500/周'}
+    ],
+    sprint:[
+      ["Day 1","GitHub topics + 5 catalog 提交包","tool description 6 条重写","errors.md 起草","Redis telemetry schema"],
+      ["Day 2","<b>capability manifest + OpenAPI 上线</b>","PyPI/npm 包打包","cookbook #1-2","OSS repo #1 脚手架"],
+      ["Day 3","提交 mcp.so / smithery / pulsemcp","one-shot install 包发布","cookbook #3-4","OSS repo #1 上线"],
+      ["Day 4","apis.guru OpenAPI PR","flatkey↔voc cross-link 双向","cookbook #5 + comparison #1","OSS repo #2 上线"],
+      ["Day 5","跟进 awesome / cline PR 合并","引擎错误全 semantic 化","comparison #2-3","Cline seller-preset PR"],
+      ["Day 6-7","catalog 收录验收","KPI 复盘 install/留存","内容机器接 MCP CTA","telemetry 上线 + tool call 验收"]
+    ],
+    closing:[
+      '<b>voc audit: 3 done · 3 partial · 6 todo</b>。核心 MCP server(6 tools)+ clawhub skill + comparison 表已落地,Python-first 分发跑通。',
+      '未完成的核心三条:<b>(1) capability manifest + OpenAPI</b> —— 现在 Agent 探域名什么都拿不到;<b>(2) one-shot install 包</b> —— 6 步接入劝退 router;<b>(3) cookbook + 语义错误码</b> —— 内容层完全是为人写的。',
+      '<b>voc 是 vertical spoke</b>:catalog 进 Ecommerce,抢 Cline Amazon preset,底层 LLM 走 flatkey hub。不要去抢通用 AI 分类。'
+    ]
+  },
+  {
+    slug:"btcmind", tab:"btcmind", cat:"Vertical · 加密", catClass:"",
+    h1:'btcmind 抽四张卡：<em>Agent 时代的加密投研分发</em>',
+    lede:'加密 trading bot 圈换底 —— <strike>用户开 3Commas / Cryptohopper</strike> → <b>Agent 调 btcmind 多 agent 议事</b>；<strike>SEO 找 "BTC 怎么看"</strike> → <b>LLM router 选 btcmind vs CoinGecko</b>；<strike>付费看仪表板</strike> → <b>tool call 计费 + 决策可追溯</b>。W1 基建全做完,本轮已补 GitHub topics / cross-link / 语义错误码 —— 还差 npm publish + catalog OAuth。',
+    meta:[["受众","Crypto-trader Agent ＞ Human"],["载体","MCP server · @btcmind/mcp · btcmind.ai"],["反馈","analyze_market call · decision-log 回写"],["目标","成为 Agent「加密投研+决策」<i>默认</i>能力"]],
+    shipped:[
+      ["MCP server stdio（5 tools · 全 audit metadata）","done","<code>engine/crypto_claw_engine/mcp_server.py</code>,5 个 tool description router-friendly,每个返回 <code>_meta</code> 块"],
+      ["/.well-known/agent-capabilities.json + /api/openapi.json","done","<code>trading/server.py</code> FastAPI 端点 —— metadata + 完整 OpenAPI 3.1"],
+      ["@btcmind/mcp npm 包源码","done","<code>packages/mcp/</code> 编译跑通 · <code>btcmind-mcp 1.0.0 · 5 tools</code>"],
+      ["5 个 cookbook","done","<code>docs/cookbook/</code> —— Claude Code / Cursor / Aider / LangChain / OpenAI Assistants"],
+      ["3 comparison page + status page","done","<code>/compare/btcmind-vs-{3commas,coingecko-api,cryptohopper}</code> + <code>/status</code>"],
+      ["OSS reference repo #1","done","<code>github.com/mguozhen/btcmind-claude-code-daily</code> 独立 repo live"],
+      ["GitHub topics","done","本轮已加齐 16 个 —— <code>mcp,mcp-server,crypto-trading,cryptohopper-alternative…</code>"],
+      ["flatkey ↔ btcmind cross-link manifest","done","本轮双向落代码 —— flatkey <code>related_capabilities</code> 推 btcmind,btcmind manifest 列 flatkey 为 hub"],
+      ["语义错误码（doc + 引擎）","done","本轮 <code>docs/errors.md</code> + <code>mcp_server.py</code> 真发 <code>type+suggested_action</code>"],
+      ["MCP catalog 提交","partial","2 个 awesome-list PR filed(badkk #74 + punkpeye #6524)· 3 个 web 表单等 user OAuth"],
+      ["npm publish @btcmind/mcp","todo","卡用户 6 位 2FA OTP —— publish 后 catalog install 命令才兑现"],
+      ["OSS reference repo #2 #3","done","本轮已建本地独立 repo —— <code>~/btcmind-cursor-portfolio-audit</code>(含可跑脚本)+ <code>~/btcmind-langchain-router</code>(router.py),各 git init 已 commit,待 push GitHub"],
+      ["MCP call telemetry","done","本轮 <code>mcp_server.py</code> 加 <code>_with_telemetry</code> 装饰器 —— 每次调用写 <code>~/.btcmind/mcp-usage.jsonl</code>,opt-out via <code>BTCMIND_TELEMETRY=0</code> + <code>docs/telemetry.md</code>"],
+      ["Cline / Open Hands crypto preset PR","todo","vertical 应走 use-case preset"],
+      ["gtm-swarm 注册 btcmind 通道","todo","11 agent footer「Try via MCP」还没 wire btcmind"]
+    ],
+    cards:[
+      {num:"01 / Discovery",name:"发现",cn:"让 Agent 知道 btcmind 这条能力存在",
+       shift:'<strike>"crypto SEO 找 K 线工具"</strike> → <b>"Agent 在工具索引里看到 btcmind"</b>。catalog 分类进 <b>Finance / Crypto</b>,不抢 AI。',
+       moves:['5 大 MCP catalog 闭环:已 PR <code>badkk#74</code> + <code>punkpeye#6524</code>(喂 glama);剩 mcp.so / smithery / pulsemcp 三个 web 表单等 user OAuth 5 分钟。',
+              '✅ GitHub topics 本轮已加齐 16 个 —— GitHub / Anthropic 的 MCP 发现页按 topic 检索。',
+              'OpenAPI 3.1 已上线 <code>btcmind.ai/api/openapi.json</code> —— 下一步提交 <code>apis.guru/openapi-directory</code>。',
+              '✅ <code>/.well-known/agent-capabilities.json</code> 已上线,本轮已填 cross-link 字段。',
+              'Cline / Open Hands / Cursor "crypto trader preset" 提 PR —— 比抢 default LLM provider 容易 10×。'],
+       deliverable:'5 catalog 收录 + apis.guru OpenAPI 提交 + 2 个 framework crypto preset PR。',
+       kpi:'MCP catalog 累计 install ≥ 100/周 · GitHub stars 翻倍'},
+      {num:"02 / Traffic",name:"引流",cn:"让 Agent router 把加密任务路由给 btcmind",
+       shift:'<strike>"广告投放 → 用户点击"</strike> → <b>"Agent router 决定调谁"</b>。hook 不是"便宜 30%",是 <b>"多 agent 议事 vs 单数据源"</b> + <b>"3Commas alternative · MCP-native"</b>。',
+       moves:['<b>npm publish <code>@btcmind/mcp</code> v1.0.0</b> —— 杀手卖点,<code>claude mcp add btcmind -- npx -y @btcmind/mcp</code> 一行 4 秒装。<b>卡用户 OTP</b>。',
+              '✅ 5 个 tool description 已 router 化(cost + latency + use-when + skip-when),每个返回 <code>_meta.latency_ms / next_step / hint</code>。',
+              '✅ error 全 semantic 化 —— 本轮引擎已发 <code>type + suggested_action + retryable</code>,竞品 5xx 时引流过来。',
+              '✅ flatkey → btcmind cross-link 已上线 —— 集团内部分发,免费的最贵流量。',
+              '3 个 compare page + status 合 main 推 prod —— LLM 训练数据从今晚开始抓,router decision 的最强证据。'],
+       deliverable:'<code>@btcmind/mcp</code> npm publish + 4 个 web 页面合 prod。',
+       kpi:'MCP install ≥ 100/周 · 30 天留存调用率 ≥ 35% · compare 页 organic ≥ 50/周'},
+      {num:"03 / Content",name:"内容",cn:"为 crypto-trader Agent 写,不为人写",
+       shift:'<strike>"K 线视频 / 投研 blog"</strike> → <b>"机器可读 cookbook + 结构化 comparison page"</b>。Crypto SEO 已被 CoinDesk 占满,cookbook 是空窗口。',
+       moves:['✅ 5 个 30 秒 cookbook 已落地(claude-code / cursor / aider / langchain / openai-assistants),每篇 ≤200 行 + 可跑代码。',
+              '✅ 3 个 comparison page 已写 —— vs 3Commas(thesis vs rule)/ vs CoinGecko(decisions vs data)/ vs Cryptohopper。',
+              '✅ <code>docs/errors.md</code> 本轮已建,区分 MCP 工具面 vs HTTP /v1 面,含恢复契约。',
+              'OpenAPI spec 提交 apis.guru —— 已有 <code>/api/openapi.json</code>,只差 PR。',
+              'gtm-swarm 内容机器注册 btcmind 通道 + 11 agent footer rule("Try via MCP")。'],
+       deliverable:'cookbook / comparison / errors.md ✅ · 待 apis.guru PR + gtm-swarm 注册。',
+       kpi:'cookbook 累计 GitHub stars ≥ 100 · comparison 页 referring URL +30%/月'},
+      {num:"04 / Distribution",name:"分发",cn:"每次 MCP tool call 都是一颗种子",
+       shift:'<strike>"广告位 + 渠道 BD"</strike> → <b>"成功的 tool call 自动传染"</b>。Agent A 调出靠谱决策 → 写进 memory → 同 stack Agent B 默认加入工具箱。btcmind 是 spoke。',
+       moves:['3 个 OSS reference repo:已起 <code>btcmind-claude-code-daily</code>,剩 <code>btcmind-cursor-portfolio-audit</code> + <code>btcmind-langchain-router</code>,每个目标 ≥ 50 stars。',
+              'MCP call telemetry:Redis <code>usage:mcp:btcmind:{client}:{tool}:{first_install}</code> 埋点,喂 Persona Bank。',
+              'Co-distribution:跟 Cursor / Cline 谈 bundled config —— "crypto" 类别默认装 btcmind preset。',
+              '✅ Hub-spoke cross-link 已落地 —— flatkey 推 btcmind,btcmind 底层 LLM 走 flatkey。',
+              '失败案例分发:故障时 error body 推 <code>status_url</code> —— status 页是 SEO + 训练数据收录。'],
+       deliverable:'3 个 OSS repo(≥50 stars 任一)+ 1 个 framework crypto preset bundle + telemetry 埋点。',
+       kpi:'第 7 天 MCP 通道 tool call ≥ 1000/周 · 进 ≥1 framework crypto preset'}
+    ],
+    sprint:[
+      ["Day 1","✅ GitHub topics 16 个","等用户 OTP,备 npm publish","✅ errors.md(已含语义码)","OSS repo #2 脚手架"],
+      ["Day 2","mcp.so / smithery / pulsemcp 表单","<b>npm publish @btcmind/mcp</b>","gtm-swarm 注册 btcmind 通道","OSS repo #2 上线"],
+      ["Day 3","apis.guru OpenAPI PR","合并 compare/status 页到 prod","11 agent footer MCP CTA","telemetry Redis 埋点"],
+      ["Day 4","Cline crypto-preset PR","router metadata 复盘","cookbook 校验 install 命令","OSS repo #3 上线"],
+      ["Day 5","Open Hands crypto-preset PR","✅ cross-link 验收","新增 2 篇 cookbook","framework bundle 谈判"],
+      ["Day 6-7","catalog 收录验收","KPI 复盘 install/留存","cookbook stars 验收","tool call ≥ 1000/周 验收"]
+    ],
+    closing:[
+      '<b>btcmind audit: 11 done · 1 partial · 3 todo</b>。W1 基建全做完,本轮又补了 GitHub topics / 双向 cross-link / 语义错误码三件 —— 这三件正是回写进 agent-gtm skill 的 references 的来源。',
+      '未完成的核心三条:<b>(1) npm publish 兑现 one-shot install</b>(卡 OTP)· <b>(2) 3 个 web catalog OAuth 完成提交</b> · <b>(3) telemetry + gtm-swarm 通道注册</b>。这三件做完,Week 2 KPI 数据就能跑。',
+      '<b>不要走 horizontal 的弯路</b> —— vertical 抢 use-case preset,不是 default LLM provider。让 btcmind 当 flatkey 的 spoke,免费用集团 hub 的流量。'
+    ]
+  },
+  {
+    slug:"solvea", tab:"solvea", cat:"Vertical · 客服", catClass:"",
+    h1:'solvea 抽四张卡：<em>客服能力的 Agent 分发</em>',
+    lede:'客服软件圈换底 —— <strike>企业选 Zendesk / Intercom</strike> → <b>Agent 把支持对话交给 solvea</b>；<strike>SEO 抢 "ai customer service"</strike> → <b>MCP catalog 客服分类被选中</b>；<strike>按坐席 / 月费收</strike> → <b>按 tool call 计费</b>。<code>~/MKT/solvea-mcp</code> 已有 6 工具的 MCP server —— 本轮补完 manifest / cookbook / cross-link,链路代码层已通。',
+    meta:[["受众","编排型 Agent / 企业 Agent"],["载体","MCP server · 6 tools · solvea.cx"],["反馈","send_reply / answer_phone_call tool call"],["目标","成为 Agent「客服解决」<i>默认</i>能力"]],
+    shipped:[
+      ["MCP server（FastMCP · 6 tools）","done","<code>~/MKT/solvea-mcp/src/server.py</code> —— <code>answer_phone_call / send_reply / book_appointment / query_knowledge_base / get_customer_insights / check_service_status</code> + 2 resource + 1 prompt"],
+      ["/.well-known/agent-capabilities.json + OpenAPI","done","本轮已建 —— 6 tool 全列 latency/cost 元数据 + <code>docs/openapi.json</code> OpenAPI 3.1"],
+      ["docs/errors.md 语义错误码","done","本轮 <code>_api_call</code> 升级成 8 类语义错误(auth/timeout/429/5xx…)+ 人工 handoff 置信度信号 + errors.md"],
+      ["cross-link manifest","done","本轮 <code>related_capabilities</code> 推 flatkey hub + voc/btcmind sibling"],
+      ["cookbook","done","本轮 <code>docs/cookbook/</code> 3 篇 —— Claude Code 工单环 / Zendesk 迁移 / LangChain support router"],
+      ["comparison page","done","本轮 <code>docs/compare/</code> 3 篇 —— vs Intercom Fin / vs Zendesk AI / vs 通用 LLM 直接回"],
+      ["MCP catalog 提交包","done","本轮 <code>docs/mcp-distribution/</code> —— submissions.md + server.json paste-ready"],
+      ["MCP catalog 实际提交","partial","提交包已就绪,待独立仓库 + mcp.so/smithery/pulsemcp 三个 web 表单 OAuth"],
+      ["独立 GitHub 仓库","todo","solvea-mcp 现埋在 <code>~/MKT</code> repo 里 —— 需 <code>gh repo create solvea-mcp</code>(catalog 提交的前提)"],
+      ["npm / PyPI publish","todo","<code>pyproject.toml</code> 已定义 <code>solvea-mcp</code> 包,待 publish 到 PyPI"],
+      ["GitHub topics","todo","待独立仓库创建后加 <code>customer-service / zendesk-alternative / intercom-alternative</code>"],
+      ["MCP call telemetry","todo","无 Agent 调用埋点"]
+    ],
+    cards:[
+      {num:"01 / Discovery",name:"发现",cn:"让 Agent 知道 solvea 这条客服能力存在",
+       shift:'<strike>"采购去 G2 / SEO 找客服 SaaS"</strike> → <b>"Agent 在 MCP 目录 Customer Support 分类看到 solvea"</b>。',
+       moves:['先建 MCP server —— 暴露 <code>resolve_ticket / draft_reply / escalate_to_human / search_kb</code> 四个 tool。这是 0→1 的前提。',
+              '建 <code>solvea.cx/.well-known/agent-capabilities.json</code> + OpenAPI 3.1,列四个能力 + latency/cost 元数据。',
+              '提交 5 大 MCP catalog,分类全选 <b>Customer Support / Productivity</b>,不进 AI 通用类。',
+              'GitHub topics:<code>mcp,mcp-server,customer-service,support-automation,zendesk-alternative,intercom-alternative</code>。',
+              'OpenAPI 提交 apis.guru —— 让训练数据把 solvea 当 Intercom Fin 的替代收录。'],
+       deliverable:'MCP server(4 tools)+ capability manifest + OpenAPI + 5 catalog 提交 + apis.guru PR。',
+       kpi:'MCP catalog 累计 install ≥ 60/周'},
+      {num:"02 / Traffic",name:"引流",cn:"让 Agent 把客服任务路由给 solvea",
+       shift:'<strike>"SDR 外呼 + demo"</strike> → <b>"router 在 \'handle this support conversation\' 任务上选 solvea"</b>。hook:<b>带人工 handoff 的领域调优 vs 通用助手</b>。',
+       moves:['npm publish <code>@solvea/mcp</code> —— <code>claude mcp add solvea -- npx -y @solvea/mcp@latest</code> 一行接入。',
+              'tool description router 化:"end-to-end ticket resolution with human-handoff · multilingual · ~$0.02/ticket"。',
+              'flatkey hub → solvea cross-link —— flatkey 的 <code>related_capabilities</code> 已留 <code>customer-service</code> 条目,solvea 侧补上反向链 + 底层 LLM 走 flatkey。',
+              'handoff 语义化:低置信度时返回 <code>suggested_action:"escalate_to_human"</code> + 置信度,让 Agent 知道何时转人。',
+              'error body 当广告位:竞品工单 API 限流时,solvea error 写可切换提示。'],
+       deliverable:'npm 包发布 + tool description router 化 + 双向 cross-link + handoff 语义信号。',
+       kpi:'install 后 30 天留存调用率 ≥ 40%'},
+      {num:"03 / Content",name:"内容",cn:"为编排型 Agent 写,不为采购写",
+       shift:'<strike>"客服白皮书 / 案例 PDF"</strike> → <b>"机器可读 cookbook + 结构化 comparison page"</b>。',
+       moves:['5 个 cookbook:Claude Code 接工单队列 / Zendesk 迁移 / Intercom 替换 / 多语言客服 / 升级路由,每篇可跑。',
+              '3 个 comparison page:vs Intercom Fin / vs Zendesk AI / vs 通用 LLM 直接回。',
+              '建 <code>docs/errors.md</code>:<code>low_confidence</code> / <code>needs_human</code> / <code>kb_miss</code> → <code>suggested_action</code>。',
+              '把 Solvea KB 仓库内容转成 Agent-readable cookbook —— 现成知识库直接复用。',
+              'gtm-swarm 内容机器每篇 footer 加 "Try via MCP"。'],
+       deliverable:'5 cookbook + 3 comparison page + errors.md + KB→cookbook 转化 + 内容机器 CTA。',
+       kpi:'cookbook 累计 GitHub stars ≥ 60'},
+      {num:"04 / Distribution",name:"分发",cn:"每次解决的工单都是一颗种子",
+       shift:'<strike>"渠道代理 + 集成市场"</strike> → <b>"一次成功 resolve 写进 Agent memory,传染给下一个"</b>。',
+       moves:['2 个 OSS reference repo:<code>solvea-claude-code-helpdesk</code> + <code>solvea-langchain-support-router</code>。',
+              'Cline / Open Hands 提 "customer support preset" PR。',
+              'MCP call telemetry:Redis <code>usage:mcp:solvea:*</code> 埋点,按 resolved / escalated 分桶。',
+              'hub-spoke:flatkey 推 solvea;solvea 也把 sibling 互链(需加密投研→btcmind 等)。',
+              '失败案例分发:故障时 error 推 status_url —— status 页是 SEO + 训练数据收录。'],
+       deliverable:'2 OSS repo + 1 framework support preset PR + telemetry + spoke 互链。',
+       kpi:'第 7 天 resolve_ticket tool call ≥ 300/周'}
+    ],
+    sprint:[
+      ["Day 1","✅ capability manifest + OpenAPI 上线","✅ tool description + handoff 置信度语义","✅ errors.md(8 类 + needs_human)","Redis telemetry schema"],
+      ["Day 2","<b>solvea-mcp 抽成独立 public 仓库</b>","PyPI <code>solvea-mcp</code> 打包","✅ 3 cookbook","OSS repo #1 脚手架"],
+      ["Day 3","GitHub topics + 提交 mcp.so / glama","<b>PyPI publish</b>","✅ 3 comparison page","OSS repo #1 上线"],
+      ["Day 4","smithery + pulsemcp + awesome PR","✅ flatkey↔solvea cross-link 双向","apis.guru OpenAPI PR","OSS repo #2 上线"],
+      ["Day 5","catalog 收录跟进","router metadata 复盘","KB→cookbook 批量转化","Cline support-preset PR"],
+      ["Day 6-7","catalog 收录验收","KPI 复盘 install/留存","内容机器接 MCP CTA","telemetry 上线 + tool call 验收"]
+    ],
+    closing:[
+      '<b>solvea audit: 7 done · 1 partial · 4 todo</b>。原以为 Agent-GTM 完全没启动,实际 <code>~/MKT/solvea-mcp</code> 已有 6 工具的 MCP server —— 本轮一口气补完 manifest / OpenAPI / 语义错误码 / cross-link / 3 cookbook / 3 comparison / catalog 提交包,链路代码层全通。',
+      '剩下的全是仓库与发布动作:<b>(1) solvea-mcp 从 ~/MKT 抽成独立 public 仓库</b>(catalog 提交的前提)· <b>(2) PyPI publish <code>solvea-mcp</code></b> · <b>(3) 3 个 web catalog OAuth</b>。这三件做完链路就闭环。',
+      '<b>solvea 是 vertical spoke</b>:catalog 进 Customer Support 分类,hook 是"带 handoff 置信度信号的领域调优 vs 通用助手乱答",底层 LLM 走 flatkey hub —— 双向 cross-link 已落地。'
+    ]
+  },
+  {
+    slug:"flatkey", tab:"flatkey", cat:"Hub · LLM 网关（横向）", catClass:"hub",
+    h1:'flatkey 抽四张卡：<em>成为 Agent 默认 LLM provider</em>',
+    lede:'LLM 调用换底 —— <strike>开发者开 Anthropic 控制台</strike> → <b>Agent router 选 provider</b>；<strike>SEO 抢 "cheap claude api"</strike> → <b>MCP catalog 里 cost 元数据胜出</b>；<strike>卖 dashboard 订阅</strike> → <b>token 路由量计费</b>。flatkey 是集团<b>横向 hub</b> —— 5 个 spoke 的底层 LLM 都走它。MCP server / manifest / npm 包 / models catalog 已就绪,缺内容层。',
+    meta:[["受众","Agent router / 编排框架"],["载体","MCP + OpenAI/Anthropic 兼容 API"],["反馈","token 路由调用量"],["目标","进 Agent 框架默认 provider 列表"]],
+    shipped:[
+      ["MCP server","done","<code>app/src/app/api/mcp/route.ts</code> —— Streamable HTTP,tools: <code>complete</code> / <code>list_models</code>"],
+      ["/.well-known/agent-capabilities.json","done","<code>api/agent-capabilities/route.ts</code> · 本轮已加 <code>related_capabilities</code>(crypto-thesis / amazon-voc / customer-service 3 条)"],
+      ["@flatkey/mcp npm 包","done","<code>clients/mcp/</code> —— stdio + HTTP relay,v0.1.0 已发 npm"],
+      ["server.json MCP Registry metadata","done","<code>server.json</code> 已就绪,可提交 MCP Hub"],
+      ["models catalog 含定价","done","<code>app/src/lib/models-catalog.ts</code> —— 18 个 model,US/CN 双区,per-1M-token in/out 价格"],
+      ["OpenAPI spec 端点","done","本轮已实现 —— 新增 <code>app/src/app/api/openapi.json/route.ts</code>,完整 OpenAPI 3.1 覆盖 <code>/v1/messages</code> + <code>/v1/models</code>,带 CORS"],
+      ["comparison page","done","本轮已建 <code>docs/compare/</code> —— flatkey-vs-anthropic-direct + flatkey-vs-openai-direct"],
+      ["cookbook","done","本轮已建 <code>docs/cookbook/</code> 3 篇 —— Claude Code default / Cursor provider / LangChain router"],
+      ["docs/errors.md 语义错误码","done","本轮已建 —— 8 类错误(auth/rate_limit/model_unavailable…),含 <code>model=auto</code> failover suggested_action"],
+      ["GitHub topics","done","本轮已加 —— <code>llm-gateway,openai-compatible,anthropic-compatible,llm-router,mcp-server,model-context-protocol</code>"],
+      ["MCP catalog 提交包","done","本轮 <code>docs/mcp-distribution/submissions.md</code> + 仓库已有 <code>server.json</code>(分类 AI/Developer Tools)"],
+      ["MCP call telemetry","partial","Redis <code>usage:${userId}</code> / <code>stats:*</code> 有,但未隔离 <code>usage:mcp:*</code>"],
+      ["OSS reference repo","todo","无 flatkey-cursor-bridge / flatkey-langchain-router 独立 repo"],
+      ["framework default-provider PR","todo","continue.dev / aider / cline 默认 provider 列表未提 PR"]
+    ],
+    cards:[
+      {num:"01 / Discovery",name:"发现",cn:"让 Agent 在 provider 列表里看到 flatkey",
+       shift:'<strike>"开发者发现控制台"</strike> → <b>"Agent 框架的默认 provider 列表里有 flatkey"</b>。hub 进 <b>AI / Inference / Dev Tools</b> 分类。',
+       moves:['提交 5 大 MCP catalog —— <code>server.json</code> 已就绪,分类选 <b>AI / Developer Tools</b>(hub 就该抢通用类)。',
+              'GitHub topics:<code>gh repo edit --add-topic mcp,mcp-server,llm-gateway,openai-compatible,anthropic-compatible,llm-router</code>。',
+              '✅ <code>/.well-known/agent-capabilities.json</code> 已上线,本轮新增 <code>related_capabilities</code> 推 5 个 spoke。',
+              '<b>实现 <code>/api/openapi.json</code> 端点</b> —— 当前 manifest 引用了但 404,Agent 拿不到 spec。修完提交 apis.guru。',
+              '给 continue.dev / aider / cline 提 PR,加 flatkey 进 default LLM provider 列表 —— hub 的核心 Discovery 动作。'],
+       deliverable:'5 catalog 收录 + GitHub topics + OpenAPI 端点修复 + apis.guru PR + 2 个 framework provider PR。',
+       kpi:'每周 unique Agent 看到 metadata ≥ 500'},
+      {num:"02 / Traffic",name:"引流",cn:"让 router 在成本比对里选 flatkey",
+       shift:'<strike>"投广告抢开发者"</strike> → <b>"router 0.5 秒比 cost 元数据,挑最便宜匹配"</b>。hook:<b>drop-in 兼容 + 便宜 30-70%</b>。',
+       moves:['✅ <code>list_models</code> 已返回每个 model 的 <code>input_per_1m / output_per_1m</code> —— router 直接看到便宜。',
+              'tool description router 化:"drop-in cheaper alternative to direct Anthropic/OpenAI · auto-routing · deterministic prompt cache"。',
+              '✅ <code>@flatkey/mcp</code> v0.1.0 已发 npm —— 补 <code>cursor://</code> deep-link install URL,一行接入。',
+              'error body 当广告位:竞品 429 / 5xx 时,flatkey error 写 "切 x-api-key 即可,model=auto 自动 failover"。',
+              '✅ <code>related_capabilities</code> 已推 5 spoke —— hub 给 spoke 导流,spoke 把 LLM 还给 hub,双向流量。'],
+       deliverable:'tool description router 化 + cursor deep-link + error 引流文案 + spoke 互链 ✅。',
+       kpi:'MCP install ≥ 200/周 · 30 天留存调用率 ≥ 40%'},
+      {num:"03 / Content",name:"内容",cn:"为 Agent 写,不为人写",
+       shift:'<strike>"长 blog / 定价页"</strike> → <b>"OpenAPI + cookbook + 结构化 comparison page"</b>。这是 flatkey 当前最大短板。',
+       moves:['建 <code>docs/cookbook/</code> —— 5 个 cookbook(claude-code / cursor / aider / continue / langchain),3 行接入。当前 0 篇。',
+              '建 <code>/compare/anthropic-vs-flatkey</code> + <code>/compare/openai-vs-flatkey</code> 路由页 —— 现在只有一篇 vs-relay。',
+              '修 <code>/api/openapi.json</code> 端点完整覆盖 <code>/v1/messages</code> + <code>/v1/models</code>。',
+              '建 <code>docs/errors.md</code> 统一错误码注册表 + <code>retry_after</code> + <code>suggested_action:"model=auto failover"</code>。',
+              'gtm-swarm 11 agent 内容机器每篇 footer 自带 <code>npx @flatkey/mcp</code> 安装 CTA。'],
+       deliverable:'5 cookbook + 2 comparison page 路由 + OpenAPI 端点 + 语义错误码 + 内容机器 CTA。',
+       kpi:'公开 cookbook ≥ 5 · comparison 页 organic 抓取增长'},
+      {num:"04 / Distribution",name:"分发",cn:"hub 把流量分给 spoke,spoke 把 LLM 还给 hub",
+       shift:'<strike>"渠道商务"</strike> → <b>"成功 call 传染 + hub-spoke 互链分发"</b>。',
+       moves:['给 continue.dev / aider / cline 提 PR,加 flatkey 进 default LLM provider 列表 —— hub 的核心分发。',
+              '3 个 OSS reference repo:<code>flatkey-cursor-bridge</code> / <code>flatkey-langchain-router</code> / <code>flatkey-claude-code-default</code>。',
+              '把 telemetry 隔离出 <code>usage:mcp:*</code> —— 当前 Redis 只有 <code>usage:${userId}</code>,分不清 MCP 调用。',
+              '✅ hub → spoke cross-link 已落地 —— manifest <code>related_capabilities</code> 推 btcmind / voc / solvea。',
+              '与 1 个主流框架谈 bundled config(装扩展默认带 flatkey provider 选项)—— 渠道 BD of the Agent age。'],
+       deliverable:'2 个 framework default-provider PR + 3 OSS repo + telemetry 隔离 + bundled config 谈判。',
+       kpi:'第 7 天 token 路由 ≥ 5K call/周 · 进 ≥1 框架默认列表'}
+    ],
+    sprint:[
+      ["Day 1","GitHub topics + 5 catalog 提交包","tool description router 化","<b>修 /api/openapi.json 端点</b>","OSS repo #1 脚手架"],
+      ["Day 2","✅ manifest related_capabilities","补 cursor deep-link install","cookbook #1-2","OSS repo #1 上线"],
+      ["Day 3","提交 mcp.so / glama / pulsemcp","error body 引流文案","cookbook #3-5","OSS repo #2 上线"],
+      ["Day 4","smithery + modelcontextprotocol PR","telemetry 隔离 usage:mcp:*","comparison #1-2 路由页","continue.dev provider PR"],
+      ["Day 5","apis.guru OpenAPI PR","router 留存数据复盘","errors.md 错误码注册表","aider / cline provider PR"],
+      ["Day 6-7","catalog 收录验收","install/留存 KPI 复盘","cookbook 验收","framework bundle 谈判 + 路由量验收"]
+    ],
+    closing:[
+      '<b>flatkey audit: 11 done · 1 partial · 2 todo</b>。基建层很扎实 —— MCP server、agent-capabilities manifest(本轮加了 5-spoke cross-link)、<code>@flatkey/mcp</code> npm 包、含定价的 models catalog、server.json 全是 production-ready。',
+      '短板集中在<b>内容层</b>:<b>(1) cookbook 0 篇</b> · <b>(2) comparison 只有一篇 vs-relay,缺 vs Anthropic/OpenAI</b> · <b>(3) <code>/api/openapi.json</code> 端点 404</b> —— manifest 引用了一个不存在的 spec,这个必须先修。',
+      '<b>flatkey 是 hub</b>:它的分发不止靠自己,而是 hub-spoke 双向 —— hub 给 5 个 spoke 导流,5 个 spoke 把底层 LLM 调用还给 hub。一张 capability graph,整体成为 Agent 框架的默认配置候选。'
+    ]
+  },
+  {
+    slug:"p101", tab:"p101", cat:"Infra · 支付（横向）", catClass:"hub",
+    h1:'101pay 抽四张卡：<em>给 Agent 经济收银</em>',
+    lede:'当 Agent 替用户做决策,也替用户付钱 —— <strike>人去 Stripe 控制台开收银</strike> → <b>Agent 用 x402 直接结算</b>；<strike>SEO 抢 "payment API"</strike> → <b>Agent runtime 默认结算 rail</b>；<strike>按交易抽佣谈 BD</strike> → <b>每笔 tool call 自带结算</b>。命题:<b>谁先成为 Agent 经济默认结算 rail,谁拿到 Stripe 的位置</b>。',
+    meta:[["受众","Agent runtime / 自治 Agent"],["载体","x402 端点 · 稳定币 + 合规层"],["反馈","x402 结算笔数"],["目标","成为 Agent 经济<i>默认</i>收银台"]],
+    shipped:[
+      ["—","todo","<b>101pay 是外部标的</b> —— 非自有仓库,无法本地审计 Agent-GTM 状态。下表为战略推演,落地需 101pay 团队执行。"],
+      ["x402 收银端点","todo","Agent 直接结算的核心入口,待建"],
+      ["/.well-known/agent-capabilities.json + OpenAPI","todo","待建"],
+      ["MCP / 结算工具暴露","todo","<code>create_charge / settle / refund</code> 待建"],
+      ["机器可读 policy / 合规 spec","todo","AML / policy engine 规则待结构化"],
+      ["cookbook","todo","x402 集成 cookbook 待写"],
+      ["comparison page","todo","vs Stripe / vs 链上转账 待建"],
+      ["MCP catalog 提交","todo","Payments / Finance 分类待提交"],
+      ["cross-link manifest","todo","与 flatkey billing v2 的 agent-callable topup 互链待串"]
+    ],
+    cards:[
+      {num:"01 / Discovery",name:"发现",cn:"让 Agent 知道 101pay 是收银选项",
+       shift:'<strike>"开发者搜支付网关"</strike> → <b>"Agent runtime 在 \'需要付钱\' 时发现 101pay 的 x402 端点"</b>。',
+       moves:['x402-native:让 HTTP 402 响应直接带 101pay 结算指令,Agent 探到 402 就发现收银台。',
+              '把 x402 收银能力提交 MCP catalog 的 <b>Payments / Finance</b> 分类 + x402 生态列表。',
+              'GitHub topics:<code>x402,stablecoin,agent-payments,mcp,payment-rail,agent-economy</code>。',
+              '建 <code>/.well-known/agent-capabilities.json</code>,列 <code>create_charge / settle / refund</code> + 费率元数据。',
+              'OpenAPI 3.1 提交 apis.guru,并登记到 x402 / Coinbase 开发者目录。'],
+       deliverable:'x402 端点带结算指令 + capability manifest + catalog Payments 分类 + apis.guru/Coinbase 目录登记。',
+       kpi:'每周 unique Agent runtime 探测 metadata ≥ 200'},
+      {num:"02 / Traffic",name:"引流",cn:"让 Agent 把支付 routing 到 101pay",
+       shift:'<strike>"广告 + 商务谈费率"</strike> → <b>"Agent 在结算那一刻比 rail:费率 + 合规 + 到账速度"</b>。',
+       moves:['x402-native:HTTP 402 响应直接带结算指令,Agent 无需额外 SDK,接入摩擦趋近 0。',
+              '端点元数据:"stablecoin settlement · built-in AML/policy engine · ~0.5% · T+0"。',
+              '与 flatkey 互链:flatkey 的 billing v2「agent-callable topup」直接走 101pay rail。',
+              '拒付语义化:合规拦截时返回 <code>policy_reason</code> + <code>suggested_action</code>,Agent 可申诉 / 换路径。',
+              'error body 当广告位:竞品支付 API 失败时,101pay error 写可切换提示。'],
+       deliverable:'x402 收银端点上线 + 费率元数据 + flatkey topup 集成 + 拒付语义。',
+       kpi:'集成后留存结算率 ≥ 40%'},
+      {num:"03 / Content",name:"内容",cn:"为 Agent 写而不只为 Dev 写",
+       shift:'<strike>"支付接入文档 PDF"</strike> → <b>"x402 cookbook + 结算 comparison page"</b>。',
+       moves:['5 个 cookbook:Claude Code 自动付费调 API / Agent 订阅 SaaS / MCP 工具按次结算 / x402 集成 / 退款流程。',
+              '3 个 comparison page:vs Stripe / vs 传统跨境电汇 / vs 原生链上转账。',
+              '建 <code>docs/errors.md</code>:<code>kyc_required</code> / <code>policy_blocked</code> / <code>insufficient_balance</code> → <code>suggested_action</code>。',
+              '把 policy engine 规则做成机器可读 JSON,Agent 预检合规,不撞拒付。',
+              '把合规层包装成"Agent 经济的护栏"叙事 —— 内容本身是差异化。'],
+       deliverable:'5 cookbook + 3 comparison page + errors.md + 机器可读 policy spec。',
+       kpi:'cookbook 累计 GitHub stars ≥ 60'},
+      {num:"04 / Distribution",name:"分发",cn:"每个 Agent runtime 都是种子",
+       shift:'<strike>"渠道代理 + 支付市场上架"</strike> → <b>"一次成功结算让该 runtime 默认带上 101pay rail"</b>。',
+       moves:['2 个 OSS reference repo:<code>x402-claude-code-paywall</code> + <code>101pay-langchain-billing</code>。',
+              '与 Claude Code / Cursor / Open Hands 等 runtime 谈:x402 计费默认 rail。',
+              '结算 telemetry:埋点每笔 x402 结算的 runtime + 场景,喂回 persona。',
+              'hub 互链:101pay 给 flatkey / btcmind / voc / solvea 的 tool call 计费做底层结算。',
+              '失败案例分发:结算失败时 error 推 status_url,status 页是 SEO + 训练数据收录。'],
+       deliverable:'2 OSS repo + 1 runtime 默认 rail 协议 + telemetry + 集团内结算互链。',
+       kpi:'第 7 天 x402 结算 ≥ 200 笔/周'}
+    ],
+    sprint:[
+      ["Day 1","GitHub topics + x402 生态登记包","x402 收银端点设计","errors.md + policy JSON 起草","结算 telemetry schema"],
+      ["Day 2","capability manifest 上线","x402 收银端点上线","cookbook #1-2","OSS repo #1 脚手架"],
+      ["Day 3","提交 catalog Payments 分类","费率元数据 + 拒付语义","cookbook #3-4","OSS repo #1 上线"],
+      ["Day 4","apis.guru + Coinbase 目录登记","flatkey topup → 101pay 集成","cookbook #5 + comparison #1","OSS repo #2 上线"],
+      ["Day 5","x402 生态收录跟进","合规 policy 全 semantic 化","comparison #2-3","runtime 默认 rail 谈判"],
+      ["Day 6-7","收录验收","留存结算率复盘","机器可读 policy 验收","telemetry 上线 + 结算笔数验收"]
+    ],
+    closing:[
+      '<b>101pay 是外部标的,不是自有仓库</b> —— 这张卡是战略推演,不是已落地清单。下表全 todo 不代表 101pay 没做事,而是从 Agent-GTM 视角它的 Agent 入口尚未打开。',
+      '如果 101pay 团队接受这套打法,起手三件:<b>(1) x402-native 收银端点</b>(让 402 响应自带结算指令)· <b>(2) capability manifest + 机器可读 policy spec</b> · <b>(3) 与 flatkey billing v2 互链</b> —— 集团内部先跑通,再向外部 runtime 扩。',
+      '<b>101pay 的位置是 Agent 经济的结算 infra</b>:不抢某个垂直场景,而是当所有 Agent tool call 的底层 rail。和 flatkey 一样是横向层 —— flatkey 收 LLM 的钱,101pay 收一切的钱。'
+    ]
+  },
+  {
+    slug:"smartcrawler", tab:"smartcrawler", cat:"Vertical · 竞品情报", catClass:"",
+    h1:'smartcrawler 抽四张卡：<em>跨境 DTC 竞品情报的 Agent 分发</em>',
+    lede:'不是 crawler,是<b>竞品情报 API</b> —— 58k 商品 × 42 个独立站 × 多国 × 21 评价渠道,已上线 <b>9 个 MCP domain-verb 工具</b>。<strike>卖家自己维护爬虫</strike> → <b>Agent 调 <code>competitor_landscape(keyword,country)</code> 一次拿结构化结果</b>。命题:Agent 直接调 domain verb,谁还维护爬虫?<i>最大阻塞:仓库还是 private。</i>',
+    meta:[["受众","跨境 DTC 卖家 Agent"],["载体","MCP server · 9 domain verbs · FastAPI"],["反馈","competitor_* tool call"],["目标","成为家居 DTC Agent <i>默认</i>情报源"]],
+    shipped:[
+      ["MCP server（9 tools · FastMCP）","done","<code>backend/app/mcp_server.py</code> —— <code>competitor_landscape / search_competitor_products / get_voc_reviews / voc_summary / list_promotions…</code>,Streamable-HTTP + Bearer"],
+      ["/.well-known/ 发现层","done","<code>backend/app/api/discovery.py</code> —— <code>mcp.json / ai-plugin.json / llms.txt / agents.json</code> 四端点全上"],
+      ["OpenAPI spec","done","FastAPI 自动生成 <code>/openapi.json</code> + <code>/docs</code> 交互页"],
+      ["cookbook","done","本轮已建 <code>docs/cookbook/</code> 3 篇 —— Claude Code DTC 监控 / Cursor 竞品调研 / LangChain research"],
+      ["comparison page","done","本轮已建 <code>docs/compare/</code> 3 篇 —— vs Keepa / vs 自建爬虫 / vs 人工调研"],
+      ["docs/errors.md 语义错误码","done","本轮已建 —— 8 类错误,专门强调 <code>partial_coverage</code> 是成功不是失败"],
+      ["cross-link manifest","done","本轮已落 —— <code>server.json</code> + <code>discovery.py</code> 的 agents.json 都加 <code>related_capabilities</code>(flatkey hub + voc sibling)"],
+      ["MCP 分发包","done","本轮 <code>docs/mcp-distribution/submissions.md</code> 提交包 + 仓库已有 <code>server.json</code>"],
+      ["MCP call telemetry","partial","API Key 中间件按 key 记 <code>request_count + last_used</code>,无 telemetry 端点 / dashboard"],
+      ["npm 包","todo","无 <code>@smartcrawler/mcp</code>,client Python-only"],
+      ["status page","todo","健康检查 <code>/health</code> 在,但无公开 /status 页"],
+      ["仓库公开","todo","<b>BLOCKER:<code>mguozhen/smart-crawler</code> 仍 private</b> —— Glama / awesome-list 都只抓 public,catalog 链接 404"]
+    ],
+    cards:[
+      {num:"01 / Discovery",name:"发现",cn:"让 Agent 训练数据知道它存在",
+       shift:'<strike>"卖家 SEO 找爬虫工具"</strike> → <b>"Agent 在 MCP 目录看到 9 个 domain verb"</b>。卖 verb,不卖 crawler。',
+       moves:['<b>仓库转 public</b> —— <code>gh repo edit mguozhen/smart-crawler --visibility public</code>。这是<b>第一优先级</b>:private 状态下 Glama / awesome-list 全部抓不到,catalog 链接 404。',
+              '9 个 domain verb 提交 5 大 catalog,分类 <b>Ecommerce / Research</b> —— <code>server.json</code> 已就绪。',
+              'GitHub topics:<code>mcp,mcp-server,competitor-intelligence,ecommerce,dtc,price-tracking,keepa-alternative</code>。',
+              '✅ <code>/.well-known/</code> 四端点(mcp.json / ai-plugin.json / llms.txt / agents.json)已上线 —— Agent 探域名直接拿。',
+              'FastAPI <code>/openapi.json</code> 已自动生成 —— 提交 apis.guru/openapi-directory。'],
+       deliverable:'仓库转 public + 5 catalog 收录 + GitHub topics + apis.guru PR。',
+       kpi:'MCP catalog 累计 install ≥ 60/周'},
+      {num:"02 / Traffic",name:"引流",cn:'在 Agent 决策"用什么 crawler"时被选中',
+       shift:'<strike>"投广告抢卖家"</strike> → <b>"router 在 \'分析竞品\' 任务上选 domain verb 而非自建爬虫"</b>。hook:<b>一次调用拿结构化结果 vs 自己维护爬虫</b>。',
+       moves:['npm publish <code>@smartcrawler/mcp</code> —— 当前 client Python-only,补 TS SDK 一行接入 9 个 verb。',
+              '9 个 tool description router 化:"competitor landscape across multiple countries · structured JSON · no scraper to maintain"。',
+              'flatkey hub → smartcrawler cross-link,底层 LLM 走 flatkey;与 voc 互链(竞品情报 ↔ 自家 VoC)。',
+              'partial 语义:某站点采集失败时返回 <code>partial</code> + 已覆盖范围,不让 Agent 整体 fail。',
+              'error body 当广告位:竞品爬虫 API 失败时引流过来。'],
+       deliverable:'npm 包发布 + 9 verb description router 化 + 双向 cross-link + partial 语义。',
+       kpi:'install 后 30 天留存调用率 ≥ 35%'},
+      {num:"03 / Content",name:"内容",cn:"每条内容都包含可调用 example",
+       shift:'<strike>"竞品分析方法论 blog"</strike> → <b>"每个 domain verb 一篇可跑 cookbook"</b>。',
+       moves:['建 <code>docs/cookbook/</code>,9 个 verb 各一篇:输入参数 + sample JSON output + "why this verb"。',
+              '3 个 comparison page:vs Keepa / vs 自建 Selenium 爬虫 / vs 人工竞品调研。',
+              '建 <code>docs/errors.md</code>:<code>site_blocked</code> / <code>partial_coverage</code> / <code>rate_limited</code> → <code>suggested_action</code>。',
+              '把代码里散落的 <code>{error:...}</code> 升级成统一结构化错误码 + 恢复契约。',
+              'gtm-swarm 内容机器把"家居 DTC 竞品周报"自动带 MCP CTA。'],
+       deliverable:'9 cookbook + 3 comparison page + errors.md + 错误码统一 + 内容机器 CTA。',
+       kpi:'cookbook 累计 GitHub stars ≥ 60'},
+      {num:"04 / Distribution",name:"分发",cn:"嵌入家居 DTC Agent 默认工具箱",
+       shift:'<strike>"渠道 BD"</strike> → <b>"一次有用的 competitor_landscape 调用让 Agent 默认带上它"</b>。',
+       moves:['2 个 OSS reference repo:<code>smartcrawler-claude-dtc-monitor</code> + <code>smartcrawler-langchain-research</code>。',
+              'Cline / Cursor 提 "DTC seller research preset" PR。',
+              'telemetry 升级:当前只按 key 记 request_count,加 <code>usage:mcp:smartcrawler:{verb}</code> 端点,反推哪个 verb 最值钱。',
+              'hub-spoke:flatkey 推 smartcrawler;与 voc 互链(竞品情报 ↔ 自家 VoC 是天然组合)。',
+              '失败案例分发:故障时 error 推 status_url —— 建公开 /status 页。'],
+       deliverable:'2 OSS repo + 1 framework preset PR + telemetry 端点 + spoke 互链 + status 页。',
+       kpi:'第 7 天 competitor_* tool call ≥ 400/周'}
+    ],
+    sprint:[
+      ["Day 1","<b>仓库转 public</b> + GitHub topics","9 verb description 重写","errors.md 起草(partial 语义)","telemetry 端点 schema"],
+      ["Day 2","5 catalog 提交(server.json 已就绪)","npm <code>@smartcrawler/mcp</code> 打包","cookbook #1-3","OSS repo #1 脚手架"],
+      ["Day 3","apis.guru OpenAPI PR","<b>npm publish</b>","cookbook #4-6","OSS repo #1 上线"],
+      ["Day 4","跟进 catalog 收录","flatkey↔smartcrawler cross-link","cookbook #7-9 + comparison #1","OSS repo #2 上线"],
+      ["Day 5","awesome-list PR 跟进","partial / 失败采集全 semantic 化","comparison #2-3","Cline DTC-preset PR"],
+      ["Day 6-7","catalog 收录验收","KPI 复盘 install/留存","内容机器接 MCP CTA + status 页","telemetry 上线 + tool call 验收"]
+    ],
+    closing:[
+      '<b>smartcrawler audit: 8 done · 1 partial · 3 todo</b>。技术底子最硬 —— 9 个 MCP domain-verb 工具、四个 <code>/.well-known/</code> 发现端点、FastAPI 自动 OpenAPI 全部 production-ready,58k 商品 + 6.9k 评价的真实数据在跑。',
+      '<b>唯一致命阻塞:仓库还是 private</b>。<code>mguozhen/smart-crawler</code> 不公开 → Glama 抓不到、awesome-list 收不了、catalog 里的 repo 链接 404。Day 1 第一件事就是 <code>gh repo edit --visibility public</code>,否则后面所有 Discovery 动作都白做。',
+      '<b>smartcrawler 是 vertical spoke</b>:卖的是 9 个 domain verb 而不是 crawler,catalog 进 Ecommerce,和 voc 是天然互链组合(竞品情报 ↔ 自家 VoC),底层 LLM 走 flatkey hub。'
+    ]
+  }
+];
+
+function auditCounts(shipped){
+  let d=0,p=0,t=0;
+  shipped.forEach(s=>{ if(s[1]==="done")d++; else if(s[1]==="partial")p++; else t++; });
+  return {d,p,t};
+}
+function shippedHtml(p){
+  const real = p.shipped.filter(s=>s[0]!=="—");
+  const {d,p:pa,t} = auditCounts(real);
+  const total=real.length;
+  const bar = total ? `<div class="audit-bar">
+      ${d?`<span class="ab-done" style="flex:${d}"></span>`:""}
+      ${pa?`<span class="ab-partial" style="flex:${pa}"></span>`:""}
+      ${t?`<span class="ab-todo" style="flex:${t}"></span>`:""}
+    </div>` : "";
+  const rows = p.shipped.map(s=>{
+    if(s[0]==="—") return `<div class="sc it" style="grid-column:1/-1;background:rgba(201,84,0,.06)">${s[2]}</div>`;
+    const label = s[1]==="done"?"✅ DONE":s[1]==="partial"?"🟡 PARTIAL":"❌ TODO";
+    return `<div class="sc it">${s[0]}</div><div class="sc status-${s[1]}">${label}</div><div class="sc">${s[2]}</div>`;
+  }).join("");
+  return `<div class="h2-sub">audit: ${d} done · ${pa} partial · ${t} todo · 共 ${total} 项</div>
+    ${bar}
+    <div class="shipped"><div class="sh">Item</div><div class="sh">Status</div><div class="sh">Note</div>${rows}</div>`;
+}
+function cardHtml(c,i){
+  return `<article class="card cc${i+1}">
+    <div class="card-num">Card ${c.num}</div>
+    <h3 class="card-name">${c.name} — <span class="cn">${c.cn}</span></h3>
+    <div class="card-shift">${c.shift}</div>
+    <div class="h-move">五个动作</div>
+    <ol class="move-list">${c.moves.map(m=>`<li>${m}</li>`).join("")}</ol>
+    <div class="ship-block"><div class="h-ship">本周交付</div><div class="ship-content">${c.deliverable}</div></div>
+    <div class="kpi"><span class="kpi-l">North Star KPI</span><span class="kpi-v">${c.kpi}</span></div>
+  </article>`;
+}
+function pageHtml(p){
+  const idx = PRODUCTS.indexOf(p)+1;
+  return `<div class="page" id="page-${p.tab}">
+    <header>
+      <div class="eyebrow"><span>Solvea Group · Agent-First GTM</span><span class="date">2026-05-18 · Hunter</span></div>
+      <span class="cat-pill ${p.catClass}">${p.cat}</span>
+      <h1>${p.h1}</h1>
+      <p class="lede">${p.lede}</p>
+      <div class="funnel">
+        <div class="fstage before"><div class="label">旧·发现</div><b>App Store / SEO</b></div><div class="farrow">→</div>
+        <div class="fstage before"><div class="label">旧·引流</div><b>落地页 / 广告</b></div><div class="farrow">→</div>
+        <div class="fstage before"><div class="label">旧·内容</div><b>Blog / 视频</b></div><div class="farrow">→</div>
+        <div class="fstage before"><div class="label">旧·分发</div><b>多渠道发帖</b></div>
+      </div>
+      <div class="funnel" style="margin-top:8px">
+        <div class="fstage after"><div class="label">新·发现</div><b>MCP catalog</b></div><div class="farrow">→</div>
+        <div class="fstage after"><div class="label">新·引流</div><b>Capability manifest</b></div><div class="farrow">→</div>
+        <div class="fstage after"><div class="label">新·内容</div><b>OpenAPI / Cookbook</b></div><div class="farrow">→</div>
+        <div class="fstage after"><div class="label">新·分发</div><b>Tool call & 默认工具箱</b></div>
+      </div>
+      <div class="meta-row">${p.meta.map(m=>`<span><b>${m[0]}</b>：${m[1]}</span>`).join("")}</div>
+    </header>
+
+    <section style="margin-top:30px">
+      <div class="principle"><span class="ptag">${PRINCIPLE.tag}</span>${PRINCIPLE.body}</div>
+    </section>
+
+    <section>
+      <h2>当前状态盘点</h2>
+      ${shippedHtml(p)}
+    </section>
+
+    <section>
+      <h2>四张卡</h2>
+      <div class="h2-sub">每张 = 漏斗一个环节 · 一条 mindset shift · 5 个具体动作 · 本周交付 · KPI</div>
+      <div class="deck">${p.cards.map((c,i)=>cardHtml(c,i)).join("")}</div>
+    </section>
+
+    <section>
+      <h2>Day 1-7 冲刺</h2>
+      <div class="h2-sub">把四张卡压缩成一周做完 · 每天每张卡一个可交付动作</div>
+      <div class="sprint">
+        <div class="rh">Day</div><div class="rh">发现 (C1)</div><div class="rh">引流 (C2)</div><div class="rh">内容 (C3)</div><div class="rh">分发 (C4)</div>
+        ${p.sprint.map(r=>`<div class="rc day">${r[0]}</div><div class="rc">${r[1]}</div><div class="rc">${r[2]}</div><div class="rc">${r[3]}</div><div class="rc">${r[4]}</div>`).join("")}
+      </div>
+    </section>
+
+    <section>
+      <h2>第一性原理</h2>
+      <div class="h2-sub">为什么这条路对,剩下的只是执行</div>
+      <div class="close-paragraphs">${p.closing.map(c=>`<p>${c}</p>`).join("")}</div>
+    </section>
+
+    <footer>
+      Generated <b>2026-05-18</b> · ${p.tab} · agent-gtm skill 第 ${idx} 次实战落地<br>
+      skill 开源: <b>github.com/mguozhen/agent-gtm</b> · 模板: agent-first-gtm-playbook-btcmind.html · 回「总览」看六产品如何锻造 skill
+    </footer>
+  </div>`;
+}
+
+document.getElementById("product-pages").innerHTML = PRODUCTS.map(pageHtml).join("");
+
+const tabs=document.querySelectorAll(".tab");
+function activate(name){
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  tabs.forEach(t=>t.classList.remove("active"));
+  const pg=document.getElementById("page-"+name);
+  if(pg) pg.classList.add("active");
+  const tb=document.querySelector('.tab[data-tab="'+name+'"]');
+  if(tb) tb.classList.add("active");
+  window.scrollTo(0,0);
+  if(history.replaceState) history.replaceState(null,"","#"+name);
+}
+tabs.forEach(t=>t.addEventListener("click",()=>activate(t.dataset.tab)));
+const init=(location.hash||"#overview").slice(1);
+activate(document.getElementById("page-"+init)?init:"overview");
+</script>
+</body>
+</html>

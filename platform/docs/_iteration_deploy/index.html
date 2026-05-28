@@ -1,0 +1,412 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>gtm-swarm v3 迭代计划 · 从内容工厂 → 能力网络</title>
+<style>
+  :root{
+    --ink:#1a2620; --mut:#5c6b62; --faint:#8a978d;
+    --green:#2f6b3f; --green-soft:#e8f1ea; --green-line:#bcd6c3;
+    --paper:#fbfcfb; --card:#ffffff; --line:#e2e7e3;
+    --red:#b4452f; --red-soft:#faf3f1; --red-line:#e8cfc7;
+    --amber:#b67d1e; --amber-soft:#fdf7e9; --amber-line:#ecd9a8;
+    --mono:'SF Mono',ui-monospace,Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--paper);color:var(--ink);
+    font-family:-apple-system,'Helvetica Neue',Arial,'PingFang SC','Hiragino Sans GB',sans-serif;
+    line-height:1.62;-webkit-font-smoothing:antialiased;padding:0 0 90px}
+  .wrap{max-width:1000px;margin:0 auto;padding:0 28px}
+  code,.m{font-family:var(--mono);font-size:.84em}
+  code{background:var(--green-soft);color:var(--green);padding:.08em .38em;border-radius:4px}
+
+  header{padding:64px 0 38px;border-bottom:3px solid var(--ink)}
+  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--green);font-weight:700}
+  h1{font-size:44px;line-height:1.14;margin:14px 0 14px;letter-spacing:-.02em;font-weight:800}
+  h1 em{font-style:normal;color:var(--green)}
+  .thesis{font-size:18px;color:var(--mut);max-width:780px;margin-bottom:14px}
+  .thesis b{color:var(--ink)}
+  .meta-row{font-family:var(--mono);font-size:12.5px;color:var(--faint);
+    padding-top:14px;border-top:1px dashed var(--line);margin-top:18px}
+  .meta-row span{margin-right:22px}.meta-row b{color:var(--ink)}
+
+  section{padding:46px 0;border-bottom:1px solid var(--line)}
+  .snum{font-family:var(--mono);font-size:12px;color:var(--faint);letter-spacing:.1em}
+  h2{font-size:27px;margin:6px 0 18px;letter-spacing:-.01em;font-weight:800}
+  h2 em{font-style:normal;color:var(--green)}
+  h3{font-size:17.5px;margin:14px 0 6px;font-weight:800}
+  p{margin:12px 0;max-width:830px}
+  .lead{font-size:16.5px}
+  .mut{color:var(--mut)}
+
+  /* status grid */
+  .status{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:22px 0}
+  .status .ok,.status .gap{border-radius:10px;padding:20px 22px}
+  .status .ok{background:var(--green-soft);border:1px solid var(--green-line)}
+  .status .gap{background:var(--red-soft);border:1px solid var(--red-line)}
+  .status h3{margin-top:0;display:flex;align-items:center;gap:8px}
+  .status .ok h3::before{content:"●";color:var(--green)}
+  .status .gap h3::before{content:"●";color:var(--red)}
+  .status ul{list-style:none;padding:0;margin:8px 0 0}
+  .status li{padding:6px 0;font-size:14.5px;border-top:1px dashed rgba(0,0,0,.08)}
+  .status li:first-child{border-top:none}
+
+  /* recent ship list */
+  .ship{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:18px 0}
+  .ship .s{background:var(--card);border:1px solid var(--line);border-radius:8px;
+    padding:13px 16px;font-size:14px}
+  .ship .s b{display:block;font-size:13.5px;color:var(--ink);margin-bottom:3px}
+  .ship .s .d{color:var(--mut);font-size:13px}
+
+  /* two-loop diagram */
+  .loops{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:22px 0}
+  .loop{border:1.5px solid var(--ink);border-radius:14px;padding:22px 24px;background:var(--card)}
+  .loop.b{border-color:var(--green);background:#fafdfb}
+  .loop .tag{font-family:var(--mono);font-size:11px;letter-spacing:.1em;font-weight:700;
+    text-transform:uppercase;color:var(--faint)}
+  .loop.b .tag{color:var(--green)}
+  .loop h3{margin:6px 0 10px}
+  .loop .flow{font-family:var(--mono);font-size:12.5px;color:var(--mut);
+    background:#f4f6f4;padding:11px 14px;border-radius:7px;margin:10px 0;line-height:1.7}
+  .loop .break{font-size:13.5px;color:var(--red);margin-top:10px;
+    padding:10px 13px;background:var(--red-soft);border:1px solid var(--red-line);border-radius:7px}
+  .loop .break b{color:var(--red)}
+
+  /* phases */
+  .phase{background:var(--card);border:1px solid var(--line);border-left:5px solid var(--green);
+    border-radius:12px;padding:22px 24px;margin:16px 0}
+  .phase .head{display:flex;gap:14px;align-items:baseline;flex-wrap:wrap;margin-bottom:8px}
+  .phase .pid{font-family:var(--mono);font-size:13px;font-weight:800;
+    background:var(--green);color:#fff;padding:3px 12px;border-radius:5px;letter-spacing:.05em}
+  .phase .wk{font-family:var(--mono);font-size:12.5px;color:var(--faint);font-weight:700}
+  .phase .pt{font-size:19px;font-weight:800}
+  .phase .scope{font-size:14.5px;color:var(--mut);margin:6px 0 10px}
+  .phase ul{list-style:none;padding:0;margin:8px 0}
+  .phase li{position:relative;padding:5px 0 5px 18px;font-size:14px}
+  .phase li::before{content:"›";position:absolute;left:0;color:var(--green);font-weight:700}
+  .phase li code{font-size:.85em}
+  .phase .own{font-family:var(--mono);font-size:12px;color:var(--green);
+    margin-top:12px;padding-top:10px;border-top:1px dashed var(--line);font-weight:700}
+  .phase .own b{color:var(--ink)}
+
+  /* roster table */
+  table{border-collapse:collapse;width:100%;margin:18px 0;font-size:14px}
+  th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);
+    font-weight:700;background:#f4f6f4}
+  tr.blocked td{background:var(--red-soft)}
+  tr.live td{background:var(--green-soft)}
+  td.tbd{color:var(--red);font-weight:700;font-family:var(--mono);font-size:12.5px}
+  td.named{font-family:var(--mono);font-size:12.5px}
+  td.st{font-family:var(--mono);font-size:12px;white-space:nowrap}
+
+  /* decisions */
+  .dec{background:var(--card);border:1px solid var(--line);border-radius:11px;
+    padding:18px 22px;margin:14px 0}
+  .dec .q{font-size:16px;font-weight:800;margin-bottom:10px}
+  .dec .q span{color:var(--green);font-family:var(--mono);font-size:13px;
+    margin-right:8px;letter-spacing:.04em}
+  .opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:8px 0}
+  .opts .o{background:#f4f6f4;border-radius:7px;padding:11px 14px;font-size:13.5px}
+  .opts .o b{display:block;margin-bottom:3px;color:var(--ink)}
+  .lean{margin-top:10px;padding:10px 14px;background:var(--amber-soft);
+    border:1px solid var(--amber-line);border-radius:7px;font-size:14px}
+  .lean b{color:var(--amber)}
+
+  /* acceptance */
+  .crit{counter-reset:c;list-style:none;padding:0;margin:18px 0}
+  .crit li{counter-increment:c;position:relative;padding:11px 0 11px 46px;
+    border-bottom:1px solid var(--line);font-size:15px}
+  .crit li::before{content:counter(c);position:absolute;left:0;top:11px;
+    font-family:var(--mono);font-weight:800;color:var(--green);font-size:18px;
+    width:32px;text-align:center}
+  .verdict{margin-top:16px;padding:14px 18px;background:#1a2620;color:#fbfcfb;
+    border-radius:8px;font-size:14.5px}
+  .verdict b{color:#a8d4b3}
+
+  .later{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:16px 0}
+  .later .l{background:#f4f6f4;border-radius:8px;padding:12px 16px;font-size:13.5px;
+    border-left:3px solid var(--faint);color:var(--mut)}
+  .later .l b{color:var(--ink);display:block;margin-bottom:3px}
+
+  footer{padding:34px 0 10px;color:var(--faint);font-size:12.5px;font-family:var(--mono)}
+  footer a{color:var(--green);text-decoration:none;border-bottom:1px solid var(--green-line)}
+
+  @media(max-width:760px){
+    .wrap{padding:0 18px}h1{font-size:32px}
+    .status,.ship,.loops,.opts,.later{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+
+<header><div class="wrap">
+  <div class="eyebrow">gtm-swarm · v3 迭代计划 · for team</div>
+  <h1>从内容工厂<br>→ <em>能力网络</em></h1>
+  <p class="thesis">v2 ship 一个月,Iron Triangle 跑通,内容能产。v3 的赌注:
+  <b>同时把两条闭环接上</b> —— 人侧分发(发出去 + 数据回流) + agent 侧能力(每个产品都是可被
+  agent 调用的能力,不只是 SaaS UI)。这是 §06「Agents 是新分发渠道」落地的第一个完整 cycle。</p>
+  <div class="meta-row">
+    <span>cycle <b>v3.0</b></span>
+    <span>window <b>2026-05-19 → 2026-06-29(6 周)</b></span>
+    <span>repo <b>SolveaCX/gtm-swarm</b></span>
+    <span>chairman <b>Hunter</b></span>
+  </div>
+</div></header>
+
+<section><div class="wrap">
+  <div class="snum">01 — 现状盘点</div>
+  <h2>v2 已 ship 一个月。<em>桌子搭好了,还差 3 条腿</em>。</h2>
+  <p class="lead mut">先把现实说清楚 —— 别在错的地方加功能,先看哪些已经 work、哪些是空洞。</p>
+  <div class="status">
+    <div class="ok">
+      <h3>已经在跑(v2 + 本月增量)</h3>
+      <ul>
+        <li>ContentOS Agent 4 步发现 → 每项目 60–100KB 战略 brief</li>
+        <li>11 agent 自动 hydrate(Iron Triangle 配置就位)</li>
+        <li>Reddit drafts platform-native,已在 voc-ai 5 篇验证</li>
+        <li>Dashboard SPA + Multica 动态绑定(每项目 1 对 1)</li>
+        <li>CIA Insights → ContentOS 自动生成(本周新)</li>
+        <li>6 个产品在册:flatkey / voc / btcmind / solvea / 101pay / smartcrawler</li>
+      </ul>
+    </div>
+    <div class="gap">
+      <h3>3 个洞 —— 闭环不闭</h3>
+      <ul>
+        <li><b>分发出不去</b>:内容到 <code>bank</code> 之后没人发。Published 永远 0,数据零回流</li>
+        <li><b>agent 侧没接上</b>:§06 原则只 voc / btcmind 部分落地,4 个产品没动</li>
+        <li><b>Iron Triangle 5 缺口</b>:11 agent 里 5 个还卡在 Builder/Reviewer TBD,不能部署</li>
+      </ul>
+    </div>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <div class="snum">02 — 最近两周</div>
+  <h2>这些是已经 ship 的,<em>不是计划</em></h2>
+  <p class="mut">5/11 v2 ship 之后到今天的所有合并 —— 别重复造已经在跑的东西。</p>
+  <div class="ship">
+    <div class="s"><b>CIA → ContentOS 自动生成</b><div class="d">cia/result 写 synthesis.md + 触发 background contentos</div></div>
+    <div class="s"><b>Multica 动态绑定 per project</b><div class="d">workspaces.multica_workspace_slug 一次性、不可变</div></div>
+    <div class="s"><b>Ledger 大改版</b><div class="d">content type metric cards + cost estimate + 分页</div></div>
+    <div class="s"><b>Format templates + QA hard checks</b><div class="d">Alinea discipline,引擎层强校验</div></div>
+    <div class="s"><b>PRINCIPLES §06</b><div class="d">Agents Are the New Distribution Channel</div></div>
+    <div class="s"><b>PRINCIPLES §07</b><div class="d">Card-Draw HTML(本 deck 就是它的产物)</div></div>
+    <div class="s"><b>101pay + smartcrawler 注册</b><div class="d">6 产品 registry 齐</div></div>
+    <div class="s"><b>voc-ai 内容引擎 MCP CTA 接通</b><div class="d">11 agent footer 自动带 MCP install 指令</div></div>
+    <div class="s"><b>agent-gtm skill 抽离独立</b><div class="d">github.com/mguozhen/agent-gtm,六产品 audit 表落地</div></div>
+    <div class="s"><b>agent-gtm-showcase 部署上线</b><div class="d"><a href="https://agent-gtm-showcase.vercel.app" style="color:inherit">agent-gtm-showcase.vercel.app</a></div></div>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <div class="snum">03 — v3 的赌注</div>
+  <h2>v2 让每个产品有「内容」。v3 让每个产品<em>同时有能力</em>。</h2>
+  <p class="lead">人类读到 = 旧分发。Agent 调到 = 新分发。两条腿同时跑 —— 这是 §06 原则的第一次完整 cycle 落地。</p>
+  <div class="loops">
+    <div class="loop">
+      <div class="tag">闭环 A · 人侧分发</div>
+      <h3>Ideas → 内容 → 审 → 发 → 回流</h3>
+      <div class="flow">Ideas Pool<br>↓<br>11 Agent 生成 draft<br>↓<br>Reviewer dashboard 批<br>↓<br><b>Postiz 发到平台</b><br>↓<br>clicks/upvotes webhook 回传<br>↓<br>engine/hooks.md 自动更新</div>
+      <div class="break"><b>当前断点:</b> Reviewer → Postiz 这一段。Published 状态从未亮过。</div>
+    </div>
+    <div class="loop b">
+      <div class="tag">闭环 B · agent 侧能力</div>
+      <h3>能力 → 索引 → 调用 → 反馈</h3>
+      <div class="flow">MCP server + OpenAPI<br>↓<br>capability manifest<br>↓<br><b>5 大 catalog 收录 + LLM 训练数据</b><br>↓<br>agent 调用 → tool call telemetry<br>↓<br>结构化反馈进 engine</div>
+      <div class="break"><b>当前断点:</b> 只 voc / btcmind 部分接上。4 个产品(flatkey/solvea/101pay/smartcrawler)没动。</div>
+    </div>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <div class="snum">04 — 5 个 Phase</div>
+  <h2>6 周窗口,<em>P1–P5 顺序 + 部分并行</em></h2>
+
+  <div class="phase">
+    <div class="head">
+      <span class="pid">P1</span>
+      <span class="wk">W1 · 5/19–5/25</span>
+      <span class="pt">Trust & Production-grade</span>
+    </div>
+    <div class="scope">把 v2 那些「broken-by-default」的尾巴清掉 —— 没这一步,后面 4 个 phase 都是沙上加层。</div>
+    <ul>
+      <li>所有写入端点加 Bearer token auth(<code>/api/promote-idea</code> / <code>/run-step</code> / <code>/build</code> / <code>/review</code> / <code>/publish</code>)</li>
+      <li>Multica DB 迁移收尾 —— 把 <code>/api/content</code> 等路由里残留的文件系统兜底全部删掉(CLAUDE.md 已写死铁律)</li>
+      <li>Railway Cron 服务上线,每日 ideas pool 自动刷新(目前还得手动 POST)</li>
+      <li><code>bank → published</code> 流补完:Bank tab 加 "🚀 Mark as Published" 按钮 + <code>/api/publish</code> endpoint</li>
+      <li>Solvea state machine 卡死修复:strategy file + state.json 原子写</li>
+    </ul>
+    <div class="own">主理人 <b>TBD</b> · 预估 CC ≈ 1.5d · human ≈ 1 周</div>
+  </div>
+
+  <div class="phase">
+    <div class="head">
+      <span class="pid">P2</span>
+      <span class="wk">W2–3 · 5/26–6/8</span>
+      <span class="pt">Distribution 闭环 A</span>
+    </div>
+    <div class="scope">让 bank 里的内容真的发出去,数据真的回来。这是 v2 没做完的事 —— 也是 acceptance criteria 第 4 条的关键。</div>
+    <ul>
+      <li>Postiz 集成(<code>gitroomhq/postiz-app</code> fork),先通 LinkedIn + Reddit 两个 channel</li>
+      <li>"Publish to &lt;platform&gt;" 按钮上 Bank tab</li>
+      <li>webhook 回传 clicks/upvotes/conversions → 写 metrics.json</li>
+      <li>每周脚本:metrics → <code>engine/hooks.md</code> 自动更新(Memory 飞轮)</li>
+    </ul>
+    <div class="own">主理人 <b>TBD</b> · 预估 CC ≈ 3d · human ≈ 1–2 周</div>
+  </div>
+
+  <div class="phase">
+    <div class="head">
+      <span class="pid">P3</span>
+      <span class="wk">W3–4 · 6/2–6/15(与 P2 并行)</span>
+      <span class="pt">Agent-era 能力层 闭环 B</span>
+    </div>
+    <div class="scope">§06 原则在 6 个产品全面落地。每个产品都成为可被 agent 调用的能力源,不只是 SaaS UI。</div>
+    <ul>
+      <li>每个产品 ship MCP server + OpenAPI spec + <code>/.well-known/agent-capabilities.json</code></li>
+      <li>5 大 MCP catalog 提交:mcp.so / glama / smithery / awesome-mcp-servers / PulseMCP</li>
+      <li>GitHub topics 加齐 + apis.guru OpenAPI 提交(进 LLM 训练数据)</li>
+      <li>agent-gtm skill 跑 nightly audit,6 产品自动出 audit 报告</li>
+      <li>Hub-and-spoke cross-link manifest:flatkey 当 hub,5 spoke 双向引用</li>
+    </ul>
+    <div class="own">主理人 <b>Hunter</b> + 各产品 Builder · 预估 CC ≈ 4d(per product 40min)· human ≈ 2 周</div>
+  </div>
+
+  <div class="phase">
+    <div class="head">
+      <span class="pid">P4</span>
+      <span class="wk">W4–6 · 6/9–6/29</span>
+      <span class="pt">Iron Triangle 招满</span>
+    </div>
+    <div class="scope">11 个 agent 里 5 个还卡在 TBD。按 §03 原则,没填名字 = 不能部署。这是组织层 forcing function,不是技术问题。</div>
+    <ul>
+      <li>04 Backlink 招 Builder</li>
+      <li>08 Ads 招 Reviewer</li>
+      <li>09 EDM 招 Builder + Reviewer</li>
+      <li>10 Yelp 招 Builder + Reviewer</li>
+      <li>11 Poster (WeChat 公众号) 招 Builder + Reviewer</li>
+    </ul>
+    <div class="own">主理人 <b>Hunter</b>(招聘)+ 用人主理人 · 8 个 slot · 优先级见 Q3</div>
+  </div>
+
+  <div class="phase">
+    <div class="head">
+      <span class="pid">P5</span>
+      <span class="wk">W5–6 · 6/16–6/29</span>
+      <span class="pt">Brand voice 去重 + Solvea 解锁</span>
+    </div>
+    <div class="scope">现在 btcmind/engine 是 voc-ai/engine 的拷贝,所以加密 trader 听起来像 Amazon 卖家。质量地板需要这一步。</div>
+    <ul>
+      <li>engine 重构:<code>core graph</code>(平台/钩子/repurpose,品牌中性)+ <code>brand layer</code>(声音/index,per-project)</li>
+      <li>ContentOS Agent Step 4 生成 brand layer,不只生成 agent.yaml</li>
+      <li>每项目 ~17KB brand 层 + 共享 ~200KB core 层(从 624KB 砍下来)</li>
+      <li>Solvea state machine 卡死修好后(P1),重跑 ContentOS Agent 4 步,把 0/10 audit 拉到 ≥ 5/10</li>
+    </ul>
+    <div class="own">主理人 <b>TBD</b> · 预估 CC ≈ 3d · human ≈ 1 周</div>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <div class="snum">05 — Iron Triangle 缺口</div>
+  <h2>11 agent 里 <em>5 个不能部署</em></h2>
+  <p class="mut">§03「No Triangle = No Agent」是硬规矩。下面 5 行红色 = v3 周期内必须填,不然 v3 收口不了。</p>
+  <table>
+    <thead><tr><th>#</th><th>Agent</th><th>Builder</th><th>Reviewer</th><th>状态</th></tr></thead>
+    <tbody>
+      <tr class="live"><td>01</td><td>GTM Foundation</td><td class="named">钟石龙</td><td class="named">Boyuan</td><td class="st">✅ live</td></tr>
+      <tr class="live"><td>02</td><td>KOL / KOC</td><td class="named">张基琳</td><td class="named">Ivy</td><td class="st">✅ live</td></tr>
+      <tr class="live"><td>03</td><td>Blog</td><td class="named">张基琳</td><td class="named">彭静</td><td class="st">✅ live</td></tr>
+      <tr class="blocked"><td>04</td><td>Backlink</td><td class="tbd">TBD</td><td class="named">彭静</td><td class="st">🚫 blocked</td></tr>
+      <tr class="live"><td>05</td><td>Video</td><td class="named">张基琳</td><td class="named">庄可欣</td><td class="st">✅ live</td></tr>
+      <tr class="live"><td>06</td><td>Reddit</td><td class="named">Wayne</td><td class="named">Ivy Chen</td><td class="st">✅ pilot</td></tr>
+      <tr class="live"><td>07</td><td>Social Media</td><td class="named">Wayne</td><td class="named">Ivy Chen</td><td class="st">✅ live</td></tr>
+      <tr class="blocked"><td>08</td><td>Ads</td><td class="named">高博远</td><td class="tbd">TBD</td><td class="st">🚫 blocked</td></tr>
+      <tr class="blocked"><td>09</td><td>EDM</td><td class="tbd">TBD</td><td class="tbd">TBD</td><td class="st">🚫 blocked</td></tr>
+      <tr class="blocked"><td>10</td><td>Yelp</td><td class="tbd">TBD</td><td class="tbd">TBD</td><td class="st">🚫 blocked</td></tr>
+      <tr class="blocked"><td>11</td><td>Poster (WeChat)</td><td class="tbd">TBD</td><td class="tbd">TBD</td><td class="st">🚫 blocked</td></tr>
+    </tbody>
+  </table>
+  <p><b>3 个 Builder + 5 个 Reviewer = 8 个名字</b>。优先级见下面 Q3。</p>
+</div></section>
+
+<section><div class="wrap">
+  <div class="snum">06 — 团队要决的 4 件事</div>
+  <h2>把这 4 个决定<em>定下来,v3 才能动</em></h2>
+
+  <div class="dec">
+    <div class="q"><span>Q1</span>Postiz: fork 自建 还是 用 SaaS?</div>
+    <div class="opts">
+      <div class="o"><b>A · fork postiz-app</b>1–2 周开发 + 维护成本;数据自有,channel 可改,可深度集成 metrics 回流</div>
+      <div class="o"><b>B · 用 Postiz SaaS</b>立即可用 + $X/mo;数据出去,channel 受限,metrics 走他们 webhook</div>
+    </div>
+    <div class="lean"><b>Hunter 倾向 A 自建。</b>核心理由:metrics 回流要写进 engine/hooks.md,SaaS 的 webhook 不够细。</div>
+  </div>
+
+  <div class="dec">
+    <div class="q"><span>Q2</span>Solvea 这一轮:救 还是 搁?</div>
+    <div class="opts">
+      <div class="o"><b>A · 救</b>P1 修完 state machine 后立刻拨 1 周 Founder 时间重跑 ContentOS Agent,0/10 audit 拉到 ≥ 5</div>
+      <div class="o"><b>B · 搁</b>先做有进度的 5 产品,Solvea 等 P5(engine 重构同期一起捞)</div>
+    </div>
+    <div class="lean"><b>Hunter 倾向 B。</b>Solvea 0/10 不是技术问题,是没人盯;P5 engine 重构本来就要重跑 ContentOS Agent,顺手捞。</div>
+  </div>
+
+  <div class="dec">
+    <div class="q"><span>Q3</span>招聘 8 个 slot:谁先?</div>
+    <div class="opts">
+      <div class="o"><b>A · Builder 先</b>能产出,但没人收,bank 堆积</div>
+      <div class="o"><b>B · Reviewer 先</b>能收,但没产能,Reviewer 空转</div>
+    </div>
+    <div class="lean"><b>Hunter 倾向先解锁 08 Ads + 04 Backlink。</b>08 招 Reviewer(Builder 高博远已就位),04 招 Builder(Reviewer 彭静已就位)。最低成本各搬一块石头,各先解锁 1 个 agent。其他 6 个 slot(09/10/11 双 TBD)等 P5 之后再说。</div>
+  </div>
+
+  <div class="dec">
+    <div class="q"><span>Q4</span>multi-platform-publisher 算 agent #12 还是 infra?</div>
+    <div class="opts">
+      <div class="o"><b>A · 进 agent 编号</b>11 → 12 个 agent,有 Builder/Reviewer,自带 Iron Triangle</div>
+      <div class="o"><b>B · 当作 infra</b>02/05/06/07 共用的发布通道,不进 roster</div>
+    </div>
+    <div class="lean"><b>Hunter 倾向 B infra。</b>它没有自己的 brief / goal / 内容产出,只是发布管道;让它继续做基础设施,不要把工具拟人成 agent。</div>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <div class="snum">07 — v3 验收</div>
+  <h2>6 条硬指标。<em>4/6 没达 = v3 没完成</em></h2>
+  <ol class="crit">
+    <li>新产品 onboarding < 1 小时(Founder 填 <code>project.yaml</code> → wizard → built)</li>
+    <li>每个 agent 每天 ≥ 20 个 idea(Railway cron 自动跑,不靠手动 POST)</li>
+    <li>Reviewer 每周 ≥ 30 件 approve,全在 dashboard 内完成,不切窗口</li>
+    <li>≥ 50% 已 approve 的 draft 到达 published 状态(P2 必须开闸)</li>
+    <li>每周 ≥ 1 个 metric(clicks/upvotes/conversions)回流到 <code>engine/hooks.md</code></li>
+    <li>6 产品各有 MCP server + OpenAPI + capability manifest + ≥ 3 catalog 收录</li>
+  </ol>
+  <div class="verdict"><b>规则:</b> 6/29 周末检查。达成 ≥ 4 → v3 closed,启动 v4 规划。<br>达成 &lt; 4 → <b>不做 v4。</b>架构是错的,不是功能不够。停止加新东西,先把 v3 加固到 ≥ 4。</div>
+</div></section>
+
+<section><div class="wrap">
+  <div class="snum">08 — 留给 v4</div>
+  <h2>这些<em>故意不在 v3 里</em></h2>
+  <p class="mut">列出来是让团队不要在 v3 周期内被这些带跑。需要的话单独 deck 讨论,不挤 v3。</p>
+  <div class="later">
+    <div class="l"><b>多语言混发</b>zh / en / ja 同时发到对应平台;engine 检测/指定输出语言</div>
+    <div class="l"><b>Paperclip 双向同步</b>Paperclip approval status ↔ gtm-swarm dashboard 实时同步</div>
+    <div class="l"><b>LLM A/B</b>同一 prompt 跑不同 model(claude / gpt / qwen),对比 reviewer 通过率</div>
+    <div class="l"><b>收入归因</b>具体 conversion → sale 链路,要 CRM 接入,P3 暂不依赖</div>
+    <div class="l"><b>Sell ContentOS Agent 独立产品</b>4 步发现作为 SaaS 卖,商业化决策不在 v3 scope</div>
+    <div class="l"><b>Founder 自动化跳过</b>取消 4 步 human-in-loop,争议大,留 v4 讨论</div>
+  </div>
+</div></section>
+
+<footer><div class="wrap">
+  gtm-swarm v3 iteration plan · drafted 2026-05-19 ·
+  repo <a href="https://github.com/SolveaCX/gtm-swarm">SolveaCX/gtm-swarm</a> ·
+  PRINCIPLES.md §01–§07 · ROSTER.md · RETROSPECTIVE.md v3 tiers expanded ·
+  本 deck 即 §07「Card-Draw HTML」自身的产物
+</div></footer>
+
+</body>
+</html>

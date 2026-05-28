@@ -1,0 +1,597 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>smartcrawler.io · Agent-First GTM Insight</title>
+<style>
+  :root {
+    --paper: #f6f2e9;
+    --paper-2: #efeadc;
+    --ink: #1a1a1a;
+    --muted: #7a7060;
+    --line: #d8cfb8;
+    --accent: #2a6f4e;       /* green for crawler / data */
+    --accent-2: #b85428;
+    --warning: #b35d3d;
+    --serif: "Iowan Old Style", "Charter", "Source Serif Pro", Georgia, serif;
+    --sans: -apple-system, "SF Pro Text", "Inter", "Helvetica Neue", Arial, sans-serif;
+    --mono: "JetBrains Mono", "SF Mono", Menlo, monospace;
+    --c-market: #e7eee0;
+    --c-persona: #e4ecde;
+    --c-c1: #e1ead9;
+    --c-c2: #dfe7d5;
+    --c-c3: #e6ecdd;
+    --c-c4: #d8e3ce;
+    --c-roadmap: #ecf1e3;
+  }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--paper);
+    background-image:
+      radial-gradient(circle at 12% 18%, rgba(42,111,78,.05), transparent 28%),
+      radial-gradient(circle at 88% 78%, rgba(184,84,40,.04), transparent 32%);
+    color: var(--ink); font-family: var(--sans);
+    font-size: 15px; line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1280px; margin: 0 auto; padding: 64px 36px 140px; }
+
+  header { border-bottom: 1px solid var(--line); padding-bottom: 36px; margin-bottom: 56px; }
+  .eyebrow {
+    font-family: var(--mono); font-size: 11px; letter-spacing: .28em;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 14px;
+    display: flex; justify-content: space-between; align-items: baseline;
+  }
+  .eyebrow .date { color: var(--accent); }
+  h1 {
+    font-family: var(--serif); font-size: 60px; line-height: 1.02;
+    margin: 0 0 14px; letter-spacing: -0.015em; font-weight: 600;
+  }
+  h1 em { font-style: italic; color: var(--accent); }
+  .lede {
+    font-family: var(--serif); font-size: 21px; line-height: 1.5;
+    color: var(--ink); max-width: 960px; margin: 0 0 22px;
+  }
+  .meta-row {
+    display: flex; gap: 28px; font-family: var(--mono); font-size: 11.5px;
+    color: var(--muted); margin-top: 12px; flex-wrap: wrap;
+  }
+  .meta-row b { color: var(--ink); font-weight: 500; }
+  .meta-row a { color: var(--accent); text-decoration: none; }
+
+  section { margin-top: 72px; }
+  h2 {
+    font-family: var(--serif); font-size: 34px; line-height: 1.1;
+    margin: 0 0 8px; letter-spacing: -0.005em; font-weight: 600;
+  }
+  .h2-sub {
+    font-family: var(--mono); font-size: 11.5px; color: var(--muted);
+    letter-spacing: .18em; text-transform: uppercase; margin-bottom: 28px;
+    padding-bottom: 14px; border-bottom: 1px solid var(--line);
+  }
+
+  .market {
+    background: var(--c-market); border-radius: 8px; padding: 28px 32px;
+    border: 1px solid var(--line); margin-bottom: 24px;
+  }
+  .market h3 {
+    font-family: var(--serif); font-size: 22px; margin: 0 0 10px;
+    font-weight: 600;
+  }
+  .market p { margin: 10px 0; font-size: 15px; line-height: 1.55; }
+  .market b { color: var(--accent); font-weight: 700; }
+  .table-block {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 18px;
+  }
+  .table-block > div {
+    background: #fff; border-radius: 6px; padding: 16px 18px; border: 1px solid var(--line);
+  }
+  .table-block .label {
+    font-family: var(--mono); font-size: 10px; letter-spacing: .2em;
+    color: var(--muted); text-transform: uppercase; margin-bottom: 8px;
+  }
+  .table-block ul { margin: 6px 0 0; padding-left: 18px; font-size: 13.5px; line-height: 1.55; }
+  .table-block ul li { margin-bottom: 3px; }
+  .table-block .big {
+    font-family: var(--serif); font-size: 22px; line-height: 1.3; font-weight: 600; color: var(--ink);
+  }
+  .pill {
+    display: inline-block; padding: 2px 9px; font-size: 11px; border-radius: 10px;
+    font-family: var(--mono); letter-spacing: .1em; text-transform: uppercase;
+    background: rgba(42,111,78,.15); color: var(--accent); margin-right: 4px; margin-bottom: 4px;
+  }
+  .pill.alt { background: rgba(184,84,40,.15); color: var(--accent-2); }
+  .pill.warn { background: rgba(179, 93, 61, .2); color: var(--warning); }
+
+  .persona-pair {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-top: 20px;
+  }
+  @media (max-width: 900px) {
+    .table-block, .persona-pair { grid-template-columns: 1fr; }
+  }
+  .persona {
+    background: var(--c-persona); border-radius: 8px; padding: 24px 28px;
+    border: 1px solid var(--line);
+  }
+  .persona h4 {
+    font-family: var(--serif); font-size: 22px; margin: 0 0 10px;
+    font-weight: 600;
+  }
+  .persona h4 .tag {
+    font-family: var(--mono); font-size: 10px; letter-spacing: .15em;
+    color: var(--accent); text-transform: uppercase; margin-left: 10px;
+    background: rgba(42,111,78,.15); padding: 2px 8px; border-radius: 10px;
+    vertical-align: middle;
+  }
+  .persona h4 .tag.agent { color: var(--accent-2); background: rgba(184,84,40,.15); }
+  .persona p { margin: 8px 0; font-size: 14px; line-height: 1.55; }
+  .persona ul { margin: 8px 0; padding-left: 20px; font-size: 14px; line-height: 1.55; }
+  .persona li { margin-bottom: 5px; }
+  .persona b { color: var(--ink); font-weight: 700; }
+  .persona .trigger {
+    background: #fff; border-radius: 6px; padding: 12px 14px; margin-top: 12px;
+    border-left: 3px solid var(--accent); font-size: 13.5px; line-height: 1.5;
+  }
+  .persona .trigger b { color: var(--accent); }
+
+  .deck {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; margin-top: 24px;
+  }
+  @media (max-width: 900px) { .deck { grid-template-columns: 1fr; } }
+  .card {
+    background: var(--c-c1); border-radius: 8px; padding: 28px 30px;
+    border: 1px solid var(--line); position: relative;
+    box-shadow: 0 1px 0 rgba(0,0,0,.04), 0 8px 24px -16px rgba(0,0,0,.12);
+  }
+  .card.c2 { background: var(--c-c2); }
+  .card.c3 { background: var(--c-c3); }
+  .card.c4 { background: var(--c-c4); }
+  .card-num {
+    font-family: var(--mono); font-size: 11px; letter-spacing: .25em;
+    color: var(--accent); text-transform: uppercase; margin-bottom: 6px;
+  }
+  .card-name {
+    font-family: var(--serif); font-size: 30px; line-height: 1.1;
+    margin: 0 0 12px; font-weight: 600;
+  }
+  .card-name .cn { color: var(--accent); }
+  .card-shift {
+    border-left: 3px solid var(--accent); padding: 8px 0 8px 14px; margin: 12px 0 16px;
+    font-family: var(--serif); font-size: 16px; line-height: 1.45;
+    font-style: italic;
+  }
+  .card-shift strike { color: var(--warning); }
+  .card-shift b { font-style: normal; color: var(--accent); font-weight: 700; }
+  .h-move {
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: .22em;
+    color: var(--muted); text-transform: uppercase; margin: 18px 0 8px;
+  }
+  .move-list { padding-left: 0; list-style: none; margin: 0 0 18px; counter-reset: move; }
+  .move-list li {
+    padding: 8px 0 8px 26px; border-bottom: 1px dashed rgba(0,0,0,.1);
+    position: relative; font-size: 14px; line-height: 1.5;
+  }
+  .move-list li:last-child { border-bottom: 0; }
+  .move-list li::before {
+    content: counter(move) "."; counter-increment: move;
+    position: absolute; left: 0; top: 8px;
+    font-family: var(--mono); font-size: 12px; color: var(--accent); font-weight: 600;
+  }
+  .move-list code {
+    font-family: var(--mono); font-size: 12px; background: rgba(0,0,0,.06);
+    padding: 1px 6px; border-radius: 3px;
+  }
+  .move-list b { color: var(--ink); font-weight: 700; }
+  .ship-block {
+    background: #fff; border-radius: 6px; padding: 14px 18px; margin: 8px 0 12px;
+    border: 1px solid var(--line);
+  }
+  .ship-block .h-ship {
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: .22em;
+    color: var(--accent-2); text-transform: uppercase; margin-bottom: 6px;
+  }
+  .ship-block .ship-content { font-size: 13px; line-height: 1.5; }
+  .ship-block code {
+    font-family: var(--mono); font-size: 12px; background: rgba(0,0,0,.06);
+    padding: 1px 6px; border-radius: 3px;
+  }
+  .kpi {
+    display: flex; justify-content: space-between; align-items: baseline;
+    padding: 10px 14px; background: rgba(0,0,0,.04); border-radius: 4px; margin-top: 10px;
+  }
+  .kpi .kpi-l { font-family: var(--mono); font-size: 10px; letter-spacing: .18em; color: var(--muted); text-transform: uppercase; }
+  .kpi .kpi-v { font-family: var(--mono); font-size: 12.5px; color: var(--ink); font-weight: 600; }
+
+  .skill-slot {
+    background: #1a1a1a; color: #f4ecd8; padding: 26px 32px; border-radius: 8px;
+    margin-top: 20px; position: relative;
+  }
+  .skill-slot .ptag {
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: .25em;
+    color: var(--accent); text-transform: uppercase; margin-bottom: 12px; display: block;
+  }
+  .skill-slot h3 {
+    font-family: var(--serif); font-size: 24px; margin: 0 0 10px; font-weight: 600;
+  }
+  .skill-slot p { font-family: var(--serif); font-size: 16.5px; line-height: 1.5; margin: 8px 0; }
+  .skill-slot em { color: var(--accent); font-style: italic; }
+  .skill-slot table {
+    width: 100%; border-collapse: collapse; margin-top: 14px; font-size: 13px;
+  }
+  .skill-slot th, .skill-slot td {
+    padding: 8px 10px; border-bottom: 1px solid rgba(244,236,216,.15); text-align: left;
+  }
+  .skill-slot th {
+    font-family: var(--mono); font-size: 10px; letter-spacing: .18em;
+    text-transform: uppercase; color: rgba(244,236,216,.5); font-weight: 500;
+  }
+
+  .roadmap {
+    display: grid; grid-template-columns: 60px 1fr 1fr 1fr 1fr; gap: 0;
+    border: 1px solid var(--line); border-radius: 6px; overflow: hidden;
+    background: #fff; margin-top: 24px;
+  }
+  .roadmap .rh, .roadmap .rc {
+    padding: 13px 14px; border-bottom: 1px solid var(--line); border-right: 1px solid var(--line);
+    font-size: 12.5px; line-height: 1.45;
+  }
+  .roadmap .rh {
+    background: var(--paper-2); font-family: var(--mono); font-size: 11px;
+    letter-spacing: .18em; text-transform: uppercase; color: var(--muted); font-weight: 600;
+  }
+  .roadmap .rc:last-child { border-right: 0; }
+  .roadmap .week {
+    background: var(--c-roadmap); font-family: var(--mono); font-size: 12px;
+    font-weight: 700; color: var(--accent); text-align: center;
+  }
+  .roadmap .rc strong { color: var(--ink); font-weight: 700; }
+
+  footer {
+    border-top: 1px solid var(--line); padding-top: 24px; margin-top: 80px;
+    font-family: var(--mono); font-size: 11px; color: var(--muted); line-height: 1.7;
+  }
+  footer b { color: var(--ink); font-weight: 600; }
+  footer a { color: var(--accent); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">
+      <span>Solvea Group · GTM Swarm v3 · Agent-First Insight</span>
+      <span class="date">2026-05-18 · 抽卡 #3 · smartcrawler.io</span>
+    </div>
+    <h1>smartcrawler — <em>家居 DTC 的 Keepa</em></h1>
+    <p class="lede">
+      不是 crawler，是 <b>跨境家居 DTC 竞品情报 API</b> — 9 个品牌 × 46 个独立站 × 12 国 × 21 个评价平台，输出 7 个 MCP 工具（domain verbs）。<br>
+      <b>核心命题</b>：当 Agent 直接调"<code>competitor_landscape(keyword, country)</code>"一次拿到结构化结果，谁还要去维护爬虫？<br>
+      首页 verbatim: "<b>Agents 是新的分发渠道：做能力，不做界面。</b>"
+    </p>
+    <div class="meta-row">
+      <span><b>URL</b>: <a href="https://smartcrawler.io">smartcrawler.io</a></span>
+      <span><b>Slug</b>: smartcrawler</span>
+      <span><b>Stage</b>: Stealth / 强 agent-native</span>
+      <span><b>Customer signal</b>: 弱（无 case / 无 testimonial）</span>
+      <span><b>Pricing</b>: 未公开（<code>sck_*</code> key 暗示 invite-only）</span>
+    </div>
+  </header>
+
+  <!-- ─────────────────── Market Insight ─────────────────── -->
+  <section style="margin-top:0">
+    <h2>市场洞察</h2>
+    <div class="h2-sub">What it is · 差异化 · 与 Firecrawl/Apify 的位置差</div>
+
+    <div class="market">
+      <h3>这是什么 — 一句话</h3>
+      <p>smartcrawler = <b>家居 DTC 跨境垂直情报 API</b>，伪装成 "crawler"，实际是 <b>Keepa for furniture</b>。
+      数据维度：9 个家居品牌 × 46 个 Shopify/Vue/Nuxt 站 × 12 国 × 21 review platform（Trustpilot / Google Maps）+ Google Shopping。
+      输出预建模实体：<code>Products / PriceHistory / Promotions / VOC reviews / CompetitorShare</code>。</p>
+      <p>Agent-native 程度<b>异常高</b>：<code>/.well-known/mcp.json</code> · <code>/.well-known/ai-plugin.json</code> · <code>/agents.json</code> · <code>/llms.txt</code> · OpenAPI 3.1 · Swagger UI 全齐。
+      7 个 MCP tool 是 domain verb：<code>search_competitor_products</code> / <code>voc_summary</code> / <code>competitor_landscape</code> / ... — Firecrawl 给你 <code>scrape()</code>，他给你<b>业务动作</b>。</p>
+    </div>
+
+    <div class="table-block">
+      <div>
+        <div class="label">差异化 Wedge</div>
+        <div class="big">垂直深度 ≠ 横向爬虫</div>
+        <p style="font-size:13.5px;line-height:1.55;margin-top:10px">
+          Firecrawl / Browserless / ScrapingBee / Apify 卖<i>通用原语</i> (scrape / crawl)。
+          smartcrawler 卖<i>领域动词</i>（competitor_landscape, voc_summary）。
+          形态对位 Keepa（Amazon），不是 Firecrawl。
+        </p>
+        <div style="margin-top:12px">
+          <span class="pill">家居 DTC only</span>
+          <span class="pill">7 MCP tools</span>
+          <span class="pill">OpenAPI 3.1</span>
+          <span class="pill">llms.txt</span>
+          <span class="pill alt">CN + EN bilingual</span>
+        </div>
+      </div>
+      <div>
+        <div class="label">直接竞品（按位置）</div>
+        <ul>
+          <li><b>Prisync / Competera / Altosight</b> — 通用价格追踪 SaaS</li>
+          <li><b>Similarweb Shopper Intelligence</b> — 更广的 e-commerce intel</li>
+          <li><b>Keepa</b> — 同形态不同垂直（Amazon）</li>
+          <li><b>Firecrawl + DIY pipeline</b> — 间接替代</li>
+          <li><b>ScrapeGraphAI</b> — agent 友好但 horizontal</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="table-block" style="margin-top:18px">
+      <div>
+        <div class="label">Agent-readiness 体检（同行业最佳）</div>
+        <ul>
+          <li>✅ <code>/.well-known/mcp.json</code> + <code>/.well-known/ai-plugin.json</code></li>
+          <li>✅ <code>/agents.json</code> + <code>/llms.txt</code></li>
+          <li>✅ OpenAPI 3.1 + Swagger UI public</li>
+          <li>✅ MCP streamable HTTP, Bearer auth</li>
+          <li>✅ REST via <code>X-API-Key</code></li>
+          <li><b>已经做到 GTM Swarm v3 想做的 90% — 是教科书级范本</b></li>
+        </ul>
+      </div>
+      <div>
+        <div class="label">最大的缺口</div>
+        <div class="big" style="color:var(--accent)">"Agent-native 满分，但没人知道它存在"</div>
+        <p style="font-size:13.5px;line-height:1.55;margin-top:10px">
+          所有 discovery surface 全齐，<b>但是 customer signal 完全空</b>：无 logo / 无 case / 无 PR / 无 social。
+          产品已就绪 = Agent 来了能用，但 Agent 还没<b>被告知它的存在</b>。这是 GTM 任务全部的重心。
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────────── Persona ─────────────────── -->
+  <section>
+    <h2>Persona — 谁会用 smartcrawler</h2>
+    <div class="h2-sub">Human + Agent 双买家 · Agent 是 unfair advantage</div>
+
+    <div class="persona-pair">
+
+      <div class="persona">
+        <h4>主买家 <span class="tag">Human</span></h4>
+        <p><b>"中型跨境家居 DTC 品牌的 Competitive Intelligence 分析师 / Pricing Manager / 品类 PM"</b></p>
+        <ul>
+          <li><b>公司</b>: 家居 DTC · revenue $10-200M · 在 ≥ 3 国 / Shopify-based · 自有品牌</li>
+          <li><b>身份</b>: CI Analyst / Pricing / 品类 PM / 跨境运营总监</li>
+          <li><b>当前痛</b>: 维护 in-house 爬虫被 Shopify theme 改版搞挂 / Prisync 没覆盖独立站 / Excel 手动汇总</li>
+          <li><b>预算</b>: 数据 SaaS 月支出 $2K-$15K，可换</li>
+        </ul>
+        <div class="trigger">
+          <b>购买触发（4 选 1）</b><br>
+          ① 上线新国家，需要快速摸到本地竞品价位结构<br>
+          ② 黑五 / 双 11 前需要竞品 promo 监控 dashboard<br>
+          ③ 董事会要"我们 vs 头部 3 家"的 price-positioning 一页纸<br>
+          ④ 内部爬虫团队成本 / 跑数据 SLA 失控
+        </div>
+      </div>
+
+      <div class="persona">
+        <h4>真正决策者 <span class="tag agent">Agent</span></h4>
+        <p><b>"跨境品牌的 Pricing Agent / Competitor Watch Agent / Listing Optimizer"</b></p>
+        <ul>
+          <li><b>身份</b>: 内部 LangGraph / Claude project agent，每天跑 competitor monitoring</li>
+          <li><b>当前路径</b>: Firecrawl + 自己写 parsing logic + 自己维护 schema → 慢、贵、脆</li>
+          <li><b>切换动机</b>: 一次 <code>competitor_landscape("sofa", "us")</code> 替代 46 次 scrape + 46 次 parser + 46 次 schema 维护</li>
+          <li><b>限制</b>: smartcrawler 只覆盖<b>家居</b>。Agent 如果跨垂直，必须保留 Firecrawl 作 fallback</li>
+        </ul>
+        <div class="trigger">
+          <b>Agent "选 smartcrawler" 的真实路径</b><br>
+          ① 在 MCP 配置里 add smartcrawler MCP server（已有 endpoint）<br>
+          ② Agent 跑 <code>tools/list</code> → 看到 7 个 domain verb<br>
+          ③ <b>看到 <code>competitor_landscape</code> 直接调</b> — 不需要写新代码<br>
+          ④ smartcrawler 在 agent 工具箱里成为 <b>"家居场景的 default crawler"</b>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ─────────────────── 4 Cards ─────────────────── -->
+  <section>
+    <h2>抽四张卡 — Agent-First GTM for smartcrawler</h2>
+    <div class="h2-sub">产品已就绪 · GTM 任务全部在 Discovery + Distribution 两端</div>
+
+    <div class="deck">
+
+      <article class="card c1">
+        <div class="card-num">Card 01 / Discovery</div>
+        <h3 class="card-name">发现 — <span class="cn">让 Agent 训练数据知道它</span></h3>
+        <div class="card-shift">
+          <strike>"Google SEO"</strike> → <b>"LLM training data 收录 + MCP catalog 收录"</b>。产品已经 agent-ready，需要做的只是让索引知道它。
+        </div>
+        <div class="h-move">五个动作</div>
+        <ol class="move-list">
+          <li>提交 5 大 MCP catalog：<code>mcp.so / glama.ai / smithery.ai / modelcontextprotocol/servers / PulseMCP</code>。<b>1 天搞定</b>，分发上去就有流量。</li>
+          <li>把 OpenAPI 提交到 <code>apis.guru</code> + <code>RapidAPI</code>。两个目录都是 LLM 训练数据高频源。</li>
+          <li>每个 MCP tool 的 <code>description</code> 字段重写，把"家居 DTC"明确写进去，让 Agent router 第一秒就 match domain。</li>
+          <li>建一个 <code>vs/firecrawl</code> / <code>vs/apify</code> 对比页 — agent router 训练数据高频抓 comparison。<b>表达"我比 Firecrawl 更适合家居场景"是杀招</b>。</li>
+          <li>llms.txt 升级：把 7 个 MCP tool 的 example invocation 写齐，<b>给 LLM 看的代码片段越具体越好</b>。</li>
+        </ol>
+        <div class="ship-block">
+          <div class="h-ship">本季度交付</div>
+          <div class="ship-content">5 catalog 全收录 · apis.guru / RapidAPI 收录 · vs/firecrawl 对比页 · 改良 llms.txt</div>
+        </div>
+        <div class="kpi">
+          <span class="kpi-l">KPI</span>
+          <span class="kpi-v">每周 unique Agent runtime 探测 mcp.json ≥ 100</span>
+        </div>
+      </article>
+
+      <article class="card c2">
+        <div class="card-num">Card 02 / Traffic</div>
+        <h3 class="card-name">引流 — <span class="cn">在 Agent 决策"用什么 crawler"时被选中</span></h3>
+        <div class="card-shift">
+          <strike>"广告投开发者"</strike> → <b>"在 router 评估时赢 Firecrawl 一头"</b>。决策线是<i>domain match + cost + 数据 fidelity</i>。
+        </div>
+        <div class="h-move">五个动作</div>
+        <ol class="move-list">
+          <li><b>放出免费 tier</b>：每月 100 调用 free，无 signup wall。Agent 第一次接触零摩擦。</li>
+          <li>建 <b>live demo MCP playground</b>：<code>/playground</code> 让人/Agent 不登录就能跑 <code>competitor_landscape("sofa", "us")</code>，看实际 output。<b>Demo 即销售</b>。</li>
+          <li>Fallback URL 引流：Firecrawl / Apify 用户在他们 dashboard 找不到家居垂直方案时，搜"furniture competitor data" 第一个看到 smartcrawler 的 cookbook。</li>
+          <li>跟 <b>家居 DTC 工具生态</b>（如 OrderProtection / Triple Whale / Shopify apps for furniture）打通 cross-link manifest，让他们的 agent 推荐 smartcrawler。</li>
+          <li>One-shot install：<code>claude mcp add smartcrawler -- npx -y @smartcrawler/mcp@latest</code>。</li>
+        </ol>
+        <div class="ship-block">
+          <div class="h-ship">本季度交付</div>
+          <div class="ship-content">公开 free tier · <code>/playground</code> live demo · <code>@smartcrawler/mcp</code> npm 包</div>
+        </div>
+        <div class="kpi">
+          <span class="kpi-l">KPI</span>
+          <span class="kpi-v">MCP install ≥ 50/周 · 30 天活跃调用率 ≥ 60%</span>
+        </div>
+      </article>
+
+      <article class="card c3">
+        <div class="card-num">Card 03 / Content</div>
+        <h3 class="card-name">内容 — <span class="cn">每条都包含可调用 example</span></h3>
+        <div class="card-shift">
+          <strike>"爬虫如何工作"教程"</strike> → <b>"垂直案例 + curl + agent dataflow"</b>。家居 DTC 圈内 use case 越具体，圈外越不可替代。
+        </div>
+        <div class="h-move">五个动作</div>
+        <ol class="move-list">
+          <li>10 个 cookbook：<code>track-competitor-sale-in-realtime</code> / <code>diff-product-listing-week-over-week</code> / <code>vc-summary-by-country</code> / <code>predict-stockout</code> / <code>price-position-deck</code> ...</li>
+          <li>每个 cookbook 末尾自带 <b>MCP install 命令 + 完整 curl + JSON output 示例</b>。Agent 训练数据吸收即变 default。</li>
+          <li>每周 1 篇<b>家居 DTC 行业报告</b>："2026 Q2 美国 sofa 类目竞品价格变化趋势" — 数据来自 smartcrawler，自然背书。<b>PR + LLM 训练数据 + SEO 三重收</b>。</li>
+          <li>Blog 文末 footer 强制带："Try it via MCP: <code>npx @smartcrawler/mcp</code>"。</li>
+          <li>开 <b>每月一份 Agent 友好的 Industry Snapshot</b>，让 Claude project / Cursor / 任何 Agent 直接调来给老板写月报。</li>
+        </ol>
+        <div class="ship-block">
+          <div class="h-ship">本季度交付</div>
+          <div class="ship-content">10 cookbook · 12 周报告（每周一篇）· cookbook auto-sync 到 llms.txt</div>
+        </div>
+        <div class="kpi">
+          <span class="kpi-l">KPI</span>
+          <span class="kpi-v">cookbook 累计 GitHub stars ≥ 300 · 报告被引用率 ≥ 50/月</span>
+        </div>
+      </article>
+
+      <article class="card c4">
+        <div class="card-num">Card 04 / Distribution</div>
+        <h3 class="card-name">分发 — <span class="cn">嵌入家居 DTC Agent 默认工具箱</span></h3>
+        <div class="card-shift">
+          <strike>"销售 BD"</strike> → <b>"在所有家居 DTC Agent template 里默认带 smartcrawler"</b>。垂直收窄 = unfair distribution。
+        </div>
+        <div class="h-move">五个动作</div>
+        <ol class="move-list">
+          <li>开源 3 个 reference agent template：<code>shopify-competitor-watcher</code> / <code>furniture-pricing-agent</code> / <code>cross-border-promo-monitor</code>。每个用 smartcrawler 当默认 data source。</li>
+          <li>跟 <b>家居出海 community</b>（小红书博主 / Shopify 出海公众号 / Furniture Today / Indistry Dive Retail）建立 inbound channel，把 cookbook + reference agent 推过去。</li>
+          <li>跟 <b>Triple Whale / Lifetimely / Shopify analytics 类 app</b> 谈整合，把 smartcrawler 作为 competitor 模块的数据 backend。<b>Hub-and-spoke at industry layer</b>。</li>
+          <li>埋点 <code>tool_call_origin</code>：知道哪个 agent runtime / 哪个 industry 调用最多，把<b>客户行业分布</b> 做成公开 dashboard 当 social proof。</li>
+          <li>跟我们集团内 <b>voc.ai</b> 集成：voc.ai 卖 Amazon review intelligence，smartcrawler 卖独立站 intel。Agent 装了 voc.ai 自动看到 smartcrawler 作为"独立站补充数据源"。集团内分发。</li>
+        </ol>
+        <div class="ship-block">
+          <div class="h-ship">本季度交付</div>
+          <div class="ship-content">3 个 OSS reference agent · 1 个 Shopify app 整合 · voc.ai cross-link 上线</div>
+        </div>
+        <div class="kpi">
+          <span class="kpi-l">KPI</span>
+          <span class="kpi-v">每月 tool_call ≥ 50K · 至少 2 个家居 DTC 品牌公开认领 case study</span>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ─────────────────── Agent-skill slot ─────────────────── -->
+  <section>
+    <h2>Agent-Skill 在 11 Agent 里怎么放</h2>
+    <div class="h2-sub">smartcrawler 因为产品已 agent-ready，重点不在搭 API，在喊</div>
+
+    <div class="skill-slot">
+      <span class="ptag">11 Agent · 临时承担方</span>
+      <h3>所有动作都是 "喊"，不是 "建"</h3>
+      <p>smartcrawler 已经做对了协议层；GTM 任务全部是<em>把它喊出去</em>。所以承担方主要是分发类 agent。</p>
+      <table>
+        <thead>
+          <tr><th>能力</th><th>承担方</th><th>本周可做</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>MCP catalog 提交 + Agent template 推广</td>
+            <td>#07 Social Media (Wayne / Ivy Chen)</td>
+            <td>5 catalog 当天提交 · 联系 3 个家居出海社群</td>
+          </tr>
+          <tr>
+            <td>家居 DTC 行业报告（每周一篇）+ cookbook</td>
+            <td>#03 Blog (张基琳 / 彭静)</td>
+            <td>本周 1 篇报告 + 2 个 cookbook 草稿</td>
+          </tr>
+          <tr>
+            <td>vs/firecrawl 对比页 + 案例视频</td>
+            <td>#05 Video (张基琳 / 庄可欣)</td>
+            <td>3 分钟 demo：手动 scrape vs MCP 一行调用对比</td>
+          </tr>
+          <tr>
+            <td>客户认领 + 跨境家居博主合作 (KOC)</td>
+            <td>#02 KOL/KOC (张基琳 / Ivy)</td>
+            <td>找 3 个家居出海博主谈数据合作（免费用换内容）</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ─────────────────── Roadmap ─────────────────── -->
+  <section>
+    <h2>8 周 Roadmap</h2>
+    <div class="h2-sub">smartcrawler 比 101pay 跑得快 · 因为产品已就绪</div>
+
+    <div class="roadmap">
+      <div class="rh">Week</div>
+      <div class="rh">Discovery</div>
+      <div class="rh">Traffic</div>
+      <div class="rh">Content</div>
+      <div class="rh">Distribution</div>
+
+      <div class="rc week">W1</div>
+      <div class="rc"><strong>5 大 MCP catalog 提交</strong> · apis.guru / RapidAPI 收录</div>
+      <div class="rc">放出免费 tier（无需 signup）</div>
+      <div class="rc">2 个 cookbook 写完</div>
+      <div class="rc">埋点 <code>tool_call_origin</code></div>
+
+      <div class="rc week">W2</div>
+      <div class="rc">改良 llms.txt 含 7 tool 完整 example</div>
+      <div class="rc"><code>/playground</code> live demo 上线 · <code>@smartcrawler/mcp</code> npm 发布</div>
+      <div class="rc"><code>vs/firecrawl</code> 对比页 + 1 篇周报告</div>
+      <div class="rc">第 1 个 OSS reference agent</div>
+
+      <div class="rc week">W3</div>
+      <div class="rc">所有 MCP tool description 重写，加强 domain match</div>
+      <div class="rc">联系 Triple Whale / Lifetimely 等 Shopify analytics</div>
+      <div class="rc">5 cookbook + 2 篇周报告</div>
+      <div class="rc">第 2 个 OSS reference agent</div>
+
+      <div class="rc week">W4</div>
+      <div class="rc">提 PR 到家居出海工具的 default config</div>
+      <div class="rc">第一周 KPI 复盘 + iteration</div>
+      <div class="rc">3 篇周报告 + 7 cookbook</div>
+      <div class="rc">第 3 个 OSS reference agent + voc.ai cross-link</div>
+
+      <div class="rc week">W5-6</div>
+      <div class="rc">跟家居出海博主 (小红书 / Shopify 公众号 / Furniture Today) 合作</div>
+      <div class="rc">Shopify analytics 集成至少 1 个</div>
+      <div class="rc">10 cookbook 全发 + 6 篇周报告</div>
+      <div class="rc">公开 customer dashboard 上线</div>
+
+      <div class="rc week">W7-8</div>
+      <div class="rc">在 Anthropic / OpenAI agent 默认示例里出现</div>
+      <div class="rc">50K tool_call/月 KPI 验收</div>
+      <div class="rc">12 篇周报告 · cookbook 沉淀进 LLM 训练数据</div>
+      <div class="rc">至少 2 家公开 case study</div>
+    </div>
+  </section>
+
+  <footer>
+    Generated <b>2026-05-18</b> · Solvea Group · GTM Swarm v3 (Persona Loop + MCP Distribution) <br>
+    Sister docs: <a href="agent-first-gtm-playbook.html">Agent-First GTM Playbook (master 4-card)</a> · <a href="agent-first-gtm-for-101pay.html">101pay.ai insight</a><br>
+    References: <a href="https://smartcrawler.io">smartcrawler.io</a> · <a href="https://smartcrawler.io/llms.txt">llms.txt</a> · <a href="https://smartcrawler.io/agents.json">agents.json</a> · <a href="https://github.com/SolveaCX/gtm-swarm/blob/main/PRINCIPLES.md">PRINCIPLES.md §06 + §07</a>
+  </footer>
+
+</div>
+</body>
+</html>

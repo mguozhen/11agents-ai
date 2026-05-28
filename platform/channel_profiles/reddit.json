@@ -1,0 +1,22 @@
+{
+  "channel": "reddit",
+  "review_checklist": [
+    "Native fit — does it read like a redditor wrote it?",
+    "Subreddit rule check — target sub rules reviewed",
+    "Value ratio — >80% helpful, <20% product mention",
+    "Anti-spam — no link-dropping, no karma-farming language"
+  ],
+  "content_template": {
+    "type": "post | comment",
+    "structure": "hook (1 line) → context (2-3 lines) → value body → optional tail mention"
+  },
+  "dashboard_widgets": [
+    { "id": "karma_trend", "source": "metrics.karma_by_sub", "chart": "line" },
+    { "id": "ban_warnings", "source": "metrics.ban_warnings", "chart": "count" },
+    { "id": "signup_attribution", "source": "metrics.reddit_signups", "chart": "bar" }
+  ],
+  "kpi_defaults": {
+    "weekly_target": "5 posts/comments",
+    "measure": "karma in target subs, saved/upvoted ratio, 0 ban warnings"
+  }
+}

@@ -1,0 +1,2055 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+<meta charset="UTF-8">
+<title>CIA 情报报告 — amazon review intelligence</title>
+<link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/3.2.0/css/buttons.dataTables.min.css">
+<style>
+  :root {
+    --fg: #1f2328; --muted: #57606a; --bg: #fafbfc; --card: #ffffff;
+    --border: #d0d7de; --soft: #f6f8fa;
+    --blue: #0969da; --green: #1a7f37; --orange: #9a6700; --red: #cf222e;
+  }
+  * { box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+                       "Hiragino Sans GB", system-ui, sans-serif;
+         margin: 0; padding: 0; background: var(--bg); color: var(--fg);
+         line-height: 1.55; }
+  .container { max-width: 1280px; margin: 0 auto; padding: 24px 32px 48px; }
+
+  /* HEADER */
+  header.report-head { padding-bottom: 16px; border-bottom: 2px solid var(--border);
+                       margin-bottom: 24px; }
+  header.report-head h1 { margin: 0 0 6px 0; font-size: 26px; font-weight: 700; }
+  header.report-head .meta { color: var(--muted); font-size: 13px; }
+  header.report-head .meta span + span { margin-left: 16px; }
+
+  /* STATS CARDS */
+  .stats { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 28px; }
+  .stat { background: var(--card); border: 1px solid var(--border); border-radius: 8px;
+          padding: 12px 16px; min-width: 140px; flex: 0 0 auto; }
+  .stat-num { font-size: 22px; font-weight: 600; color: var(--blue); line-height: 1.1; }
+  .stat-label { font-size: 11px; color: var(--muted); text-transform: uppercase;
+                letter-spacing: 0.5px; margin-top: 4px; }
+
+  /* NAV */
+  .nav { position: sticky; top: 0; background: rgba(250,251,252,0.94);
+         backdrop-filter: blur(8px); padding: 10px 0; margin: 0 0 24px 0;
+         border-bottom: 1px solid var(--border); z-index: 100; font-size: 13px; }
+  .nav a { color: var(--blue); text-decoration: none; margin-right: 18px; white-space: nowrap; }
+  .nav a:hover { text-decoration: underline; }
+
+  /* SYNTHESIS (rendered markdown) */
+  .synthesis { background: var(--card); border: 1px solid var(--border); border-radius: 10px;
+               padding: 28px 36px; margin-bottom: 32px; }
+  .synthesis h1 { font-size: 22px; margin: 28px 0 12px; padding-bottom: 8px;
+                  border-bottom: 2px solid var(--border); color: var(--fg); font-weight: 700; }
+  .synthesis h1:first-child { margin-top: 0; }
+  .synthesis h2 { font-size: 18px; margin: 24px 0 10px; color: var(--fg); font-weight: 600;
+                  padding-left: 10px; border-left: 4px solid var(--blue); }
+  .synthesis h3 { font-size: 16px; margin: 20px 0 8px; color: var(--fg); font-weight: 600; }
+  .synthesis h4 { font-size: 14px; margin: 16px 0 6px; color: var(--muted); font-weight: 600;
+                  text-transform: uppercase; letter-spacing: 0.5px; }
+  .synthesis p { margin: 8px 0 12px; }
+  .synthesis ul, .synthesis ol { margin: 8px 0 14px; padding-left: 24px; }
+  .synthesis li { margin: 4px 0; }
+  .synthesis li > ul, .synthesis li > ol { margin: 4px 0; }
+  .synthesis strong { color: var(--fg); font-weight: 700; }
+  .synthesis blockquote { margin: 12px 0; padding: 10px 16px;
+                          background: var(--soft); border-left: 4px solid var(--blue);
+                          color: var(--muted); font-size: 14px; }
+  .synthesis code { background: var(--soft); padding: 2px 6px; border-radius: 4px;
+                    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+                    font-size: 12px; color: var(--red); }
+  .synthesis pre { background: #0d1117; color: #e6edf3; padding: 14px 18px;
+                   border-radius: 8px; overflow-x: auto; margin: 12px 0;
+                   font-size: 12px; line-height: 1.5; }
+  .synthesis pre code { background: transparent; padding: 0; color: inherit; }
+
+  /* SYNTHESIS TABLES — first-class formatting */
+  .synthesis table { border-collapse: collapse; width: 100%; margin: 14px 0 20px;
+                     font-size: 13px; background: var(--card); }
+  .synthesis th { background: var(--soft); font-weight: 600; text-align: left;
+                  padding: 10px 12px; border-bottom: 2px solid var(--border);
+                  color: var(--fg); white-space: nowrap; }
+  .synthesis td { padding: 9px 12px; border-bottom: 1px solid var(--border);
+                  vertical-align: top; }
+  .synthesis tr:hover td { background: #f8fbff; }
+  .synthesis td:first-child { font-weight: 500; }
+  /* Right-align cells whose header text contains numbers / pure metric names */
+  .synthesis th[align="right"], .synthesis td[align="right"] { text-align: right;
+                                                                font-variant-numeric: tabular-nums; }
+
+  /* DETAIL DATA SECTIONS */
+  .data-section { background: var(--card); border: 1px solid var(--border);
+                  border-radius: 10px; margin-bottom: 18px; }
+  .data-section summary { cursor: pointer; padding: 16px 22px; font-weight: 600;
+                          font-size: 15px; user-select: none; list-style: none;
+                          display: flex; justify-content: space-between; align-items: center; }
+  .data-section summary::before { content: "▶"; color: var(--blue); font-size: 11px;
+                                  margin-right: 10px; transition: transform 0.15s; }
+  .data-section[open] summary::before { content: "▼"; }
+  .data-section .row-count { color: var(--muted); font-weight: 400; font-size: 13px; }
+  .data-section .table-wrap { padding: 0 22px 22px; }
+  .data-section .note { font-size: 12px; color: var(--muted); margin-bottom: 10px; }
+  .data-section table.dataTable { font-size: 12px; width: 100% !important; }
+  .data-section table.dataTable th { background: var(--soft); font-weight: 600; }
+  .data-section table.dataTable td { vertical-align: top; }
+
+  /* SECTION DIVIDER */
+  .section-title { font-size: 18px; font-weight: 600; margin: 32px 0 14px;
+                   padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+</style>
+</head>
+<body>
+<div class="container">
+
+<header class="report-head">
+  <h1>CIA 情报报告 — amazon review intelligence</h1>
+  <div class="meta">
+    <span>📅 2026-05-11 11:52</span>
+    <span>💰 累计成本 $0.0000</span>
+    <span>🗄 /Users/hunter/workspace/analytics/reports/2026-05-11-cia-amazon-review-intelligence/cia.db</span>
+  </div>
+</header>
+
+<div class="stats">
+  
+  <div class="stat">
+    <div class="stat-num">0</div>
+    <div class="stat-label">Google Keywords</div>
+  </div>
+  
+  <div class="stat">
+    <div class="stat-num">0</div>
+    <div class="stat-label">Golden Keywords</div>
+  </div>
+  
+  <div class="stat">
+    <div class="stat-num">20</div>
+    <div class="stat-label">App Store SERP</div>
+  </div>
+  
+  <div class="stat">
+    <div class="stat-num">0</div>
+    <div class="stat-label">App Keywords (ASO)</div>
+  </div>
+  
+  <div class="stat">
+    <div class="stat-num">0</div>
+    <div class="stat-label">Top App Keyword Gaps</div>
+  </div>
+  
+  <div class="stat">
+    <div class="stat-num">20</div>
+    <div class="stat-label">Competitor Apps</div>
+  </div>
+  
+  <div class="stat">
+    <div class="stat-num">0</div>
+    <div class="stat-label">App Reviews (Pain)</div>
+  </div>
+  
+  <div class="stat">
+    <div class="stat-num">0</div>
+    <div class="stat-label">Competitor Web</div>
+  </div>
+  
+  <div class="stat">
+    <div class="stat-num">0</div>
+    <div class="stat-label">Competitor Organic KW</div>
+  </div>
+  
+  <div class="stat">
+    <div class="stat-num">0</div>
+    <div class="stat-label">AI Visibility</div>
+  </div>
+  
+  <div class="stat">
+    <div class="stat-num">48</div>
+    <div class="stat-label">TikTok</div>
+  </div>
+  
+  <div class="stat">
+    <div class="stat-num">6</div>
+    <div class="stat-label">Reddit</div>
+  </div>
+  
+  <div class="stat">
+    <div class="stat-num">10</div>
+    <div class="stat-label">YouTube</div>
+  </div>
+  
+  <div class="stat">
+    <div class="stat-num">20</div>
+    <div class="stat-label">Competitor Clusters</div>
+  </div>
+  
+  <div class="stat">
+    <div class="stat-num">0</div>
+    <div class="stat-label">Seeds</div>
+  </div>
+  
+  <div class="stat">
+    <div class="stat-num">10</div>
+    <div class="stat-label">Fetch Log</div>
+  </div>
+  
+</div>
+
+<div class="nav">
+  <a href="#summary">📋 执行摘要</a>
+  <a href="#sec-1">Google Keywords</a><a href="#sec-2">Golden Keywords</a><a href="#sec-3">App Store SERP</a><a href="#sec-4">App Keywords (ASO)</a><a href="#sec-5">Top App Keyword Gaps</a><a href="#sec-6">Competitor Apps</a><a href="#sec-7">App Reviews (Pain)</a><a href="#sec-8">Competitor Web</a><a href="#sec-9">Competitor Organic KW</a><a href="#sec-10">AI Visibility</a><a href="#sec-11">TikTok</a><a href="#sec-12">Reddit</a><a href="#sec-13">YouTube</a><a href="#sec-14">Competitor Clusters</a><a href="#sec-15">Seeds</a><a href="#sec-16">Fetch Log</a>
+</div>
+
+
+
+<div class="section-title">📊 完整数据明细（可搜索 / 排序 / 导出 CSV）</div>
+
+
+<details class="data-section"  id="sec-1">
+  <summary>
+    <span>Google Keywords</span>
+    <span class="row-count">0 rows</span>
+  </summary>
+  <div class="table-wrap">
+    
+    <div style="color:#57606a; font-size:12px;">— no rows —</div>
+  </div>
+</details>
+
+<details class="data-section" open id="sec-2">
+  <summary>
+    <span>Golden Keywords</span>
+    <span class="row-count">0 rows</span>
+  </summary>
+  <div class="table-wrap">
+    <div class="note">💡 Vol≥200 + KD≤35 + CPC≥$1 + commercial intent — 立即可投/可做的高价值词</div>
+    <div style="color:#57606a; font-size:12px;">— no rows —</div>
+  </div>
+</details>
+
+<details class="data-section"  id="sec-3">
+  <summary>
+    <span>App Store SERP</span>
+    <span class="row-count">20 rows</span>
+  </summary>
+  <div class="table-wrap">
+    
+    <table class="dataframe cia-table display compact">
+  <thead>
+    <tr style="text-align: right;">
+      <th>keyword</th>
+      <th>rank</th>
+      <th>app_name</th>
+      <th>developer</th>
+      <th>rating</th>
+      <th>review_count</th>
+      <th>app_id</th>
+      <th>country</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>amazon review intelligence</td>
+      <td>1</td>
+      <td>Amazon Shopper Panel</td>
+      <td>AMZN Mobile LLC</td>
+      <td>4.88494</td>
+      <td>180422</td>
+      <td>1494755014</td>
+      <td>us</td>
+    </tr>
+    <tr>
+      <td>amazon review intelligence</td>
+      <td>2</td>
+      <td>S&amp;P Capital IQ Pro</td>
+      <td>S&amp;P Global Market Intelligence LLC</td>
+      <td>4.58805</td>
+      <td>2947</td>
+      <td>1312804826</td>
+      <td>us</td>
+    </tr>
+    <tr>
+      <td>amazon review intelligence</td>
+      <td>3</td>
+      <td>Amazon Quick</td>
+      <td>AMZN Mobile LLC</td>
+      <td>4.16667</td>
+      <td>24</td>
+      <td>1148226615</td>
+      <td>us</td>
+    </tr>
+    <tr>
+      <td>amazon review intelligence</td>
+      <td>4</td>
+      <td>Scoutly</td>
+      <td>ASellerTool Inc.</td>
+      <td>4.44725</td>
+      <td>872</td>
+      <td>511248011</td>
+      <td>us</td>
+    </tr>
+    <tr>
+      <td>amazon review intelligence</td>
+      <td>5</td>
+      <td>AI Chat 5.4: Genius</td>
+      <td>Torqued Studios LLC</td>
+      <td>4.67188</td>
+      <td>50165</td>
+      <td>1665764663</td>
+      <td>us</td>
+    </tr>
+    <tr>
+      <td>amazon review intelligence</td>
+      <td>6</td>
+      <td>You.com - Enterprise grade AI</td>
+      <td>SuSea, Inc.</td>
+      <td>4.75479</td>
+      <td>4849</td>
+      <td>1600782099</td>
+      <td>us</td>
+    </tr>
+    <tr>
+      <td>amazon review intelligence</td>
+      <td>7</td>
+      <td>tool4seller for Amazon Seller</td>
+      <td>Tapcash Inc</td>
+      <td>4.71053</td>
+      <td>114</td>
+      <td>1289515640</td>
+      <td>us</td>
+    </tr>
+    <tr>
+      <td>amazon review intelligence</td>
+      <td>8</td>
+      <td>Natural - Search Perfected</td>
+      <td>brain.ai</td>
+      <td>2.57143</td>
+      <td>7</td>
+      <td>1521375720</td>
+      <td>us</td>
+    </tr>
+    <tr>
+      <td>amazon review intelligence</td>
+      <td>9</td>
+      <td>ScoutIQ</td>
+      <td>Threecolts</td>
+      <td>3.31227</td>
+      <td>554</td>
+      <td>1265325528</td>
+      <td>us</td>
+    </tr>
+    <tr>
+      <td>amazon review intelligence</td>
+      <td>10</td>
+      <td>SmartScout</td>
+      <td>SmartestSeller, LLC</td>
+      <td>4.63636</td>
+      <td>11</td>
+      <td>1604306734</td>
+      <td>us</td>
+    </tr>
+    <tr>
+      <td>amazon review intelligence</td>
+      <td>11</td>
+      <td>SellerAmp SAS</td>
+      <td>Seller Amp Limited</td>
+      <td>3.64228</td>
+      <td>123</td>
+      <td>1484202291</td>
+      <td>us</td>
+    </tr>
+    <tr>
+      <td>amazon review intelligence</td>
+      <td>12</td>
+      <td>IQ: how SMART am I?</td>
+      <td>Indigo Penguin Limited</td>
+      <td>2.26500</td>
+      <td>47856</td>
+      <td>353156045</td>
+      <td>us</td>
+    </tr>
+    <tr>
+      <td>amazon review intelligence</td>
+      <td>13</td>
+      <td>Feedly - Smart News Reader</td>
+      <td>Feedly Inc.</td>
+      <td>4.64440</td>
+      <td>25684</td>
+      <td>396069556</td>
+      <td>us</td>
+    </tr>
+    <tr>
+      <td>amazon review intelligence</td>
+      <td>14</td>
+      <td>Scan Profit AI: Amazon Tool</td>
+      <td>Aghdas Yilmaz</td>
+      <td>4.53623</td>
+      <td>69</td>
+      <td>6749568707</td>
+      <td>us</td>
+    </tr>
+    <tr>
+      <td>amazon review intelligence</td>
+      <td>15</td>
+      <td>IQ Test - Intelligence Test</td>
+      <td>Bekir Dursun</td>
+      <td>3.15000</td>
+      <td>40</td>
+      <td>1104692049</td>
+      <td>us</td>
+    </tr>
+    <tr>
+      <td>amazon review intelligence</td>
+      <td>16</td>
+      <td>Trustpilot: Reviews &amp; Ratings</td>
+      <td>Trustpilot</td>
+      <td>4.77489</td>
+      <td>5784</td>
+      <td>1608392803</td>
+      <td>us</td>
+    </tr>
+    <tr>
+      <td>amazon review intelligence</td>
+      <td>17</td>
+      <td>World Monitor Real-Time Intel</td>
+      <td>Scate</td>
+      <td>4.66892</td>
+      <td>148</td>
+      <td>6760216152</td>
+      <td>us</td>
+    </tr>
+    <tr>
+      <td>amazon review intelligence</td>
+      <td>18</td>
+      <td>Liner - AI search assistant</td>
+      <td>Liner Corp.</td>
+      <td>4.39275</td>
+      <td>1352</td>
+      <td>955395198</td>
+      <td>us</td>
+    </tr>
+    <tr>
+      <td>amazon review intelligence</td>
+      <td>19</td>
+      <td>Radar: Morning Intelligence</td>
+      <td>Schleis Ventures LLC</td>
+      <td>5.00000</td>
+      <td>22</td>
+      <td>6762556581</td>
+      <td>us</td>
+    </tr>
+    <tr>
+      <td>amazon review intelligence</td>
+      <td>20</td>
+      <td>Scan Profit - AI Sourcing Tool</td>
+      <td>Scan Profit, LLC</td>
+      <td>4.72062</td>
+      <td>519</td>
+      <td>6742060869</td>
+      <td>us</td>
+    </tr>
+  </tbody>
+</table>
+  </div>
+</details>
+
+<details class="data-section"  id="sec-4">
+  <summary>
+    <span>App Keywords (ASO)</span>
+    <span class="row-count">0 rows</span>
+  </summary>
+  <div class="table-wrap">
+    <div class="note">💡 竞品 App 实际排名词 + Apple 搜索量 — 投放/ASO 直接用</div>
+    <div style="color:#57606a; font-size:12px;">— no rows —</div>
+  </div>
+</details>
+
+<details class="data-section" open id="sec-5">
+  <summary>
+    <span>Top App Keyword Gaps</span>
+    <span class="row-count">0 rows</span>
+  </summary>
+  <div class="table-wrap">
+    <div class="note">💡 App Store 上搜索量 ≥500 但只有 ≤3 个 App 在排名 — ASO 蓝海词</div>
+    <div style="color:#57606a; font-size:12px;">— no rows —</div>
+  </div>
+</details>
+
+<details class="data-section"  id="sec-6">
+  <summary>
+    <span>Competitor Apps</span>
+    <span class="row-count">20 rows</span>
+  </summary>
+  <div class="table-wrap">
+    
+    <table class="dataframe cia-table display compact">
+  <thead>
+    <tr style="text-align: right;">
+      <th>name</th>
+      <th>developer</th>
+      <th>rating</th>
+      <th>review_count</th>
+      <th>est_downloads_low</th>
+      <th>est_downloads_high</th>
+      <th>price</th>
+      <th>category</th>
+      <th>app_id</th>
+      <th>url</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Amazon Shopper Panel</td>
+      <td>AMZN Mobile LLC</td>
+      <td>4.88494</td>
+      <td>180422</td>
+      <td>9021100</td>
+      <td>18042200</td>
+      <td>Free</td>
+      <td>Lifestyle</td>
+      <td>1494755014</td>
+      <td>https://apps.apple.com/us/app/amazon-shopper-panel/id1494755014?uo=4</td>
+    </tr>
+    <tr>
+      <td>AI Chat 5.4: Genius</td>
+      <td>Torqued Studios LLC</td>
+      <td>4.67188</td>
+      <td>50165</td>
+      <td>2508250</td>
+      <td>5016500</td>
+      <td>Free</td>
+      <td>Utilities</td>
+      <td>1665764663</td>
+      <td>https://apps.apple.com/us/app/ai-chat-5-4-genius/id1665764663?uo=4</td>
+    </tr>
+    <tr>
+      <td>IQ: how SMART am I?</td>
+      <td>Indigo Penguin Limited</td>
+      <td>2.26500</td>
+      <td>47856</td>
+      <td>2392800</td>
+      <td>4785600</td>
+      <td>Free</td>
+      <td>Utilities</td>
+      <td>353156045</td>
+      <td>https://apps.apple.com/us/app/iq-how-smart-am-i/id353156045?uo=4</td>
+    </tr>
+    <tr>
+      <td>Feedly - Smart News Reader</td>
+      <td>Feedly Inc.</td>
+      <td>4.64440</td>
+      <td>25684</td>
+      <td>1284200</td>
+      <td>2568400</td>
+      <td>Free</td>
+      <td>News</td>
+      <td>396069556</td>
+      <td>https://apps.apple.com/us/app/feedly-smart-news-reader/id396069556?uo=4</td>
+    </tr>
+    <tr>
+      <td>Trustpilot: Reviews &amp; Ratings</td>
+      <td>Trustpilot</td>
+      <td>4.77489</td>
+      <td>5784</td>
+      <td>289200</td>
+      <td>578400</td>
+      <td>Free</td>
+      <td>Shopping</td>
+      <td>1608392803</td>
+      <td>https://apps.apple.com/us/app/trustpilot-reviews-ratings/id1608392803?uo=4</td>
+    </tr>
+    <tr>
+      <td>You.com - Enterprise grade AI</td>
+      <td>SuSea, Inc.</td>
+      <td>4.75479</td>
+      <td>4849</td>
+      <td>242450</td>
+      <td>484900</td>
+      <td>Free</td>
+      <td>Productivity</td>
+      <td>1600782099</td>
+      <td>https://apps.apple.com/us/app/you-com-enterprise-grade-ai/id1600782099?uo=4</td>
+    </tr>
+    <tr>
+      <td>S&amp;P Capital IQ Pro</td>
+      <td>S&amp;P Global Market Intelligence LLC</td>
+      <td>4.58805</td>
+      <td>2947</td>
+      <td>147350</td>
+      <td>294700</td>
+      <td>Free</td>
+      <td>Finance</td>
+      <td>1312804826</td>
+      <td>https://apps.apple.com/us/app/s-p-capital-iq-pro/id1312804826?uo=4</td>
+    </tr>
+    <tr>
+      <td>Liner - AI search assistant</td>
+      <td>Liner Corp.</td>
+      <td>4.39275</td>
+      <td>1352</td>
+      <td>67600</td>
+      <td>135200</td>
+      <td>Free</td>
+      <td>Productivity</td>
+      <td>955395198</td>
+      <td>https://apps.apple.com/us/app/liner-ai-search-assistant/id955395198?uo=4</td>
+    </tr>
+    <tr>
+      <td>Scoutly</td>
+      <td>ASellerTool Inc.</td>
+      <td>4.44725</td>
+      <td>872</td>
+      <td>43600</td>
+      <td>87200</td>
+      <td>Free</td>
+      <td>Business</td>
+      <td>511248011</td>
+      <td>https://apps.apple.com/us/app/scoutly/id511248011?uo=4</td>
+    </tr>
+    <tr>
+      <td>ScoutIQ</td>
+      <td>Threecolts</td>
+      <td>3.31227</td>
+      <td>554</td>
+      <td>27700</td>
+      <td>55400</td>
+      <td>Free</td>
+      <td>Business</td>
+      <td>1265325528</td>
+      <td>https://apps.apple.com/us/app/scoutiq/id1265325528?uo=4</td>
+    </tr>
+    <tr>
+      <td>Scan Profit - AI Sourcing Tool</td>
+      <td>Scan Profit, LLC</td>
+      <td>4.72062</td>
+      <td>519</td>
+      <td>25950</td>
+      <td>51900</td>
+      <td>Free</td>
+      <td>Business</td>
+      <td>6742060869</td>
+      <td>https://apps.apple.com/us/app/scan-profit-ai-sourcing-tool/id6742060869?uo=4</td>
+    </tr>
+    <tr>
+      <td>World Monitor Real-Time Intel</td>
+      <td>Scate</td>
+      <td>4.66892</td>
+      <td>148</td>
+      <td>7400</td>
+      <td>14800</td>
+      <td>Free</td>
+      <td>News</td>
+      <td>6760216152</td>
+      <td>https://apps.apple.com/us/app/world-monitor-real-time-intel/id6760216152?uo=4</td>
+    </tr>
+    <tr>
+      <td>SellerAmp SAS</td>
+      <td>Seller Amp Limited</td>
+      <td>3.64228</td>
+      <td>123</td>
+      <td>6150</td>
+      <td>12300</td>
+      <td>Free</td>
+      <td>Utilities</td>
+      <td>1484202291</td>
+      <td>https://apps.apple.com/us/app/selleramp-sas/id1484202291?uo=4</td>
+    </tr>
+    <tr>
+      <td>tool4seller for Amazon Seller</td>
+      <td>Tapcash Inc</td>
+      <td>4.71053</td>
+      <td>114</td>
+      <td>5700</td>
+      <td>11400</td>
+      <td>Free</td>
+      <td>Business</td>
+      <td>1289515640</td>
+      <td>https://apps.apple.com/us/app/tool4seller-for-amazon-seller/id1289515640?uo=4</td>
+    </tr>
+    <tr>
+      <td>Scan Profit AI: Amazon Tool</td>
+      <td>Aghdas Yilmaz</td>
+      <td>4.53623</td>
+      <td>69</td>
+      <td>3450</td>
+      <td>6900</td>
+      <td>Free</td>
+      <td>Reference</td>
+      <td>6749568707</td>
+      <td>https://apps.apple.com/us/app/scan-profit-ai-amazon-tool/id6749568707?uo=4</td>
+    </tr>
+    <tr>
+      <td>IQ Test - Intelligence Test</td>
+      <td>Bekir Dursun</td>
+      <td>3.15000</td>
+      <td>40</td>
+      <td>2000</td>
+      <td>4000</td>
+      <td>Free</td>
+      <td>Games</td>
+      <td>1104692049</td>
+      <td>https://apps.apple.com/us/app/iq-test-intelligence-test/id1104692049?uo=4</td>
+    </tr>
+    <tr>
+      <td>Amazon Quick</td>
+      <td>AMZN Mobile LLC</td>
+      <td>4.16667</td>
+      <td>24</td>
+      <td>1200</td>
+      <td>2400</td>
+      <td>Free</td>
+      <td>Business</td>
+      <td>1148226615</td>
+      <td>https://apps.apple.com/us/app/amazon-quick/id1148226615?uo=4</td>
+    </tr>
+    <tr>
+      <td>Radar: Morning Intelligence</td>
+      <td>Schleis Ventures LLC</td>
+      <td>5.00000</td>
+      <td>22</td>
+      <td>1100</td>
+      <td>2200</td>
+      <td>Free</td>
+      <td>News</td>
+      <td>6762556581</td>
+      <td>https://apps.apple.com/us/app/radar-morning-intelligence/id6762556581?uo=4</td>
+    </tr>
+    <tr>
+      <td>SmartScout</td>
+      <td>SmartestSeller, LLC</td>
+      <td>4.63636</td>
+      <td>11</td>
+      <td>550</td>
+      <td>1100</td>
+      <td>Free</td>
+      <td>Business</td>
+      <td>1604306734</td>
+      <td>https://apps.apple.com/us/app/smartscout/id1604306734?uo=4</td>
+    </tr>
+    <tr>
+      <td>Natural - Search Perfected</td>
+      <td>brain.ai</td>
+      <td>2.57143</td>
+      <td>7</td>
+      <td>350</td>
+      <td>700</td>
+      <td>Free</td>
+      <td>Productivity</td>
+      <td>1521375720</td>
+      <td>https://apps.apple.com/us/app/natural-search-perfected/id1521375720?uo=4</td>
+    </tr>
+  </tbody>
+</table>
+  </div>
+</details>
+
+<details class="data-section"  id="sec-7">
+  <summary>
+    <span>App Reviews (Pain)</span>
+    <span class="row-count">0 rows</span>
+  </summary>
+  <div class="table-wrap">
+    <div class="note">💡 1-3 星差评，按时间倒序 — 直接挖痛点和不满</div>
+    <div style="color:#57606a; font-size:12px;">— no rows —</div>
+  </div>
+</details>
+
+<details class="data-section"  id="sec-8">
+  <summary>
+    <span>Competitor Web</span>
+    <span class="row-count">0 rows</span>
+  </summary>
+  <div class="table-wrap">
+    <div class="note">💡 竞品官网 SEO 体量 — 从 Ahrefs Site Explorer</div>
+    <div style="color:#57606a; font-size:12px;">— no rows —</div>
+  </div>
+</details>
+
+<details class="data-section"  id="sec-9">
+  <summary>
+    <span>Competitor Organic KW</span>
+    <span class="row-count">0 rows</span>
+  </summary>
+  <div class="table-wrap">
+    
+    <div style="color:#57606a; font-size:12px;">— no rows —</div>
+  </div>
+</details>
+
+<details class="data-section"  id="sec-10">
+  <summary>
+    <span>AI Visibility</span>
+    <span class="row-count">0 rows</span>
+  </summary>
+  <div class="table-wrap">
+    <div class="note">💡 竞品在 ChatGPT/Gemini/Perplexity 的引用份额 — Brand Radar</div>
+    <div style="color:#57606a; font-size:12px;">— no rows —</div>
+  </div>
+</details>
+
+<details class="data-section"  id="sec-11">
+  <summary>
+    <span>TikTok</span>
+    <span class="row-count">48 rows</span>
+  </summary>
+  <div class="table-wrap">
+    <div class="note">💡 share_rate = shares/plays，>1% 是爆款门槛；高 share_rate 代表有商业转化力的内容钩子（leading indicator）</div>
+    <table class="dataframe cia-table display compact">
+  <thead>
+    <tr style="text-align: right;">
+      <th>plays</th>
+      <th>likes</th>
+      <th>shares</th>
+      <th>comments</th>
+      <th>share_rate</th>
+      <th>author</th>
+      <th>text</th>
+      <th>url</th>
+      <th>posted_at</th>
+      <th>query</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>120200</td>
+      <td>4505</td>
+      <td>1748</td>
+      <td>322</td>
+      <td>0.01454</td>
+      <td>helpmomreviews</td>
+      <td>ChatGPT can help you write your scripts out for whatever product you have and you can do it faceless!\n It’s so helpful!\nThis is my favorite Amazon reviewer hack. I hope it helps!\n\n#amazonreviewer #amazoninfluencer #sidehustles #amazonaffiliate</td>
+      <td>https://www.tiktok.com/@helpmomreviews/video/7533619239471598878</td>
+      <td>2025-08-01T14:10:47.000Z</td>
+      <td>amazon review intelligence</td>
+    </tr>
+    <tr>
+      <td>62800</td>
+      <td>4439</td>
+      <td>827</td>
+      <td>157</td>
+      <td>0.01317</td>
+      <td>parthknowsai</td>
+      <td>Amazon is now requiring AI generated code to be reviewed by seniors before pushing to production #ai #learnontiktok #chatgpt #tech #fyp</td>
+      <td>https://www.tiktok.com/@parthknowsai/video/7616713540170206495</td>
+      <td>2026-03-13T12:19:16.000Z</td>
+      <td>amazon review intelligence</td>
+    </tr>
+    <tr>
+      <td>1246</td>
+      <td>51</td>
+      <td>14</td>
+      <td>14</td>
+      <td>0.01124</td>
+      <td>nurtureyournestt</td>
+      <td>#creatorsearchinsights Amazon reviews can be a little confusing for some. There are some many names for the programs but really it’s simple. It’s a great opportunity for a profitable Side hustle and truly\nPassive income. All you have to do is make Product reviews on things you already have. I mean who doesn’t want to Make money online. #amazonreviews #productreviews #makemoneyonline #sidehustle #passiveincome</td>
+      <td>https://www.tiktok.com/@nurtureyournestt/video/7485936715752951082</td>
+      <td>2025-03-26T02:18:25.000Z</td>
+      <td>amazon review intelligence</td>
+    </tr>
+    <tr>
+      <td>48700</td>
+      <td>2945</td>
+      <td>517</td>
+      <td>497</td>
+      <td>0.01062</td>
+      <td>helpmomreviews</td>
+      <td>This Amazon influencer hack saves time and helps my videos sound&nbsp;&nbsp;great. I hope this hack helps you! \n\n#amazontips #amazoninfluencerprogram #amazoninfluencer #amazonreview #contentcreatortips #contentcreator #amazononsitecommission #workfromhomemom</td>
+      <td>https://www.tiktok.com/@helpmomreviews/video/7508870439620316446</td>
+      <td>2025-05-26T21:32:31.000Z</td>
+      <td>amazon review intelligence</td>
+    </tr>
+    <tr>
+      <td>7422</td>
+      <td>548</td>
+      <td>78</td>
+      <td>23</td>
+      <td>0.01051</td>
+      <td>linkinsolutionpashto</td>
+      <td>Best tool for amazon “Amazon Listing Intelligence Tool” @LinkinSolution by Arif #foryou #amazoninpashto #amazonfba #ecommercetips #unfreezemyaccount</td>
+      <td>https://www.tiktok.com/@linkinsolutionpashto/video/7637152125700656406</td>
+      <td>2026-05-07T14:10:51.000Z</td>
+      <td>amazon review intelligence</td>
+    </tr>
+    <tr>
+      <td>69400</td>
+      <td>4436</td>
+      <td>645</td>
+      <td>621</td>
+      <td>0.00929</td>
+      <td>kelseysimas</td>
+      <td>Part 1: Amazon Influencer ☕️\n\n#amazoninfluencerprogram #amazoninfluencer101 #amazoninfluencertips #amazoninfluencers #amazoninfluencerforbeginner#sidehustle #onsitecommision #ugccreator #amazonreviews #amazonreviewer #greenscreen #microinfluencer</td>
+      <td>https://www.tiktok.com/@kelseysimas/video/7473642452683869486</td>
+      <td>2025-02-20T23:10:11.000Z</td>
+      <td>amazon review intelligence</td>
+    </tr>
+    <tr>
+      <td>1300000</td>
+      <td>61700</td>
+      <td>11800</td>
+      <td>1859</td>
+      <td>0.00908</td>
+      <td>haileenwcarvalho</td>
+      <td>How to become an Amazon Reviewer\nSTEP BY STEP! \n#simplesidehustlesformoms #sidegigsformom #sidegigsforbeginners #makemoneyonline2024 #waystomakemoneyonline #amazoninfluencerprogram \n#payoffdebt #paybills #buildfinancialfreedom</td>
+      <td>https://www.tiktok.com/@haileenwcarvalho/video/7311464129263324446</td>
+      <td>2023-12-11T22:15:17.000Z</td>
+      <td>amazon review intelligence</td>
+    </tr>
+    <tr>
+      <td>127400</td>
+      <td>4260</td>
+      <td>1087</td>
+      <td>734</td>
+      <td>0.00853</td>
+      <td>iniciaonline</td>
+      <td>Esta es la parte que NO te dicen, la mayoría es por desconocimiento, pero debes SABERLO cuanto antes #amazon #reseñas #amazonreview #amazonreviews #amazonreseñas #productosamazon</td>
+      <td>https://www.tiktok.com/@iniciaonline/video/7492860457611496735</td>
+      <td>2025-04-13T18:05:52.000Z</td>
+      <td>amazon review intelligence</td>
+    </tr>
+    <tr>
+      <td>12200000</td>
+      <td>121000</td>
+      <td>80500</td>
+      <td>3434</td>
+      <td>0.00660</td>
+      <td>androf.ca</td>
+      <td>Smart Robot Vacuum with Mechanical Arm #goodthing #productreview #tiktokmakemebuyit #amazonfinds</td>
+      <td>https://www.tiktok.com/@androf.ca/video/7484716195032206597</td>
+      <td>2025-03-22T19:21:38.000Z</td>
+      <td>amazon review intelligence</td>
+    </tr>
+    <tr>
+      <td>22200</td>
+      <td>774</td>
+      <td>140</td>
+      <td>160</td>
+      <td>0.00631</td>
+      <td>shopbykayy</td>
+      <td>This is what they are NOT telling you #creatorsearchinsights #amazoninfluencer #amazoninfluencerprogram #smallinfluencer #amazonreviews #amazonreview #howtomakemoney #makemoneywhileyousleep</td>
+      <td>https://www.tiktok.com/@shopbykayy/video/7447732379105496362</td>
+      <td>2024-12-13T03:25:28.000Z</td>
+      <td>amazon review intelligence</td>
+    </tr>
+    <tr>
+      <td>23100</td>
+      <td>1376</td>
+      <td>135</td>
+      <td>166</td>
+      <td>0.00584</td>
+      <td>lindsaypeachfinds</td>
+      <td>This has been my most asked question so far is how I do Amazon Reviews!\nLike I said, this is a very brief overview on what you need to do go get started, but follow along for part 2!\nDrop your questions below and I'II answer them in my next video!!!!\n#amazonreviews #amazoninfluencerprogram #ugc #ugccontentcreator\nAmazon shoppable videos\nSide hustles for moms\nUGC creator\nUGC journey\nUGC</td>
+      <td>https://www.tiktok.com/@lindsaypeachfinds/video/7624990020885122318</td>
+      <td>2026-04-04T19:36:04.000Z</td>
+      <td>amazon review intelligence</td>
+    </tr>
+    <tr>
+      <td>184300</td>
+      <td>8802</td>
+      <td>973</td>
+      <td>368</td>
+      <td>0.00528</td>
+      <td>cnetdotcom</td>
+      <td>#Astro has arrived at the #CNET #smarthome. #tech #gadgets #review #news #robot</td>
+      <td>https://www.tiktok.com/@cnetdotcom/video/7087574239968054570</td>
+      <td>2022-04-17T14:07:53.000Z</td>
+      <td>amazon review intelligence</td>
+    </tr>
+    <tr>
+      <td>8369</td>
+      <td>199</td>
+      <td>43</td>
+      <td>24</td>
+      <td>0.00514</td>
+      <td>nmirabalc</td>
+      <td>el link esta en mi amazon storefront ✨ #smartring #ouraring #amazonfinds #founditonamazon #review hones review, reseña, anillo inteligente, unboxing, haul</td>
+      <td>https://www.tiktok.com/@nmirabalc/video/7606120499680152846</td>
+      <td>2026-02-12T23:12:37.000Z</td>
+      <td>amazon review intelligence</td>
+    </tr>
+    <tr>
+      <td>88700</td>
+      <td>2427</td>
+      <td>435</td>
+      <td>93</td>
+      <td>0.00490</td>
+      <td>atkdconnectpy</td>
+      <td>Lente inteligente de Amazon!\nLos Echo Frames 3ª generación parecen unos lentes normales, pero tienen Alexa integrada, altavoces direccionales y micrófonos con cancelación de ruido.\nPodés escuchar música, atender llamadas y controlar tu casa inteligente por voz, todo sin tocar el celular.\n\n👉 El precio encontrás en el link de la bio.\n\n#lenteinteligente #amazon #amazonechoframes #alexa #review</td>
+      <td>https://www.tiktok.com/@atkdconnectpy/video/7569326337609993479</td>
+      <td>2025-11-05T19:32:11.000Z</td>
+      <td>amazon review intelligence</td>
+    </tr>
+    <tr>
+      <td>237000</td>
+      <td>6481</td>
+      <td>1152</td>
+      <td>590</td>
+      <td>0.00486</td>
+      <td>socialwithbecca</td>
+      <td>The Amazon onsite review program is such an underrated way to make $! 💸💻🎀🤳🏼 #amazonreview #amazononsitecommission #amazononsitereviews #sidehustle</td>
+      <td>https://www.tiktok.com/@socialwithbecca/video/7428257798179343623</td>
+      <td>2024-10-21T15:54:08.000Z</td>
+      <td>amazon review intelligence</td>
+    </tr>
+    <tr>
+      <td>18400</td>
+      <td>92</td>
+      <td>74</td>
+      <td>3</td>
+      <td>0.00402</td>
+      <td>cnrfinds</td>
+      <td>Must have AI translator gadget for all travelers #review #amazonfinds #giftideas #travel #techgadgets #fyp</td>
+      <td>https://www.tiktok.com/@cnrfinds/video/7484468542163733791</td>
+      <td>2025-03-22T03:20:54.000Z</td>
+      <td>amazon review intelligence</td>
+    </tr>
+    <tr>
+      <td>127800</td>
+      <td>5996</td>
+      <td>509</td>
+      <td>17</td>
+      <td>0.00398</td>
+      <td>thesamfindz</td>
+      <td>Numer 02 is a pure genius 👌 🔥 #amazonfinds #amazonproducts #amazon #founditonamazon #productreview #gadgets</td>
+      <td>https://www.tiktok.com/@thesamfindz/video/7587863688514718984</td>
+      <td>2025-12-25T18:26:35.000Z</td>
+      <td>amazon review intelligence</td>
+    </tr>
+    <tr>
+      <td>17300</td>
+      <td>775</td>
+      <td>66</td>
+      <td>10</td>
+      <td>0.00382</td>
+      <td>sidehustlereview</td>
+      <td>🚨 I keep seeing creators say you can make thousands doing ‘Amazon reviews’—but let’s be real, they know exactly what they’re doing when they say that.\n📌 What they want you to think:\n✔ That you get paid for leaving star reviews on Amazon.\n✔ That it’s super easy and doesn’t require effort.\n✔ That anyone can do it instantly and start making money.\n📌 What’s actually happening:\n❌ You don’t get paid for leaving product reviews.\n✅ You can get paid through Amazon Onsite Commissions—a program where you upload video reviews directly to Amazon product pages.\n✅ If someone watches your video and buys the product, you earn a commission.\n📌 Is it a real side hustle? Yes. But here’s what you need to know:\n✔ You have to buy or own the product to make videos.\n✔ Your videos need to be helpful and well-done to rank on product pages.\n✔ Some people make $1,000s/month, but like anything, it takes work.\n💡 I put together a FREE guide explaining exactly how this works—no paid course, no academy, just straight facts.\nIf you want to start making money in the creator economy, check my bio. 💬 Have you heard about Amazon Onsite Commissions before? Drop a comment.\n#SideHustleReview #AmazonOnsite #MakeMoneyOnline #PassiveIncome #AmazonInfluencer 🚀#greenscreen</td>
+      <td>https://www.tiktok.com/@sidehustlereview/video/7519540181729381646</td>
+      <td>2025-06-24T15:37:13.000Z</td>
+      <td>amazon review intelligence</td>
+    </tr>
+    <tr>
+      <td>163000</td>
+      <td>25100</td>
+      <td>616</td>
+      <td>251</td>
+      <td>0.00378</td>
+      <td>washingtonpost</td>
+      <td>Amazon collects more data than almost any other company, according to Post reporter Geoffrey Fowler. Amazon says all that personal information helps power an “ambient intelligence” to make your home smart.</td>
+      <td>https://www.tiktok.com/@washingtonpost/video/7154043701168442670</td>
+      <td>2022-10-13T17:03:47.000Z</td>
+      <td>amazon review intelligence</td>
+    </tr>
+    <tr>
+      <td>79200</td>
+      <td>1164</td>
+      <td>291</td>
+      <td>23</td>
+      <td>0.00367</td>
+      <td>bravetech.ai</td>
+      <td>Honestly, I wish I had this since I was younger. \n\nThis is XNote, a smart pen that simply does the job of like 3 apps for me. ✍️💡📲\n\nIt transcribes all my ideas, notes and sketches and organizes everything inside the app. The built-in AI agent also helps me summarize and organize my ideas.\n\nFor more info, check my 🔗 in b1o.\n.\n.\n.\n#XNote #AI #notebook #productivity #amazon #amazonfinds #gadgets #usa #canada #uk #amazonmusthaves #techtips #aitips #bravetech #productivitytools #smartpen</td>
+      <td>https://www.tiktok.com/@bravetech.ai/video/7519618109708209416</td>
+      <td>2025-06-24T20:38:53.000Z</td>
+      <td>amazon review intelligence</td>
+    </tr>
+    <tr>
+      <td>1025</td>
+      <td>39</td>
+      <td>3</td>
+      <td>4</td>
+      <td>0.00293</td>
+      <td>marbsgirlie</td>
+      <td>Train your ai and your process will become easier and faster ✨😇 #chatgpt #amazoninfluencerprogram #productreviews</td>
+      <td>https://www.tiktok.com/@marbsgirlie/video/7576390730730507542</td>
+      <td>2025-11-24T20:25:36.000Z</td>
+      <td>amazon review intelligence</td>
+    </tr>
+    <tr>
+      <td>29000</td>
+      <td>130</td>
+      <td>79</td>
+      <td>6</td>
+      <td>0.00272</td>
+      <td>ophaya.smart.pen</td>
+      <td>Best SmartPen notebook Ive ever reviewed\n#smartpen #smartnotebook #geniusamazonfinds #bluetoothnotebook #ourfavoritefinds</td>
+      <td>https://www.tiktok.com/@ophaya.smart.pen/video/7440761233076391214</td>
+      <td>2024-11-24T08:34:02.000Z</td>
+      <td>amazon review intelligence</td>
+    </tr>
+    <tr>
+      <td>1000000</td>
+      <td>20000</td>
+      <td>2662</td>
+      <td>166</td>
+      <td>0.00266</td>
+      <td>comprasonlinecolombia</td>
+      <td>🔊Eco Dot Alexa 5 generación con función de control inteligente🔊\n•\n🔸 Súmate al mundo de la inteligencia artificial con el Amazon Echo Dot 5th Gen que ofrece soluciones para automatizar algunas tareas en tu hogar.\n🔸 La ventaja de este asistente virtual es que tiene mejor integración con todos los servicios y dispositivos de Amazon.\n🔸 ¿Necesitas ayuda con tus tareas diarias? Alexa organizará tu rutina, te brindará noticias, comprobará el estado del clima y mucho más.\n\n🤑 $259.990\n🚚 Envíos a todo el país\n📲 Compra por WhatsApp +57 3164593307\n💻 Compra en comprasonlinecolombia.com \n.\n.\n.\n.\n.\n.\n#ComprasOnlineColombia #ComprasOnline #Alexa #EchoDot5 #EchoDot #AmazonAlexa #CasaInteligente #Domotica&nbsp;&nbsp;#gadgetstecnologicos #Medellin #tecnologia</td>
+      <td>https://www.tiktok.com/@comprasonlinecolombia/video/7220943812170992902</td>
+      <td>2023-04-11T23:50:01.000Z</td>
+      <td>amazon review intelligence</td>
+    </tr>
+    <tr>
+      <td>2179</td>
+      <td>41</td>
+      <td>5</td>
+      <td>0</td>
+      <td>0.00229</td>
+      <td>dailybullrun</td>
+      <td>Amazon dropped three new AI tools that are so smart, they’re probably reading this before you are.\n\nThey’re built to make your life easier, your deliveries faster, and your grandma's weird holiday gift show up right on time.\n\nHere’s the scoop 👇\n\n1. Wellspring: AI With a Built-In GPS and a Grudge\n\nMeet Wellspring, Amazon’s new generative AI for mapping. It figures out where you live better than you do.\n\nInstead of just using Google Maps, it pulls data from:\n\nSatellites\n\nRoad networks\n\nBuilding shapes\n\nPrevious deliveries\n\nCustomer notes like “ring twice or I’ll cry”\n\nEven if you live in a newly built area that Google thinks is Narnia, Wellspring will get your package there. Drivers won’t need a PhD in “Where the hell is Unit 4B” anymore.\n\n2. Supply Chain AI: The Psychic of Logistics\n\nAmazon also built an AI that predicts what people will buy, when they’ll buy it, and where they’ll want it delivered.\n\nWe’re talking hundreds of millions of product predictions per day.\n\nThe model adds things like:\n\nWeather patterns (rain = umbrellas)\n\nHoliday calendars (Christmas = socks and regrets)\n\nHistorical buying behavior (Midnight snacks? Say no more)\n\nThis lets Amazon stock items in the right warehouse before you even think about ordering. Spooky.\n\n3. Robots That Listen (And Might Be Judging You)\n\nLast but not least, Amazon is training robots to understand human speech, think about it, and act.\n\nThis isn’t sci-fi. It’s called agentic AI. Here’s what it can do:\n\nHear natural language\n\nReason through commands\n\nTake action like moving stuff around without crashing into Dave from accounting\n\nThe goal? Turn robots like Proteus (Amazon’s autonomous warehouse helper) into super-assistants. They’ll handle the grunt work while humans focus on high-value tasks like... not getting crushed by shelves.\n\nAmazon’s not playing around. These aren’t “look how smart we are” updates. These tools are already in motion, making deliveries smarter and warehouses smoother.\n\nYour packages are arriving faster, your Prime impulse buys are getting creepier, and the robots are learning English. All thanks to AI.\n\nThe machines aren’t taking over yet. But they might be your new coworkers.\n\n#dailybullrun</td>
+      <td>https://www.tiktok.com/@dailybullrun/video/7514772791246195990</td>
+      <td>2025-06-11T19:16:29.000Z</td>
+      <td>amazon review intelligence</td>
+    </tr>
+    <tr>
+      <td>15100000</td>
+      <td>875800</td>
+      <td>34100</td>
+      <td>4166</td>
+      <td>0.00226</td>
+      <td>justicebuys</td>
+      <td>Number 2 is my favorite 👀😅 #amazon #productreview #gadgets #tiktokmademebuyit #shopping #home #kitchen #products #product #productreview</td>
+      <td>https://www.tiktok.com/@justicebuys/video/7340338201418140970</td>
+      <td>2024-02-27T17:41:23.000Z</td>
+      <td>amazon review intelligence</td>
+    </tr>
+    <tr>
+      <td>10400</td>
+      <td>238</td>
+      <td>23</td>
+      <td>14</td>
+      <td>0.00221</td>
+      <td>tradeinvestsimplify</td>
+      <td>Replying to @Electric Ring what does Amazon use AI for? Literally everything. The goal: sell us more STUFF. \n\n#kennethsuna #retireearly #genzfinance #investingforbeginners #investing</td>
+      <td>https://www.tiktok.com/@tradeinvestsimplify/video/7567480039466437902</td>
+      <td>2025-10-31T20:08:00.000Z</td>
+      <td>amazon review intelligence</td>
+    </tr>
+    <tr>
+      <td>14800</td>
+      <td>114</td>
+      <td>30</td>
+      <td>4</td>
+      <td>0.00203</td>
+      <td>smarttechcore</td>
+      <td>Amazon Echo Show 5 🤖📺 — my new smart display \nVoice, screen, music &amp; Alexa all in one.\nMore details in bio\n#echoshow5 #smarthome #techfinds #gadgetreview #echoshow5\n#smarthome\n#techreview\n#gadgets\n#alexa\n#reels\n#reelsinstagram</td>
+      <td>https://www.tiktok.com/@smarttechcore/video/7588258534312152340</td>
+      <td>2025-12-26T19:58:49.000Z</td>
+      <td>amazon review intelligence</td>
+    </tr>
+    <tr>
+      <td>38600</td>
+      <td>798</td>
+      <td>76</td>
+      <td>4</td>
+      <td>0.00197</td>
+      <td>lianafinds0</td>
+      <td>"Smart home hacks 🤯💡 Top 10 Amazon gadgets for a smarter kitchen &amp; home! \nComment “HACKS” for all links &amp; follow for more deals!\n\n#smarthome #amazonfinds #geniusproducts #tiktokmademebuyit #productreview</td>
+      <td>https://www.tiktok.com/@lianafinds0/video/7600076771165293831</td>
+      <td>2026-01-27T16:19:34.000Z</td>
+      <td>amazon review intelligence</td>
+    </tr>
+    <tr>
+      <td>15700</td>
+      <td>370</td>
+      <td>25</td>
+      <td>1</td>
+      <td>0.00159</td>
+      <td>crazyfinds456</td>
+      <td>10 GENIUS Amazon Finds #shorts #amazonfinds #productreview #crazyfinds #gadgets</td>
+      <td>https://www.tiktok.com/@crazyfinds456/video/7632634236482112785</td>
+      <td>2026-04-25T09:59:49.000Z</td>
+      <td>amazon review intelligence</td>
+    </tr>
+    <tr>
+      <td>5507</td>
+      <td>146</td>
+      <td>8</td>
+      <td>21</td>
+      <td>0.00145</td>
+      <td>cheyunfiltered</td>
+      <td>Everyday is package day 📦🙆🏽‍♀️ …..not that I’m complaining ☺️\n#relatable #fyp #viralvideo #amazoningluencerprogram #reviewer</td>
+      <td>https://www.tiktok.com/@cheyunfiltered/video/7481844894642736415</td>
+      <td>2025-03-15T01:39:42.000Z</td>
+      <td>amazon review intelligence</td>
+    </tr>
+    <tr>
+      <td>23600</td>
+      <td>368</td>
+      <td>34</td>
+      <td>2</td>
+      <td>0.00144</td>
+      <td>crazyfinds456</td>
+      <td>10 GENIUS Amazon Finds #shorts #amazonfinds #productreview #crazyfinds #gadgets</td>
+      <td>https://www.tiktok.com/@crazyfinds456/video/7622322867845254407</td>
+      <td>2026-03-28T15:05:02.000Z</td>
+      <td>amazon review intelligence</td>
+    </tr>
+    <tr>
+      <td>2131</td>
+      <td>7</td>
+      <td>3</td>
+      <td>2</td>
+      <td>0.00141</td>
+      <td>sumnerandali</td>
+      <td>Amazon Vine Reviewers using Chat GPT to write reviews be like.. 🤣 Well, at least it’s a 5-star review? 🤭 #amazonlife #gonewrong #chatgpt #amazonreview</td>
+      <td>https://www.tiktok.com/@sumnerandali/video/7229140024959241515</td>
+      <td>2023-05-04T01:55:36.000Z</td>
+      <td>amazon review intelligence</td>
+    </tr>
+    <tr>
+      <td>729</td>
+      <td>25</td>
+      <td>1</td>
+      <td>6</td>
+      <td>0.00137</td>
+      <td>olababstheanalyst</td>
+      <td>A case study built with Excel to analyze Amazon product listings, uncovering insights on discounts, ratings, reviews, and potential revenue. Features include a clean dashboard, pivot tables, and visual charts to support business decision making.</td>
+      <td>https://www.tiktok.com/@olababstheanalyst/video/7525089571906932024</td>
+      <td>2025-07-09T14:30:53.000Z</td>
+      <td>amazon review intelligence</td>
+    </tr>
+    <tr>
+      <td>852</td>
+      <td>3</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0.00117</td>
+      <td>uktechgadget</td>
+      <td>Echo Spot Review: Smart &amp; Stylish Mini Alexa\n#amazongadgets #trendingnow #techgadgets</td>
+      <td>https://www.tiktok.com/@uktechgadget/video/7532472715161128214</td>
+      <td>2025-07-29T21:20:00.000Z</td>
+      <td>amazon review intelligence</td>
+    </tr>
+    <tr>
+      <td>12400</td>
+      <td>322</td>
+      <td>12</td>
+      <td>1</td>
+      <td>0.00097</td>
+      <td>crazyfinds456</td>
+      <td>10 GENIUS Amazon Finds #shorts #amazonfinds #productreview #crazyfinds #gadgets</td>
+      <td>https://www.tiktok.com/@crazyfinds456/video/7633005612741315856</td>
+      <td>2026-04-26T10:00:19.000Z</td>
+      <td>amazon review intelligence</td>
+    </tr>
+    <tr>
+      <td>34500</td>
+      <td>366</td>
+      <td>31</td>
+      <td>48</td>
+      <td>0.00090</td>
+      <td>fairy_beautyy</td>
+      <td>Ich habe mir vor ein paar Tagen eine Smartwatch von Amazon gekauft und muss die einfach mit euch teilen. Für den Preis, ist die einfach nur genial!!! 😍😍 #smartwatch #smartwatches #smartwatchviral #uhr #intelligent #technology #amazon</td>
+      <td>https://www.tiktok.com/@fairy_beautyy/video/7427816763439598881</td>
+      <td>2024-10-20T11:22:48.000Z</td>
+      <td>amazon review intelligence</td>
+    </tr>
+    <tr>
+      <td>30200</td>
+      <td>474</td>
+      <td>25</td>
+      <td>18</td>
+      <td>0.00083</td>
+      <td>marketdraft</td>
+      <td>Amazon's Just Walk Out technology had a secret ingredient: Roughly 1,000 workers in India who review what you pick up, set down, and walk out of its stores with.\n\nThe company touted the technology, which allowed customers to bypass traditional checkouts, as an achievement powered entirely by computer vision. But Just Walk Out was still very reliant on humans, The Information reported on Tuesday, citing an unnamed person who has worked on Just Walk Out technology.\n\nAbout 700 of every 1,000 Just Walk Out sales had to be reviewed by Amazon's team in India in 2022, according to The Information. Internally, Amazon wanted just 50 out of every 1,000 sales to get a manual check, according to the report.\n\n#Marketraft #Amazon #AITech #Stocks #Stockmarket #Stockmarketnews #AMZN #AmazonStock</td>
+      <td>https://www.tiktok.com/@marketdraft/video/7355656578932002090</td>
+      <td>2024-04-09T00:24:39.000Z</td>
+      <td>amazon review intelligence</td>
+    </tr>
+    <tr>
+      <td>6932</td>
+      <td>163</td>
+      <td>5</td>
+      <td>4</td>
+      <td>0.00072</td>
+      <td>lianafinds0</td>
+      <td>"🚀 SMART HOME, SMART SHOPPING! 🚀 Score these 10 genius Amazon gadgets &amp; transform your kitchen &amp; home! 🤯💡 Comment "HACKS" for links &amp; FOLLOW for more DEALS! \n\n#smarthome #amazonfinds #geniusproducts #tiktokmademebuyit #productreview</td>
+      <td>https://www.tiktok.com/@lianafinds0/video/7600685606645058823</td>
+      <td>2026-01-29T07:42:10.000Z</td>
+      <td>amazon review intelligence</td>
+    </tr>
+    <tr>
+      <td>4671</td>
+      <td>33</td>
+      <td>3</td>
+      <td>1</td>
+      <td>0.00064</td>
+      <td>pinay_in_britain</td>
+      <td>Amazon Review Gilobaby robot #artificelintelligence #robot&nbsp;&nbsp;#amazonfinds #review #amazonreview #gilorobot #toys #toy #amazonprime #england #unitedkingdom #filipino #filipinotiktok</td>
+      <td>https://www.tiktok.com/@pinay_in_britain/video/7378187982748044551</td>
+      <td>2024-06-08T17:37:46.000Z</td>
+      <td>amazon review intelligence</td>
+    </tr>
+    <tr>
+      <td>12300</td>
+      <td>54</td>
+      <td>7</td>
+      <td>6</td>
+      <td>0.00057</td>
+      <td>eiunleashed</td>
+      <td>real people real reviews \nEmotional Intelligence Unleashed has so many 5 Star reviews on Amazon and is now available on Tiktok shop at a discount \n#MindsetMatters #SelfImprovement #EmotionalIntelligence #PersonalGrowth #BookTok #SuccessMindset #MentalStrength#NLPTechniques #MasterYourMind #EmotionalMastery #ConfidenceBuilding #MindsetShift #LeadershipSkills#TikTokShop #AmazonFinds #LevelUp #LifeHacks #GameChanger #DailyMotivation</td>
+      <td>https://www.tiktok.com/@eiunleashed/video/7470983990023818518</td>
+      <td>2025-02-13T19:13:34.000Z</td>
+      <td>amazon review intelligence</td>
+    </tr>
+    <tr>
+      <td>5854</td>
+      <td>86</td>
+      <td>2</td>
+      <td>11</td>
+      <td>0.00034</td>
+      <td>waynes_world3</td>
+      <td>LAKEEN A.I. GLASSES REVIEW\n#glasses #trending #smartglasses #lakeen #ai @Amazon</td>
+      <td>https://www.tiktok.com/@waynes_world3/video/7576486778677284151</td>
+      <td>2025-11-25T02:38:40.000Z</td>
+      <td>amazon review intelligence</td>
+    </tr>
+    <tr>
+      <td>206</td>
+      <td>5</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.00000</td>
+      <td>weiltech</td>
+      <td>Alexa's AI Upgrade: Testing Amazon's New Conversational Intelligence\n\n#weiltech</td>
+      <td>https://www.tiktok.com/@weiltech/video/7618396918422490398</td>
+      <td>2026-03-18T01:11:05.000Z</td>
+      <td>amazon review intelligence</td>
+    </tr>
+    <tr>
+      <td>122</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.00000</td>
+      <td>bluebugio</td>
+      <td>AI Review Analytics 2025\n\n🚀 **AI Review Analytics 2025: Turn Feedback into Profit**\nAmazon reviews aren’t just ratings — they’re insights. With AI Review Analytics, sellers can uncover patterns, fix pain points, and boost growth faster than ever. 💡📈\n#AmazonSellers #AIAnalytics #EcommerceGrowth #ReviewInsights #SmartSelling #DigitalTrends2025</td>
+      <td>https://www.tiktok.com/@bluebugio/video/7564465886317251848</td>
+      <td>2025-10-23T17:11:06.000Z</td>
+      <td>amazon review intelligence</td>
+    </tr>
+    <tr>
+      <td>1270</td>
+      <td>72</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.00000</td>
+      <td>cerycool5</td>
+      <td>10 GENIUS Amazon Finds #shorts #amazonfinds #productreview #crazyfinds #gadgets</td>
+      <td>https://www.tiktok.com/@cerycool5/video/7633315481956453663</td>
+      <td>2026-04-27T06:03:18.000Z</td>
+      <td>amazon review intelligence</td>
+    </tr>
+    <tr>
+      <td>496</td>
+      <td>17</td>
+      <td>0</td>
+      <td>5</td>
+      <td>0.00000</td>
+      <td>thesirlinksalot</td>
+      <td>Is Amazon's latest AI tool actually useful, or just another way to overcomplicate things by throwing AI into the mix? #AmazonAI #AI #Amaon</td>
+      <td>https://www.tiktok.com/@thesirlinksalot/video/7636030884633709838</td>
+      <td>2026-05-04T13:40:11.000Z</td>
+      <td>amazon review intelligence</td>
+    </tr>
+    <tr>
+      <td>224</td>
+      <td>10</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.00000</td>
+      <td>idigiztv</td>
+      <td>#amazon usando #IA para "resumir" reseñas... $ #tecnologia #geek #noticias</td>
+      <td>https://www.tiktok.com/@idigiztv/video/7268084594904206593</td>
+      <td>2023-08-17T00:40:21.000Z</td>
+      <td>amazon review intelligence</td>
+    </tr>
+    <tr>
+      <td>651</td>
+      <td>13</td>
+      <td>0</td>
+      <td>2</td>
+      <td>0.00000</td>
+      <td>laurenceai4ads</td>
+      <td>I wanted Alexa+ to be great. But it's not yet… 😬\nAmazon's big AI upgrade for Alexa just launched in the US and Canada 🇺🇸🇨🇦\nThe promise: Smart conversations, task automation, deal tracking—a real AI assistant 🤖\nThe @techcrunchrunch review: ❌ Interrupts you ❌ Forgets things ❌ Misses key details\nFor marketers: Price tracking = new Amazon discovery channel. IF it works 💰\nGood news? AI models improve fast. Amazon will get there. Just not yet ⏳\nHave you tried it? 👇\nNext: Amazon Nova (their business LLM)\n#TechReview #AINews #AmazonAlexa #SmartHome</td>
+      <td>https://www.tiktok.com/@laurenceai4ads/video/7593888123357121814</td>
+      <td>2026-01-11T14:00:00.000Z</td>
+      <td>amazon review intelligence</td>
+    </tr>
+    <tr>
+      <td>288</td>
+      <td>7</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.00000</td>
+      <td>threecolts</td>
+      <td>How to Summarise Customer Reviews on Amazon using AI! 🤯 #amazonfba #ai #amazonseller\n\nDiscover the future of customer feedback management with FeedbackWhiz’s AI-powered Review Summary! Our cutting-edge technology simplifies your Amazon customer reviews into concise, actionable insights. 🚀 Dive into the world of AI and transform how you interpret buyer satisfaction. Perfect for busy Amazon entrepreneurs eager to elevate their business with smart, data-driven decisions. #FeedbackWhizAI #ReviewSummary #CustomerFeedback #AmazonReviews #ArtificialIntelligence #AmazonFBA #AmazonSellers #EcommerceSuccess #SmartSelling #ProductFeedback #SellerTips #FBASeller #AmazonAI #DataInsights #CustomerSatisfaction #EcommerceTools #amazonbusiness</td>
+      <td>https://www.tiktok.com/@threecolts/video/7315453010132421920</td>
+      <td>2023-12-22T16:14:00.000Z</td>
+      <td>amazon review intelligence</td>
+    </tr>
+  </tbody>
+</table>
+  </div>
+</details>
+
+<details class="data-section"  id="sec-12">
+  <summary>
+    <span>Reddit</span>
+    <span class="row-count">6 rows</span>
+  </summary>
+  <div class="table-wrap">
+    
+    <table class="dataframe cia-table display compact">
+  <thead>
+    <tr style="text-align: right;">
+      <th>score</th>
+      <th>num_comments</th>
+      <th>subreddit</th>
+      <th>title</th>
+      <th>body</th>
+      <th>author</th>
+      <th>url</th>
+      <th>posted_at</th>
+      <th>query</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>92906</td>
+      <td>1369</td>
+      <td>funny</td>
+      <td>An Amazon review for a food thermometer</td>
+      <td>Images:\n\thttps://preview.redd.it/dfz942gqsrfg1.png?auto=webp&amp;amp;s=890f925332cadf4bd57f606dbba81a49f2ad3390</td>
+      <td>landlordslizard</td>
+      <td>https://www.reddit.com/r/funny/comments/1qnvad0/an_amazon_review_for_a_food_thermometer/</td>
+      <td>2026-01-26T22:30:21.000Z</td>
+      <td>None</td>
+    </tr>
+    <tr>
+      <td>46895</td>
+      <td>1374</td>
+      <td>funny</td>
+      <td>Amazon Review</td>
+      <td>Images:\n\thttps://preview.redd.it/pxfknyq484pf1.jpeg?auto=webp&amp;amp;s=5f6f67bfaf961ee19c4fee79b3bfd9ed45eb1bd3</td>
+      <td>dodgsn</td>
+      <td>https://www.reddit.com/r/funny/comments/1ngotro/amazon_review/</td>
+      <td>2025-09-14T11:26:25.000Z</td>
+      <td>None</td>
+    </tr>
+    <tr>
+      <td>37703</td>
+      <td>876</td>
+      <td>mildlyinfuriating</td>
+      <td>My mother insists on having this "air purifier" plugged in.</td>
+      <td>Even one of the Amazon reviews says it caught fire. So I have confiscated it.</td>
+      <td>willster97</td>
+      <td>https://www.reddit.com/r/mildlyinfuriating/comments/1n9xc2f/my_mother_insists_on_having_this_air_purifier/</td>
+      <td>2025-09-06T11:36:47.000Z</td>
+      <td>None</td>
+    </tr>
+    <tr>
+      <td>30131</td>
+      <td>58</td>
+      <td>MadeMeSmile</td>
+      <td>Too cute for words…</td>
+      <td>Images:\n\thttps://preview.redd.it/stmwr5mkvejf1.jpeg?auto=webp&amp;amp;s=eff4e3703df1e2f414fb168de3290dc6b1855c22</td>
+      <td>Twerky_Jurky</td>
+      <td>https://www.reddit.com/r/MadeMeSmile/comments/1ms0qs7/too_cute_for_words/</td>
+      <td>2025-08-16T16:50:48.000Z</td>
+      <td>None</td>
+    </tr>
+    <tr>
+      <td>14787</td>
+      <td>860</td>
+      <td>mildlyinfuriating</td>
+      <td>My Christmas gift was covered in maggots.</td>
+      <td>My roommate bought me Turkish delights for Christmas and the entire package is infested with maggots. The product was manufactured in August and doesn’t expire until 2027, so I’m not sure how this happened. We contacted the seller through Amazon, but they requested that we mail the product back for a refund. After reaching out to Amazon customer service directly, they issued a full refund without requiring a return and also provided a gift card for the inconvenience. Sadly, we later discovered that another customer had experienced the same issue. I asked Amazon to consider removing this product from their website to prevent this from happening to others. Always check reviews before buying! 🤢</td>
+      <td>WarpCoreNomad</td>
+      <td>https://www.reddit.com/r/mildlyinfuriating/comments/1pnmjmz/my_christmas_gift_was_covered_in_maggots/</td>
+      <td>2025-12-15T23:30:56.000Z</td>
+      <td>None</td>
+    </tr>
+    <tr>
+      <td>14284</td>
+      <td>409</td>
+      <td>Helldivers</td>
+      <td>MAJOR ORDER: Change Negative Review After Region Unlock</td>
+      <td>MAJOR ORDER: Data collection from Ministry of Intelligence field operatives has confirmed that the anti-fascist efforts of the Helldivers have finally resulted in liberation from the Sony Blockade for nearly all regions of Super Earth. \n\n The Ministry of Defense forecasts a flood of new recruits to bolster the Helldiver's ranks which ~~were badly depleted~~ are just as strong as ever after the brutal slaughter during the Illuminate's Super Earth Invasion.\n\nORDER OVERVIEW: If a negative review was left for region lock, change negative reviews to positive.\n\nREWARD: The Ministry of Prosperity will initiate the consideration process for a new commemorative cape depicting Democracy's victory over Sony.</td>
+      <td>Good_Policy3529</td>
+      <td>https://www.reddit.com/r/Helldivers/comments/1lap4sh/major_order_change_negative_review_after_region/</td>
+      <td>2025-06-13T19:42:14.000Z</td>
+      <td>None</td>
+    </tr>
+  </tbody>
+</table>
+  </div>
+</details>
+
+<details class="data-section"  id="sec-13">
+  <summary>
+    <span>YouTube</span>
+    <span class="row-count">10 rows</span>
+  </summary>
+  <div class="table-wrap">
+    
+    <table class="dataframe cia-table display compact">
+  <thead>
+    <tr style="text-align: right;">
+      <th>views</th>
+      <th>likes</th>
+      <th>comments</th>
+      <th>channel</th>
+      <th>title</th>
+      <th>description</th>
+      <th>duration_seconds</th>
+      <th>url</th>
+      <th>posted_at</th>
+      <th>query</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>18164601</td>
+      <td>23257</td>
+      <td>2744</td>
+      <td>Amazon MGM Studios</td>
+      <td>Mercy | Official Trailer</td>
+      <td>90 minutes to prove your innocence or face execution. Chris Pratt and Rebecca Ferguson star in Mercy. Watch the trailer now and see the movie only in theaters January 23. Filmed for IMAX, experience it in 3D. \n\nIn the near future, a detective (Chris Pratt) stands on trial accused of murdering his wife. He has 90 minutes to prove his innocence to the advanced A.I. Judge (Rebecca Ferguson) he once championed, before it determines his fate. #MercyMovie\n\nConnect with Mercy Online\nhttp://www.MercyMovie.com/\nFollow Mercy on INSTAGRAM: https://www.instagram.com/mercymovie/\nLike Mercy on FACEBOOK : https://www.facebook.com/MercytheMovie/\n\nAbout Amazon MGM Studios: Amazon MGM (Metro Goldwyn Mayer) is a leading entertainment company focused on the production and global distribution of film and television content across all platforms. The company owns one of the world’s deepest libraries of premium film and television content as well as the premium pay television network MGM+, which is available throughout the U.S. via cable, satellite, telco and digital distributors.&nbsp;&nbsp;In addition, Amazon MGM has investments in numerous other television channels, digital platforms and interactive ventures and is producing premium short-form content for distribution. \n\nConnect with MGM Studios Online\nVisit the MGM Studios WEBSITE: http://amazonmgmstudios.com/\nCheck out Amazon MGM on TIKTOK: https://www.tiktok.com/@amazonmgmstudios\nFollow Amazon MGM Studios on INSTAGRAM: https://www.instagram.com/amazonmgmstudios/\nFollow Amazon MGM Studios on TWITTER: https://twitter.com/amazonmgmstudio\nLike Amazon MGM Studios on FACEBOOK: https://www.facebook.com/AmazonMGMStudios\n\nMercy | Official Trailer\nhttps://www.youtube.com/@AmazonMGMStudios</td>
+      <td>179</td>
+      <td>https://www.youtube.com/watch?v=dSS4yqd0x6o</td>
+      <td>2025-10-09T18:45:02Z</td>
+      <td>amazon review intelligence</td>
+    </tr>
+    <tr>
+      <td>9143608</td>
+      <td>304799</td>
+      <td>2344</td>
+      <td>Mohit Burad</td>
+      <td>This mini drift car is insane🔥🤯 honest reviews -episode 31 #coolgadgets #driftcar #rccar #tech</td>
+      <td></td>
+      <td>99</td>
+      <td>https://www.youtube.com/watch?v=Ojn6B8UaGUY</td>
+      <td>2025-06-07T13:00:42Z</td>
+      <td>amazon review intelligence</td>
+    </tr>
+    <tr>
+      <td>5646034</td>
+      <td>65969</td>
+      <td>20659</td>
+      <td>AI Upload</td>
+      <td>Ex-OpenAI Scientist WARNS: "You Have No Idea What's Coming"</td>
+      <td>Ex-OpenAI pioneer Ilya Sutskever warns that as AI begins to self-improve, its trajectory may become "extremely unpredictable and unimaginable," ushering in a rapid advance beyond human control. He stresses that while this shift offers profound benefits - like curing diseases - it also poses monumental risks that humanity must urgently prepare for. #ai #agi</td>
+      <td>1094</td>
+      <td>https://www.youtube.com/watch?v=79-bApI3GIU</td>
+      <td>2025-07-16T21:51:04Z</td>
+      <td>amazon review intelligence</td>
+    </tr>
+    <tr>
+      <td>4637928</td>
+      <td>118098</td>
+      <td>10485</td>
+      <td>Mrwhosetheboss</td>
+      <td>The Ultimate AI Battle!</td>
+      <td>Testing ChatGPT (4o) vs Google Gemini (2.5 Pro) vs Perplexity Pro vs Grok 3 - which is the best AI chatbot that you should be paying for?&nbsp;&nbsp;Go to https://surfshark.com/boss or use code BOSS at checkout to get 4 extra months of Surfshark VPN!\n\nI spend a LOT of time trying to make my videos as concise, polished and useful as possible for you - if you would like to support me on that mission then consider subscribing to the channel - you'd make my day 😁\n\nFor my tech hot takes: http://twitter.com/Mrwhosetheboss\nFor my Personal Posts: http://instagram.com/mrwhosetheboss\nFor quick tech videos: https://www.tiktok.com/@mrwhosetheboss\nDoes anyone still use this anymore?: https://facebook.com/mrwhosetheboss\n\nAmazon Affiliate links (if you buy anything through these it will support the channel and allow us to buy better gear!):\nAmazon US: https://amzn.to/3mFix9d\nAmazon UK: https://amzn.to/3GMPPtM\n\nMy Browser: https://opr.as/Opera-browser-Mr-Whose-the-Boss \nMy Filming Gear: https://bit.ly/35CuxwI\n\nMusic is from Epidemic sound:\nhttp://share.epidemicsound.com/pHDFT</td>
+      <td>1632</td>
+      <td>https://www.youtube.com/watch?v=cMuif_hJGPI</td>
+      <td>2025-06-27T11:33:36Z</td>
+      <td>amazon review intelligence</td>
+    </tr>
+    <tr>
+      <td>1425721</td>
+      <td>53841</td>
+      <td>731</td>
+      <td>TechWiser</td>
+      <td>Forget iPhone 17, It Still Can't Do This!</td>
+      <td>Amazon's flagship destroyer is here! 🔥 The S24 Ultra exposes 5 brutal iPhone weaknesses that Apple can't fix - and at ₹71,999, it's the steal of Great Indian Festival!\n\nThis Samsung flagship does what iPhone 16 Pro Max simply can't - from superior AI magic to desktop-level power, discover why the S24 Ultra is the ultimate iPhone killer at an unbeatable price! 💥\n\nThis video is made in #collab with Amazon and Samsung</td>
+      <td>84</td>
+      <td>https://www.youtube.com/watch?v=eySs903Iu24</td>
+      <td>2025-09-21T15:30:12Z</td>
+      <td>amazon review intelligence</td>
+    </tr>
+    <tr>
+      <td>1301146</td>
+      <td>13318</td>
+      <td>1987</td>
+      <td>CNBC</td>
+      <td>No Nvidia Chips Needed! Amazon’s New AI Data Center For Anthropic Is Truly Massive</td>
+      <td>On 1,200 acres in Indiana, Amazon’s biggest AI data center is now operational, with half a million AWS Trainium2 chips entirely devoted to powering OpenAI rival Anthropic. Just over a year ago, the whole site was nothing but dirt and cornfields. Seven buildings are operating now, and once complete, the site will have around 30 buildings and consume some 2.2 gigawatts of power. CNBC went to the small town of New Carlisle, Indiana, to talk to locals who are worried about the impact on their community and electric bills - and to get a first ever on-camera tour inside what Amazon’s calling the largest cluster of non-Nvidia chips in the world. We also sat down with AWS CEO Matt Garman and Anthropic CPO Mike Krieger for more details on the partnership.\n\nChapters:\n0:00 Introduction\n2:37 Rapid buildout\n6:41 Exclusively AWS chips\n9:41 Aligned with Anthropic\n12:24 Power and water\n\nProduced and Shot by: Katie Tarasov\nAdditional Reporting: MacKenzie Sigalos\nEdited by: Mike Heffron\nAdditional Camera: Erin Black, Michael Crowe, Newton Ward, Peter Cassam\nSenior Director of Video: Jeniece Pettitt\nAnimation: Emily Park, Jason Reginato, Josh Kalven\nAdditional Production: Laura Batchelor\nAdditional Footage: Amazon, Getty Images, Meta, Indiana Michigan Power, Last Energy\n\n» Subscribe to CNBC TV: https://cnb.cx/SubscribeCNBCtelevision\n» Watch CNBC on the go with CNBC+: https://www.cnbc.com/WatchCNBCPlus\n\nAbout CNBC: From 'Wall Street' to 'Main Street' to award winning original documentaries and Reality TV series, CNBC has you covered. Experience special sneak peeks of your favorite shows, exclusive video and more.\n\nWant to be your own boss? Sign up for Smarter by CNBC Make It's new online course, How To Start A Business: For First-Time Founders. Find step-by-step guidance for launching your first business, from testing your idea to growing your revenue. Sign up today: https://cnb.cx/4gEgnhO\n\nConnect with CNBC News Online\nGet the latest news: https://www.cnbc.com/\nFollow CNBC on LinkedIn: https://cnb.cx/LinkedInCNBC\nFollow CNBC News on Instagram: https://cnb.cx/InstagramCNBC\nFollow CNBC News on Facebook: https://cnb.cx/LikeCNBC\nFollow CNBC on Threads: https://cnb.cx/threads\nFollow CNBC News on X: https://cnb.cx/FollowCNBC\nFollow CNBC on WhatsApp: https://cnb.cx/WhatsAppCNBC\n\n#cnbc \n\nHow Amazon Opened Its Largest AI Data Center In The World In Just One Year</td>
+      <td>1016</td>
+      <td>https://www.youtube.com/watch?v=vnGC4YS36gU</td>
+      <td>2025-10-29T14:01:43Z</td>
+      <td>amazon review intelligence</td>
+    </tr>
+    <tr>
+      <td>681122</td>
+      <td>0</td>
+      <td>26</td>
+      <td>Gyan Sagar</td>
+      <td>IIT PACKAGE IN AI &amp; CSE JOBS 🤯 #ai #aitools #techtools #chatgpt #iit #iitbombay #iitkanpur #VED</td>
+      <td>🤖 AI &amp; ML Jobs from IIT = Dream Career + Big Salaries!\n\nWant to work at top companies like Google, Amazon, OpenAI, Microsoft, and Flipkart?\nHere’s what AI &amp; ML grads from IITs are doing 👇\n\n✅ Top Job Roles:\n\nMachine Learning Engineer\n\nData Scientist\n\nAI Researcher\n\nNLP Engineer\n\nRobotics Engineer\n\n\n💸 Starting Packages: ₹18–60 LPA (Yes, that high!)\n🔥 AI is the hottest career path from IIT right now!\nAre you preparing for it the right way?\n\n\n---\n\n🚀 Hashtags:\n\n#ai #ml #jobs #iit #iitjee #jeeadvanced #jeemains #privatejobs #VED #aicareer #machinelearning #btechlife #iitbombay #futuretech #shorts</td>
+      <td>22</td>
+      <td>https://www.youtube.com/watch?v=rBOZp5o5bcg</td>
+      <td>2025-07-15T17:09:48Z</td>
+      <td>amazon review intelligence</td>
+    </tr>
+    <tr>
+      <td>478806</td>
+      <td>10153</td>
+      <td>115</td>
+      <td>EMOPET ROBOT</td>
+      <td>Meet your desktop buddy TODAY!! ☺️🤖 #emorobot #robot #livingai #emopetrobot #tech #desktoppet #pet</td>
+      <td></td>
+      <td>44</td>
+      <td>https://www.youtube.com/watch?v=ja51vcIkIZQ</td>
+      <td>2025-06-07T02:24:07Z</td>
+      <td>amazon review intelligence</td>
+    </tr>
+    <tr>
+      <td>187116</td>
+      <td>10046</td>
+      <td>4405</td>
+      <td>Synthetic Man</td>
+      <td>Fallout Season 2 Insults Your Intelligence</td>
+      <td>Amazon's Fallout Season 2 continues to be a humiliation ritual for fans.\n\nJoin this channel to get access to perks:\nhttps://www.youtube.com/channel/UCo8HnWzRvJQTsYNF1Sfhxvw/join\n\n0:00 Intro\n3:17 Episode 4 Breakdown\n7:44 Brotherhood Civil War Idiocy\n12:01 Breakdown (Continued)\n16:39 Episode 5 Breakdown\n21:09 The House Reveal\n27:16 The Rest of EP5\n31:25 Conclusion</td>
+      <td>1943</td>
+      <td>https://www.youtube.com/watch?v=VhiF2eOC19E</td>
+      <td>2026-01-17T19:00:28Z</td>
+      <td>amazon review intelligence</td>
+    </tr>
+    <tr>
+      <td>137301</td>
+      <td>1277</td>
+      <td>62</td>
+      <td>Amazon Web Services</td>
+      <td>Amazon Bedrock AgentCore: Deploy &amp; Operate AI Agents in Minutes | Amazon Web Services</td>
+      <td>Join Swami Sivasubramanian, VP of Agentic AI at AWS, along with Nick Aldridge, Principal Developer, and&nbsp;&nbsp;Nora Johnson, Generative AI Solutions Architect, as they unveil Amazon Bedrock AgentCore.\n\nAgentCore is a comprehensive, modular, fully-managed set of services to securely deploy &amp; operate production-ready AI agents at scale.\n\n🔥 What You'll Learn\nIn this technical demo, discover how AgentCore helps you:\n• Build production-ready AI agents with any open-source framework and model\n• Deploy secure, serverless agent runtimes\n• Implement enterprise-grade memory management \n• Secure agent identity and tool access \n• Monitor and optimize agent performance at scale\n\n👨‍💻 Featured Demo\nWatch an insurance underwriting use case that showcases how AgentCore transforms agent development from proof-of-concept to production-ready applications.\n\nLearn more:\nAmazon Bedrock AgentCore: https://go.aws/bedrock-agentcore\nNews Blog: https://go.aws/4lwr9Im \n\nSubscribe to AWS: https://go.aws/subscribe\n\nSign up for AWS: https://go.aws/signup \nAWS free tier: https://go.aws/free \nExplore more: https://go.aws/more\nContact AWS: https://go.aws/contact\n\nNext steps:\nExplore on AWS in Analyst Research:&nbsp;&nbsp;https://go.aws/reports\nDiscover, deploy, and manage software that runs on AWS: https://go.aws/marketplace\nJoin the AWS Partner Network: https://go.aws/partners \nLearn more on how Amazon builds and operates software: https://go.aws/library \n\nDo you have technical AWS questions? \nAsk the community of experts on AWS re:Post: https://go.aws/3lPaoPb\n\nWhy AWS?\nAmazon Web Services (AWS) is the world’s most comprehensive and broadly adopted cloud. Millions of customers—including the fastest-growing startups, largest enterprises, and leading government agencies—use AWS to be more agile, lower costs, and innovate faster.\n\n#AWS #AmazonBedrock #AgentCore</td>
+      <td>417</td>
+      <td>https://www.youtube.com/watch?v=usFIb9aEd1U</td>
+      <td>2025-07-16T15:14:35Z</td>
+      <td>amazon review intelligence</td>
+    </tr>
+  </tbody>
+</table>
+  </div>
+</details>
+
+<details class="data-section"  id="sec-14">
+  <summary>
+    <span>Competitor Clusters</span>
+    <span class="row-count">20 rows</span>
+  </summary>
+  <div class="table-wrap">
+    <div class="note">💡 Python KMeans 自动分群（v3）— 按 review/category/ASO词 聚类，LLM 看 top_keywords 后填 cluster_label</div>
+    <table class="dataframe cia-table display compact">
+  <thead>
+    <tr style="text-align: right;">
+      <th>cluster_id</th>
+      <th>cluster_label</th>
+      <th>name</th>
+      <th>developer</th>
+      <th>rating</th>
+      <th>review_count</th>
+      <th>category</th>
+      <th>price</th>
+      <th>top_keywords</th>
+      <th>app_id</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0</td>
+      <td>None</td>
+      <td>You.com - Enterprise grade AI</td>
+      <td>SuSea, Inc.</td>
+      <td>4.75479</td>
+      <td>4849</td>
+      <td>Productivity</td>
+      <td>Free</td>
+      <td></td>
+      <td>1600782099</td>
+    </tr>
+    <tr>
+      <td>0</td>
+      <td>None</td>
+      <td>Liner - AI search assistant</td>
+      <td>Liner Corp.</td>
+      <td>4.39275</td>
+      <td>1352</td>
+      <td>Productivity</td>
+      <td>Free</td>
+      <td></td>
+      <td>955395198</td>
+    </tr>
+    <tr>
+      <td>0</td>
+      <td>None</td>
+      <td>Natural - Search Perfected</td>
+      <td>brain.ai</td>
+      <td>2.57143</td>
+      <td>7</td>
+      <td>Productivity</td>
+      <td>Free</td>
+      <td></td>
+      <td>1521375720</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>None</td>
+      <td>Amazon Shopper Panel</td>
+      <td>AMZN Mobile LLC</td>
+      <td>4.88494</td>
+      <td>180422</td>
+      <td>Lifestyle</td>
+      <td>Free</td>
+      <td></td>
+      <td>1494755014</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>None</td>
+      <td>AI Chat 5.4: Genius</td>
+      <td>Torqued Studios LLC</td>
+      <td>4.67188</td>
+      <td>50165</td>
+      <td>Utilities</td>
+      <td>Free</td>
+      <td></td>
+      <td>1665764663</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>None</td>
+      <td>IQ: how SMART am I?</td>
+      <td>Indigo Penguin Limited</td>
+      <td>2.26500</td>
+      <td>47856</td>
+      <td>Utilities</td>
+      <td>Free</td>
+      <td></td>
+      <td>353156045</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>None</td>
+      <td>Feedly - Smart News Reader</td>
+      <td>Feedly Inc.</td>
+      <td>4.64440</td>
+      <td>25684</td>
+      <td>News</td>
+      <td>Free</td>
+      <td></td>
+      <td>396069556</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>None</td>
+      <td>Trustpilot: Reviews &amp; Ratings</td>
+      <td>Trustpilot</td>
+      <td>4.77489</td>
+      <td>5784</td>
+      <td>Shopping</td>
+      <td>Free</td>
+      <td></td>
+      <td>1608392803</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>None</td>
+      <td>S&amp;P Capital IQ Pro</td>
+      <td>S&amp;P Global Market Intelligence LLC</td>
+      <td>4.58805</td>
+      <td>2947</td>
+      <td>Finance</td>
+      <td>Free</td>
+      <td></td>
+      <td>1312804826</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>None</td>
+      <td>SellerAmp SAS</td>
+      <td>Seller Amp Limited</td>
+      <td>3.64228</td>
+      <td>123</td>
+      <td>Utilities</td>
+      <td>Free</td>
+      <td></td>
+      <td>1484202291</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>None</td>
+      <td>Scoutly</td>
+      <td>ASellerTool Inc.</td>
+      <td>4.44725</td>
+      <td>872</td>
+      <td>Business</td>
+      <td>Free</td>
+      <td></td>
+      <td>511248011</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>None</td>
+      <td>ScoutIQ</td>
+      <td>Threecolts</td>
+      <td>3.31227</td>
+      <td>554</td>
+      <td>Business</td>
+      <td>Free</td>
+      <td></td>
+      <td>1265325528</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>None</td>
+      <td>Scan Profit - AI Sourcing Tool</td>
+      <td>Scan Profit, LLC</td>
+      <td>4.72062</td>
+      <td>519</td>
+      <td>Business</td>
+      <td>Free</td>
+      <td></td>
+      <td>6742060869</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>None</td>
+      <td>tool4seller for Amazon Seller</td>
+      <td>Tapcash Inc</td>
+      <td>4.71053</td>
+      <td>114</td>
+      <td>Business</td>
+      <td>Free</td>
+      <td></td>
+      <td>1289515640</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>None</td>
+      <td>Amazon Quick</td>
+      <td>AMZN Mobile LLC</td>
+      <td>4.16667</td>
+      <td>24</td>
+      <td>Business</td>
+      <td>Free</td>
+      <td></td>
+      <td>1148226615</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>None</td>
+      <td>SmartScout</td>
+      <td>SmartestSeller, LLC</td>
+      <td>4.63636</td>
+      <td>11</td>
+      <td>Business</td>
+      <td>Free</td>
+      <td></td>
+      <td>1604306734</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>None</td>
+      <td>World Monitor Real-Time Intel</td>
+      <td>Scate</td>
+      <td>4.66892</td>
+      <td>148</td>
+      <td>News</td>
+      <td>Free</td>
+      <td></td>
+      <td>6760216152</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>None</td>
+      <td>Scan Profit AI: Amazon Tool</td>
+      <td>Aghdas Yilmaz</td>
+      <td>4.53623</td>
+      <td>69</td>
+      <td>Reference</td>
+      <td>Free</td>
+      <td></td>
+      <td>6749568707</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>None</td>
+      <td>Radar: Morning Intelligence</td>
+      <td>Schleis Ventures LLC</td>
+      <td>5.00000</td>
+      <td>22</td>
+      <td>News</td>
+      <td>Free</td>
+      <td></td>
+      <td>6762556581</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>None</td>
+      <td>IQ Test - Intelligence Test</td>
+      <td>Bekir Dursun</td>
+      <td>3.15000</td>
+      <td>40</td>
+      <td>Games</td>
+      <td>Free</td>
+      <td></td>
+      <td>1104692049</td>
+    </tr>
+  </tbody>
+</table>
+  </div>
+</details>
+
+<details class="data-section"  id="sec-15">
+  <summary>
+    <span>Seeds</span>
+    <span class="row-count">0 rows</span>
+  </summary>
+  <div class="table-wrap">
+    
+    <div style="color:#57606a; font-size:12px;">— no rows —</div>
+  </div>
+</details>
+
+<details class="data-section"  id="sec-16">
+  <summary>
+    <span>Fetch Log</span>
+    <span class="row-count">10 rows</span>
+  </summary>
+  <div class="table-wrap">
+    
+    <table class="dataframe cia-table display compact">
+  <thead>
+    <tr style="text-align: right;">
+      <th>source</th>
+      <th>op</th>
+      <th>rows</th>
+      <th>cost_usd</th>
+      <th>error</th>
+      <th>started_at</th>
+      <th>duration_ms</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>analysis</td>
+      <td>cluster_competitors</td>
+      <td>20</td>
+      <td>0.0</td>
+      <td>None</td>
+      <td>2026-05-11 18:52:11</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>youtube</td>
+      <td>search+videos</td>
+      <td>10</td>
+      <td>0.0</td>
+      <td>None</td>
+      <td>2026-05-11 18:52:10</td>
+      <td>2029</td>
+    </tr>
+    <tr>
+      <td>apify</td>
+      <td>reddit_search</td>
+      <td>3</td>
+      <td>0.0</td>
+      <td>None</td>
+      <td>2026-05-11 18:52:07</td>
+      <td>34618</td>
+    </tr>
+    <tr>
+      <td>apify</td>
+      <td>tiktok_search</td>
+      <td>30</td>
+      <td>0.0</td>
+      <td>None</td>
+      <td>2026-05-11 18:51:32</td>
+      <td>13976</td>
+    </tr>
+    <tr>
+      <td>ahrefs_hub</td>
+      <td>keywords</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>None</td>
+      <td>2026-05-11 18:51:17</td>
+      <td>1600</td>
+    </tr>
+    <tr>
+      <td>itunes</td>
+      <td>lookup_apps</td>
+      <td>20</td>
+      <td>0.0</td>
+      <td>None</td>
+      <td>2026-05-11 18:51:12</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>itunes</td>
+      <td>keyword_to_apps_bulk</td>
+      <td>20</td>
+      <td>0.0</td>
+      <td>None</td>
+      <td>2026-05-11 18:51:10</td>
+      <td>1175</td>
+    </tr>
+    <tr>
+      <td>apify</td>
+      <td>reddit_search</td>
+      <td>3</td>
+      <td>0.0</td>
+      <td>None</td>
+      <td>2026-05-11 18:45:52</td>
+      <td>63442</td>
+    </tr>
+    <tr>
+      <td>apify</td>
+      <td>tiktok_search</td>
+      <td>30</td>
+      <td>0.0</td>
+      <td>None</td>
+      <td>2026-05-11 18:44:48</td>
+      <td>16861</td>
+    </tr>
+    <tr>
+      <td>itunes</td>
+      <td>keyword_to_apps_bulk</td>
+      <td>20</td>
+      <td>0.0</td>
+      <td>None</td>
+      <td>2026-05-11 18:44:30</td>
+      <td>1164</td>
+    </tr>
+  </tbody>
+</table>
+  </div>
+</details>
+
+
+</div>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.datatables.net/2.1.8/js/dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/3.2.0/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/3.2.0/js/buttons.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/3.2.0/js/buttons.html5.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+<script>
+$(function(){
+  $('table.cia-table').each(function(){
+    $(this).DataTable({
+      pageLength: 25,
+      order: [],
+      dom: 'Bfrtip',
+      buttons: [{ extend: 'csv', text: '⬇ CSV' }, { extend: 'copy', text: '⎘ Copy' }],
+      scrollX: true
+    });
+  });
+});
+</script>
+</body>
+</html>

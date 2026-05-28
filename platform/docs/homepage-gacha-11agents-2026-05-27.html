@@ -1,0 +1,1332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>11agents.ai · homepage gacha · 3 layouts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0e0f0e;
+    --bg-2: #16181a;
+    --bg-3: #1d2023;
+    --fg: #d4d4cb;
+    --fg-muted: rgba(212, 212, 203, 0.55);
+    --fg-dim: rgba(212, 212, 203, 0.3);
+    --red: #c33;
+    --red-hot: #ff3838;
+    --line: rgba(212, 212, 203, 0.18);
+    --line-strong: rgba(212, 212, 203, 0.4);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 100%; }
+  body {
+    font-family: 'IBM Plex Mono', monospace;
+    background: var(--bg);
+    color: var(--fg);
+    line-height: 1.5;
+    overflow-x: hidden;
+  }
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(0deg, transparent 0, transparent 2px, rgba(255,255,255,.022) 2px, rgba(255,255,255,.022) 3px);
+    pointer-events: none;
+    z-index: 200;
+  }
+  .red { color: var(--red); }
+  .muted { color: var(--fg-muted); }
+  .dim { color: var(--fg-dim); }
+
+  /* ============================================================
+     CARD WRAPPER + LABEL
+     ============================================================ */
+  .gacha-card {
+    border-bottom: 4px solid var(--red);
+    position: relative;
+  }
+  .gacha-label {
+    background: var(--red);
+    color: #fff;
+    padding: 12px 32px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    display: flex;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+  .gacha-label .right { font-weight: 700; }
+
+  section { padding: 64px 80px; position: relative; }
+  .section-num {
+    position: absolute;
+    top: 20px;
+    left: 32px;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    color: var(--fg-dim);
+  }
+  .section-tag {
+    position: absolute;
+    top: 20px;
+    right: 32px;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    color: var(--fg-dim);
+  }
+
+  /* ============================================================
+     ==== VARIANT A — VIKTOR HIJACK (dense, hire-first) ====
+     ============================================================ */
+
+  .a-chrome {
+    padding: 14px 32px;
+    border-bottom: 1px solid var(--line-strong);
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    align-items: center;
+    background: var(--bg);
+  }
+  .a-chrome .dot {
+    display: inline-block;
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--red);
+    box-shadow: 0 0 6px var(--red);
+    margin-right: 8px;
+  }
+  .a-chrome .nav {
+    display: flex; gap: 24px;
+  }
+  .a-chrome .cta-mini {
+    background: var(--red);
+    color: #fff;
+    padding: 6px 14px;
+    letter-spacing: 0.2em;
+    font-weight: 700;
+  }
+
+  .a-hero {
+    padding: 100px 80px 80px;
+  }
+  .a-prefix {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 6px 12px;
+    border: 1px solid var(--red);
+    color: var(--red);
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    margin-bottom: 32px;
+  }
+  .a-prefix::before {
+    content: '';
+    width: 6px; height: 6px;
+    background: var(--red);
+    border-radius: 50%;
+    animation: pulse 1.6s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; box-shadow: 0 0 4px var(--red); }
+    50% { opacity: 0.4; box-shadow: 0 0 12px var(--red); }
+  }
+  .a-mark {
+    font-size: clamp(96px, 18vw, 240px);
+    line-height: 0.85;
+    font-weight: 700;
+    letter-spacing: -0.05em;
+    margin-bottom: 24px;
+  }
+  .a-mark .dot { color: var(--red); }
+  .a-mark .tld { color: var(--fg-muted); font-weight: 400; }
+  .a-hero-cn {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(36px, 5.5vw, 72px);
+    font-weight: 300;
+    line-height: 1.1;
+    margin-bottom: 16px;
+    color: #fff;
+    letter-spacing: -0.015em;
+  }
+  .a-hero-cn .gtm { color: var(--red); font-weight: 500; }
+  .a-hero-en {
+    font-size: 13px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+    margin-bottom: 48px;
+  }
+  .a-cta-row {
+    display: inline-flex;
+    gap: 0;
+    border: 1px solid var(--line-strong);
+    background: var(--bg-2);
+  }
+  .a-cta-primary {
+    background: var(--red);
+    color: #fff;
+    padding: 20px 36px;
+    font-size: 14px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 700;
+    cursor: pointer;
+    border: 0;
+    font-family: inherit;
+  }
+  .a-cta-primary .price {
+    color: rgba(255,255,255,0.7);
+    font-weight: 400;
+    margin-left: 12px;
+  }
+  .a-cta-secondary {
+    background: transparent;
+    color: var(--fg);
+    padding: 20px 28px;
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 500;
+    border: 0;
+    border-left: 1px solid var(--line-strong);
+    font-family: inherit;
+  }
+  .a-hero-meta {
+    margin-top: 64px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 32px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+  .a-hero-meta .label { color: var(--fg-dim); display: block; margin-bottom: 4px; font-size: 9px; }
+  .a-hero-meta .val { color: #fff; font-size: 14px; letter-spacing: 0.02em; text-transform: none; }
+
+  /* A · PROMISE (viktor 3-card) */
+  .a-promise {
+    background: var(--bg-2);
+  }
+  .a-promise-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--line-strong);
+    border: 1px solid var(--line-strong);
+  }
+  .a-promise-card {
+    background: var(--bg);
+    padding: 48px 32px;
+    position: relative;
+  }
+  .a-promise-card .idx {
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    color: var(--red);
+    margin-bottom: 24px;
+  }
+  .a-promise-card h3 {
+    font-family: 'Inter', sans-serif;
+    font-size: 32px;
+    font-weight: 400;
+    line-height: 1.15;
+    color: #fff;
+    margin-bottom: 16px;
+    letter-spacing: -0.01em;
+  }
+  .a-promise-card h3 strong {
+    font-weight: 700;
+    color: var(--red);
+  }
+  .a-promise-card p {
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--fg-muted);
+  }
+
+  /* A · COMPARISON TABLE (the standout) */
+  .a-comp {
+    padding-top: 100px;
+  }
+  .a-comp-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-bottom: 16px;
+    border-bottom: 2px solid var(--line-strong);
+    margin-bottom: 0;
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+  }
+  .a-comp-head h2 {
+    font-family: 'Inter', sans-serif;
+    font-size: 48px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    color: #fff;
+  }
+  .a-comp-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .a-comp-table th, .a-comp-table td {
+    padding: 20px 16px;
+    text-align: left;
+    font-size: 13px;
+    border-bottom: 1px solid var(--line);
+    vertical-align: middle;
+  }
+  .a-comp-table th {
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+    font-weight: 500;
+    border-bottom: 1px solid var(--line-strong);
+  }
+  .a-comp-table th.us {
+    background: var(--red);
+    color: #fff;
+    font-weight: 700;
+  }
+  .a-comp-table td.us {
+    background: rgba(204, 51, 51, 0.08);
+    color: #fff;
+    font-weight: 600;
+  }
+  .a-comp-table td.label-cell {
+    color: var(--fg-muted);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-weight: 500;
+    width: 220px;
+  }
+  .a-comp-table td.x { color: var(--red); opacity: 0.6; }
+  .a-comp-table td.check { color: var(--red); font-weight: 700; }
+
+  /* A · ROSTER STRIP */
+  .a-roster {
+    padding: 80px 0 80px;
+    background: var(--bg-2);
+  }
+  .a-roster-head {
+    padding: 0 80px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 0;
+  }
+  .a-roster-head h2 {
+    font-family: 'Inter', sans-serif;
+    font-size: 36px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: -0.02em;
+  }
+  .a-roster-strip {
+    display: grid;
+    grid-template-columns: repeat(11, 1fr);
+    border-top: 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .a-roster-cell {
+    border-right: 1px solid var(--line);
+    padding: 32px 8px 24px;
+    text-align: center;
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .a-roster-cell:last-child { border-right: 0; }
+  .a-roster-cell .num {
+    font-size: 36px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    color: #fff;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .a-roster-cell .ch {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--fg);
+    font-weight: 600;
+    margin-bottom: 16px;
+  }
+  .a-roster-cell .ships {
+    font-size: 9px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+    line-height: 1.5;
+    font-family: 'Inter', sans-serif;
+  }
+  .a-roster-cell .link {
+    margin-top: 16px;
+    padding-top: 12px;
+    border-top: 1px dashed var(--line);
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--red);
+  }
+
+  /* A · HARDWARE LITE */
+  .a-hw {
+    padding: 100px 80px;
+    background: var(--bg);
+    text-align: center;
+  }
+  .a-hw .label {
+    font-size: 11px;
+    letter-spacing: 0.35em;
+    color: var(--red);
+    margin-bottom: 32px;
+  }
+  .a-hw h2 {
+    font-family: 'Inter', sans-serif;
+    font-size: 56px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    margin-bottom: 32px;
+  }
+  .a-hw .box-mock {
+    width: 360px;
+    height: 240px;
+    margin: 48px auto;
+    background:
+      linear-gradient(135deg, #2a2c30 0%, #16181a 50%, #0e0f0e 100%);
+    border: 1px solid #2a2c30;
+    border-radius: 6px;
+    box-shadow:
+      0 30px 80px rgba(0,0,0,0.6),
+      inset 0 1px 0 rgba(255,255,255,0.05),
+      0 0 80px rgba(204, 51, 51, 0.15);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .a-hw .box-mock::before {
+    content: '11.agents.ai';
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    color: rgba(212,212,203,0.4);
+    text-shadow: 0 0 8px rgba(212, 212, 203, 0.1);
+  }
+  .a-hw .box-mock::after {
+    content: '●';
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    color: var(--red);
+    font-size: 10px;
+    text-shadow: 0 0 8px var(--red);
+    animation: pulse 1.6s ease-in-out infinite;
+  }
+  .a-hw .price {
+    font-size: 64px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: -0.04em;
+    margin-bottom: 8px;
+  }
+  .a-hw .price-sub {
+    font-size: 13px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+    margin-bottom: 40px;
+  }
+  .a-hw button {
+    background: var(--red);
+    color: #fff;
+    padding: 18px 40px;
+    font-size: 13px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    font-weight: 700;
+    border: 0;
+    font-family: inherit;
+  }
+
+  /* ============================================================
+     ==== VARIANT B — APPLE ONE MORE THING (product-first) ====
+     ============================================================ */
+
+  .b-chrome {
+    padding: 18px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    backdrop-filter: blur(20px);
+    background: rgba(14, 15, 14, 0.7);
+    border-bottom: 1px solid var(--line);
+  }
+  .b-chrome .mark {
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: -0.02em;
+  }
+  .b-chrome .mark .dot { color: var(--red); }
+  .b-chrome .mark .tld { opacity: 0.55; font-weight: 400; }
+  .b-chrome .nav {
+    display: flex; gap: 32px; font-size: 12px;
+  }
+  .b-chrome .nav a { color: var(--fg-muted); }
+  .b-chrome .buy {
+    background: var(--fg);
+    color: var(--bg);
+    padding: 8px 18px;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 0.05em;
+  }
+
+  .b-hero {
+    min-height: 100vh;
+    padding: 80px 40px 60px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background:
+      radial-gradient(ellipse 60% 50% at 50% 60%, rgba(204, 51, 51, 0.18) 0%, transparent 70%),
+      var(--bg);
+    position: relative;
+  }
+  .b-hero .eyebrow {
+    font-size: 12px;
+    letter-spacing: 0.25em;
+    color: var(--red);
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+  .b-hero h1 {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(64px, 10vw, 140px);
+    font-weight: 700;
+    letter-spacing: -0.045em;
+    line-height: 1.0;
+    color: #fff;
+    margin-bottom: 16px;
+  }
+  .b-hero h2 {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(20px, 2.5vw, 32px);
+    font-weight: 300;
+    color: var(--fg);
+    margin-bottom: 64px;
+    letter-spacing: -0.005em;
+    line-height: 1.4;
+    max-width: 720px;
+  }
+  .b-hero h2 .gtm { color: var(--red); font-weight: 500; }
+  .b-box-hero {
+    width: clamp(420px, 60vw, 720px);
+    aspect-ratio: 16 / 10;
+    background:
+      radial-gradient(ellipse at 30% 30%, rgba(255,255,255,0.04) 0%, transparent 50%),
+      linear-gradient(135deg, #3a3d42 0%, #1d2023 40%, #0e0f0e 100%);
+    border-radius: 12px;
+    box-shadow:
+      0 60px 120px rgba(0,0,0,0.7),
+      0 0 200px rgba(204, 51, 51, 0.25),
+      inset 0 1px 0 rgba(255,255,255,0.08);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 48px;
+  }
+  .b-box-hero::before {
+    content: '11.agents.ai';
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: clamp(28px, 4.5vw, 56px);
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    color: rgba(212,212,203,0.5);
+    text-shadow:
+      0 0 20px rgba(212,212,203,0.2),
+      inset 0 0 30px rgba(0,0,0,0.5);
+  }
+  .b-box-hero::after {
+    content: '●';
+    position: absolute;
+    top: 24px;
+    right: 28px;
+    color: var(--red);
+    font-size: 14px;
+    text-shadow: 0 0 12px var(--red);
+    animation: pulse 1.6s ease-in-out infinite;
+  }
+  .b-cta-stack {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+  .b-price {
+    font-family: 'Inter', sans-serif;
+    font-size: 56px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: -0.04em;
+    line-height: 1;
+  }
+  .b-price-sub {
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+    margin-bottom: 12px;
+  }
+  .b-buy {
+    background: var(--red);
+    color: #fff;
+    padding: 18px 56px;
+    border-radius: 999px;
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    border: 0;
+  }
+  .b-learn {
+    color: var(--fg-muted);
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-top: 8px;
+  }
+
+  /* B · TAGLINE strip */
+  .b-tagline {
+    background: var(--bg);
+    padding: 120px 40px;
+    text-align: center;
+  }
+  .b-tagline h2 {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(48px, 7vw, 96px);
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: -0.04em;
+    line-height: 1.05;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .b-tagline h2 .red { color: var(--red); }
+  .b-tagline p {
+    font-family: 'Inter', sans-serif;
+    font-size: 22px;
+    color: var(--fg-muted);
+    margin-top: 32px;
+    font-weight: 300;
+  }
+
+  /* B · WHAT'S INSIDE */
+  .b-inside {
+    padding: 100px 80px;
+    background: var(--bg-2);
+  }
+  .b-inside-head {
+    text-align: center;
+    margin-bottom: 64px;
+  }
+  .b-inside-head .label {
+    font-size: 12px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 16px;
+  }
+  .b-inside-head h2 {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(40px, 6vw, 72px);
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+  }
+  .b-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+  .b-agent {
+    background: var(--bg);
+    border: 1px solid var(--line);
+    padding: 28px 24px;
+    transition: border-color .2s;
+    cursor: pointer;
+  }
+  .b-agent:hover {
+    border-color: var(--red);
+  }
+  .b-agent .num {
+    font-size: 14px;
+    letter-spacing: 0.2em;
+    color: var(--red);
+    margin-bottom: 16px;
+    font-weight: 700;
+  }
+  .b-agent .ch {
+    font-family: 'Inter', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 8px;
+    letter-spacing: -0.01em;
+  }
+  .b-agent .ships {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    color: var(--fg-muted);
+    line-height: 1.5;
+  }
+  .b-agent .arrow {
+    margin-top: 20px;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--fg-muted);
+    text-transform: uppercase;
+  }
+
+  /* B · SPECS */
+  .b-specs {
+    padding: 100px 80px;
+    background: var(--bg);
+  }
+  .b-specs h2 {
+    font-family: 'Inter', sans-serif;
+    font-size: 48px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: -0.03em;
+    margin-bottom: 48px;
+    text-align: center;
+  }
+  .b-spec-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 32px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .b-spec-card {
+    text-align: center;
+    padding: 32px;
+    border-top: 2px solid var(--red);
+  }
+  .b-spec-card .val {
+    font-family: 'Inter', sans-serif;
+    font-size: 56px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: -0.04em;
+    margin-bottom: 8px;
+  }
+  .b-spec-card .label {
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+  }
+
+  /* ============================================================
+     ==== VARIANT C — MANIFESTO (typographic, editorial brutalist) ====
+     ============================================================ */
+
+  .c-chrome {
+    padding: 16px 40px;
+    border-bottom: 1px solid var(--line-strong);
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+  }
+  .c-chrome .term::before {
+    content: '$ ';
+    color: var(--red);
+  }
+
+  .c-manifesto {
+    padding: 120px 80px;
+    background: var(--bg);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .c-manifesto-eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.35em;
+    color: var(--red);
+    text-transform: uppercase;
+    margin-bottom: 48px;
+  }
+  .c-manifesto-text {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(32px, 4.5vw, 60px);
+    font-weight: 300;
+    line-height: 1.35;
+    color: #fff;
+    letter-spacing: -0.015em;
+    max-width: 1280px;
+  }
+  .c-manifesto-text strong {
+    font-weight: 700;
+    color: var(--red);
+  }
+  .c-manifesto-text em {
+    font-style: italic;
+    color: var(--fg-muted);
+    font-weight: 300;
+  }
+  .c-manifesto-text .strike {
+    text-decoration: line-through;
+    text-decoration-thickness: 3px;
+    opacity: 0.4;
+  }
+  .c-manifesto-cn {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(40px, 6vw, 80px);
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: -0.025em;
+    margin-top: 64px;
+    line-height: 1.1;
+  }
+  .c-manifesto-cn .gtm { color: var(--red); }
+  .c-manifesto-cta {
+    margin-top: 80px;
+    display: inline-block;
+    border: 1px solid var(--fg);
+    padding: 16px 28px;
+    font-size: 12px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--fg);
+    align-self: flex-start;
+    background: transparent;
+    font-family: inherit;
+  }
+  .c-manifesto-cta::before {
+    content: '> ';
+    color: var(--red);
+  }
+
+  /* C · BIG NUMBERS */
+  .c-numbers {
+    background: var(--bg-2);
+    padding: 120px 80px;
+  }
+  .c-numbers-head {
+    font-size: 11px;
+    letter-spacing: 0.35em;
+    color: var(--red);
+    text-transform: uppercase;
+    margin-bottom: 64px;
+  }
+  .c-num-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+  }
+  .c-num {
+    border-left: 1px solid var(--line);
+    padding: 32px;
+    min-height: 280px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .c-num:first-child { border-left: 0; padding-left: 0; }
+  .c-num .big {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(96px, 12vw, 180px);
+    font-weight: 800;
+    color: #fff;
+    line-height: 0.85;
+    letter-spacing: -0.06em;
+  }
+  .c-num .big .red { color: var(--red); }
+  .c-num .cap {
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+    line-height: 1.6;
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+  }
+
+  /* C · AGENT DIRECTORY (ASCII style) */
+  .c-dir {
+    padding: 100px 80px;
+    background: var(--bg);
+  }
+  .c-dir-head {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    color: var(--fg);
+    padding-bottom: 16px;
+    border-bottom: 2px solid var(--line-strong);
+    margin-bottom: 0;
+  }
+  .c-dir-head .red { color: var(--red); }
+  .c-dir-row {
+    display: grid;
+    grid-template-columns: 60px 200px 1fr 120px;
+    gap: 24px;
+    padding: 18px 0;
+    border-bottom: 1px solid var(--line);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 14px;
+    align-items: baseline;
+  }
+  .c-dir-row .id {
+    color: var(--red);
+    font-weight: 700;
+    letter-spacing: 0.05em;
+  }
+  .c-dir-row .codename {
+    color: #fff;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .c-dir-row .ships {
+    color: var(--fg-muted);
+    font-size: 13px;
+    font-family: 'Inter', sans-serif;
+  }
+  .c-dir-row .status {
+    color: var(--red);
+    text-align: right;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+  .c-dir-row .status.pending {
+    color: var(--fg-dim);
+  }
+
+  /* C · HARDWARE MONOLITH */
+  .c-hw {
+    padding: 160px 80px;
+    background: var(--bg-2);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .c-hw::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 40% 40% at 50% 50%, rgba(204, 51, 51, 0.12) 0%, transparent 70%);
+  }
+  .c-hw > * { position: relative; }
+  .c-hw .footnote-top {
+    font-size: 11px;
+    letter-spacing: 0.35em;
+    color: var(--red);
+    margin-bottom: 64px;
+    text-transform: uppercase;
+  }
+  .c-hw .box-mono {
+    width: clamp(280px, 40vw, 460px);
+    aspect-ratio: 3 / 2;
+    margin: 0 auto 64px;
+    background:
+      linear-gradient(160deg, #2a2c30 0%, #16181a 50%, #0a0a0a 100%);
+    border-radius: 4px;
+    box-shadow:
+      0 80px 160px rgba(0,0,0,0.8),
+      0 0 200px rgba(204, 51, 51, 0.3),
+      inset 0 1px 0 rgba(255,255,255,0.04);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .c-hw .box-mono::before {
+    content: '11.agents.ai';
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: clamp(24px, 3.5vw, 42px);
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    color: rgba(212,212,203,0.4);
+    text-shadow: 0 0 16px rgba(212,212,203,0.15);
+  }
+  .c-hw .box-mono::after {
+    content: '●';
+    position: absolute;
+    top: 18px;
+    right: 22px;
+    color: var(--red);
+    font-size: 12px;
+    text-shadow: 0 0 12px var(--red);
+    animation: pulse 1.6s ease-in-out infinite;
+  }
+  .c-hw .caption {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(28px, 4vw, 48px);
+    font-weight: 300;
+    color: #fff;
+    letter-spacing: -0.02em;
+    line-height: 1.3;
+    max-width: 880px;
+    margin: 0 auto 16px;
+  }
+  .c-hw .caption .gtm { color: var(--red); font-weight: 500; }
+  .c-hw .stat {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.3em;
+    color: var(--fg-muted);
+    text-transform: uppercase;
+    margin-bottom: 48px;
+  }
+  .c-hw .stat .red { color: var(--red); font-weight: 700; }
+  .c-hw .engage {
+    background: transparent;
+    color: var(--fg);
+    border: 1px solid var(--fg);
+    padding: 16px 32px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+  }
+  .c-hw .engage::before { content: '> '; color: var(--red); }
+
+  /* ============================================================
+     FOOTER PICK
+     ============================================================ */
+  .pick {
+    padding: 64px 80px;
+    background: var(--bg);
+    text-align: center;
+    border-top: 4px solid var(--red);
+  }
+  .pick .label {
+    font-size: 12px;
+    letter-spacing: 0.4em;
+    color: var(--red);
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+  .pick .opts {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 14px;
+    letter-spacing: 0.05em;
+    color: var(--fg);
+  }
+  .pick .opts strong { color: var(--red); font-weight: 700; }
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     ==== CARD A — VIKTOR HIJACK ====
+     ============================================================ -->
+<div class="gacha-card">
+  <div class="gacha-label">
+    <span>CARD A · VIKTOR HIJACK · HIRE-FIRST</span>
+    <span class="right">DENSE / OPS-FOCUSED / NUMBERS UP FRONT</span>
+  </div>
+
+  <div class="a-chrome">
+    <span><span class="dot"></span>11.agents.ai &nbsp;·&nbsp; STATUS LIVE</span>
+    <span class="nav">
+      <span>AGENTS</span><span>PRICING</span><span>HARDWARE</span><span>FAQ</span>
+    </span>
+    <span class="cta-mini">HIRE 11 →</span>
+  </div>
+
+  <section class="a-hero">
+    <span class="a-prefix">6 OF 11 LIVE · TAKING PRE-ORDERS</span>
+    <div class="a-mark">11<span class="dot">.</span>agents<span class="tld">.ai</span></div>
+    <div class="a-hero-cn">让天下没有难做的 <span class="gtm">GTM</span>。</div>
+    <div class="a-hero-en">11 SPECIALISTS · ANY VERTICAL · SHIPPED RESULTS</div>
+    <div class="a-cta-row">
+      <button class="a-cta-primary">HIRE YOUR 11-AGENT TEAM <span class="price">$999/YR</span></button>
+      <button class="a-cta-secondary">SEE HOW IT WORKS →</button>
+    </div>
+    <div class="a-hero-meta">
+      <div><span class="label">[ PRICING ]</span><span class="val">$999/yr · single SKU · no subscription</span></div>
+      <div><span class="label">[ DELIVERY ]</span><span class="val">shipped GTM artifacts, weekly cadence</span></div>
+      <div><span class="label">[ DOCTRINE ]</span><span class="val">No Triangle = No Agent</span></div>
+      <div><span class="label">[ REFUND ]</span><span class="val">30-day no questions asked</span></div>
+    </div>
+  </section>
+
+  <section class="a-promise">
+    <span class="section-num">SEC 02</span>
+    <span class="section-tag">THE PROMISE</span>
+    <div class="a-promise-grid">
+      <div class="a-promise-card">
+        <div class="idx">/ 01</div>
+        <h3>Not advice. <strong>Output.</strong></h3>
+        <p>Other AI tools draft a plan and hand you a chatbot. We hand you 30 published X posts, 12 SEO articles, 8 Reddit threads, and a YouTube short — every week, reviewed before they ship.</p>
+      </div>
+      <div class="a-promise-card">
+        <div class="idx">/ 02</div>
+        <h3>Not a subscription. <strong>A hire.</strong></h3>
+        <p>$999 once. The full 11-agent team works for you for a year. No per-seat. No per-token. No metered overage. One price, eleven specialists, zero surprises on your card.</p>
+      </div>
+      <div class="a-promise-card">
+        <div class="idx">/ 03</div>
+        <h3>Not 1 agent. <strong>11 specialists.</strong></h3>
+        <p>X · Reddit · SEO · GEO · TikTok · KOC · KOL · MCP · Ads · Owned channels · EDM — each in its own Iron Triangle (Builder + Reviewer + Cron). One team. Every channel that matters.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="a-comp">
+    <span class="section-num">SEC 03</span>
+    <span class="section-tag">VS. ALTERNATIVES</span>
+    <div class="a-comp-head">
+      <h2>You've tried everything else.</h2>
+      <span>STRAIGHT NUMBERS, NO SPIN</span>
+    </div>
+    <table class="a-comp-table">
+      <thead>
+        <tr>
+          <th></th>
+          <th>GTM agency</th>
+          <th>Marketing hire</th>
+          <th>DIY GPT/Claude</th>
+          <th class="us">11agents.ai</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="label-cell">Annual cost</td><td>$60k–180k</td><td>$80k–150k</td><td>$200–2k</td><td class="us">$999</td></tr>
+        <tr><td class="label-cell">Channels covered</td><td>2–3</td><td>1</td><td>1–2</td><td class="us">11</td></tr>
+        <tr><td class="label-cell">What you receive</td><td>advice + decks</td><td>mixed bag</td><td>prompts you wrote</td><td class="us">shipped GTM artifacts</td></tr>
+        <tr><td class="label-cell">Onboarding time</td><td>4–8 weeks</td><td>6–12 weeks</td><td>same day</td><td class="us">24 hours</td></tr>
+        <tr><td class="label-cell">Reviewer in loop</td><td class="x">No</td><td class="x">N/A</td><td class="x">No</td><td class="us check">Yes (Iron Triangle)</td></tr>
+        <tr><td class="label-cell">Hardware included</td><td class="x">No</td><td class="x">No</td><td class="x">No</td><td class="us check">Yes (lobster box)</td></tr>
+        <tr><td class="label-cell">Subscription</td><td>yearly retainer</td><td>monthly salary</td><td>per-token</td><td class="us check">None — single $999</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="a-roster">
+    <div class="a-roster-head">
+      <h2>The 11.</h2>
+      <span>HORIZONTAL ROSTER · ELEVEN SPECIALISTS</span>
+    </div>
+    <div class="a-roster-strip">
+      <div class="a-roster-cell"><div><div class="num">01</div><div class="ch">X 增长</div><div class="ships">30 ICP-aligned posts/mo</div></div><div class="link">Meet →</div></div>
+      <div class="a-roster-cell"><div><div class="num">02</div><div class="ch">Reddit</div><div class="ships">8 community threads + 4 AMA-style/mo</div></div><div class="link">Meet →</div></div>
+      <div class="a-roster-cell"><div><div class="num">03</div><div class="ch">SEO</div><div class="ships">12 ranked articles + 80 backlinks/mo</div></div><div class="link">Meet →</div></div>
+      <div class="a-roster-cell"><div><div class="num">04</div><div class="ch">GEO</div><div class="ships">AI-search citation pages weekly</div></div><div class="link">Meet →</div></div>
+      <div class="a-roster-cell"><div><div class="num">05</div><div class="ch">TikTok</div><div class="ships">15 short-form videos/mo</div></div><div class="link">Meet →</div></div>
+      <div class="a-roster-cell"><div><div class="num">06</div><div class="ch">KOC</div><div class="ships">20 micro-creator partnerships/mo</div></div><div class="link">Meet →</div></div>
+      <div class="a-roster-cell"><div><div class="num">07</div><div class="ch">KOL</div><div class="ships">4 tier-1 creator deals/qtr</div></div><div class="link">Meet →</div></div>
+      <div class="a-roster-cell"><div><div class="num">08</div><div class="ch">MCP</div><div class="ships">listing in Claude/Cursor/OpenAI tool catalogs</div></div><div class="link">Meet →</div></div>
+      <div class="a-roster-cell"><div><div class="num">09</div><div class="ch">Ads</div><div class="ships">launched + optimised campaigns weekly</div></div><div class="link">Meet →</div></div>
+      <div class="a-roster-cell"><div><div class="num">10</div><div class="ch">Owned</div><div class="ships">8 owned-channels self-publishing</div></div><div class="link">Meet →</div></div>
+      <div class="a-roster-cell"><div><div class="num">11</div><div class="ch">EDM</div><div class="ships">weekly newsletters + 4 sequences/qtr</div></div><div class="link">Meet →</div></div>
+    </div>
+  </section>
+
+  <section class="a-hw">
+    <div class="label">ONE MORE THING</div>
+    <h2>Ship the box. Hire the team.</h2>
+    <div class="box-mock"></div>
+    <div class="price">$999</div>
+    <div class="price-sub">ONE-TIME · FIRST YEAR INCLUDED · NO SUBSCRIPTION</div>
+    <button>RESERVE YOURS — $99 DEPOSIT →</button>
+  </section>
+</div>
+
+<!-- ============================================================
+     ==== CARD B — APPLE ONE MORE THING ====
+     ============================================================ -->
+<div class="gacha-card">
+  <div class="gacha-label">
+    <span>CARD B · APPLE ONE MORE THING · PRODUCT-FIRST</span>
+    <span class="right">CINEMATIC / HARDWARE HERO / SOFT GLOW</span>
+  </div>
+
+  <div class="b-chrome">
+    <span class="mark">11<span class="dot">.</span>agents<span class="tld">.ai</span></span>
+    <span class="nav">
+      <a>The Box</a><a>The 11</a><a>Specs</a><a>Pre-order</a>
+    </span>
+    <span class="buy">Buy — $999</span>
+  </div>
+
+  <section class="b-hero">
+    <div class="eyebrow">★ INTRODUCING · NOW SHIPPING Q3 2026</div>
+    <h1>11agents.</h1>
+    <h2>让天下没有难做的 <span class="gtm">GTM</span>. Plug in. Hire 11. Ship growth.</h2>
+    <div class="b-box-hero"></div>
+    <div class="b-cta-stack">
+      <div class="b-price">$999</div>
+      <div class="b-price-sub">FIRST YEAR · 11 AGENTS · INCLUDED</div>
+      <button class="b-buy">Pre-order — $99 deposit</button>
+      <span class="b-learn">SHIPS Q3 2026 · 30-DAY REFUND</span>
+    </div>
+  </section>
+
+  <section class="b-tagline">
+    <h2>One <span class="red">box</span>.<br>Eleven <span class="red">specialists</span>.<br>Every channel <span class="red">that matters.</span></h2>
+    <p>999 美金 = 一支 11 人的专业 GTM 团队，雇佣一年。</p>
+  </section>
+
+  <section class="b-inside">
+    <div class="b-inside-head">
+      <div class="label">WHAT'S INSIDE</div>
+      <h2>Meet the team you just hired.</h2>
+    </div>
+    <div class="b-grid">
+      <div class="b-agent"><div class="num">/ 01</div><div class="ch">X Agent</div><div class="ships">Drafts, ships, and threads 30 ICP-aligned posts per month — Reviewer locked.</div><div class="arrow">MEET →</div></div>
+      <div class="b-agent"><div class="num">/ 02</div><div class="ch">Reddit Agent</div><div class="ships">Picks the subs, drafts the threads, sets the cadence. Eight per month.</div><div class="arrow">MEET →</div></div>
+      <div class="b-agent"><div class="num">/ 03</div><div class="ch">SEO Agent</div><div class="ships">Twelve articles a month — keyword-mapped, internal-linked, ranked.</div><div class="arrow">MEET →</div></div>
+      <div class="b-agent"><div class="num">/ 04</div><div class="ch">GEO Agent</div><div class="ships">Generative-engine optimisation — Perplexity, ChatGPT search, Claude search.</div><div class="arrow">MEET →</div></div>
+      <div class="b-agent"><div class="num">/ 05</div><div class="ch">TikTok Agent</div><div class="ships">Fifteen short-form videos a month — script, b-roll prompt, edit, post.</div><div class="arrow">MEET →</div></div>
+      <div class="b-agent"><div class="num">/ 06</div><div class="ch">KOC Agent</div><div class="ships">Twenty micro-creator partnerships sourced + briefed per month.</div><div class="arrow">MEET →</div></div>
+      <div class="b-agent"><div class="num">/ 07</div><div class="ch">KOL Agent</div><div class="ships">Four tier-1 creator deals per quarter — outreach to brief to brief to invoice.</div><div class="arrow">MEET →</div></div>
+      <div class="b-agent"><div class="num">/ 08</div><div class="ch">MCP Agent</div><div class="ships">Lists your product in Claude, Cursor, OpenAI, and emerging tool catalogs.</div><div class="arrow">MEET →</div></div>
+      <div class="b-agent"><div class="num">/ 09</div><div class="ch">Ads Agent</div><div class="ships">Campaigns launched and optimised weekly — Google, Meta, X, Reddit.</div><div class="arrow">MEET →</div></div>
+      <div class="b-agent"><div class="num">/ 10</div><div class="ch">Owned-Channels</div><div class="ships">公众号 / 视频号 / Douyin / 小红书 / LinkedIn / Notes / Qiita / dev.to — 8 owned posts/wk.</div><div class="arrow">MEET →</div></div>
+      <div class="b-agent"><div class="num">/ 11</div><div class="ch">EDM Agent</div><div class="ships">Weekly newsletter + 4 lifecycle sequences per quarter.</div><div class="arrow">MEET →</div></div>
+      <div class="b-agent" style="background: rgba(204,51,51,0.06); border-color: var(--red);"><div class="num red">+ MORE</div><div class="ch">Open platform</div><div class="ships">2027 — bring your own growth hack. Channel SDK opens. Join the builders waitlist.</div><div class="arrow">JOIN →</div></div>
+    </div>
+  </section>
+
+  <section class="b-specs">
+    <h2>What you get for $999.</h2>
+    <div class="b-spec-grid">
+      <div class="b-spec-card"><div class="val">11</div><div class="label">specialised AI agents</div></div>
+      <div class="b-spec-card"><div class="val">33</div><div class="label">iron triangle roles</div></div>
+      <div class="b-spec-card"><div class="val">365</div><div class="label">days of shipping GTM</div></div>
+      <div class="b-spec-card"><div class="val">1</div><div class="label">lobster box on your desk</div></div>
+    </div>
+  </section>
+</div>
+
+<!-- ============================================================
+     ==== CARD C — MANIFESTO ====
+     ============================================================ -->
+<div class="gacha-card">
+  <div class="gacha-label">
+    <span>CARD C · MANIFESTO · TYPOGRAPHIC</span>
+    <span class="right">EDITORIAL / FOUNDER-VOICE / TERMINAL HEAVY</span>
+  </div>
+
+  <div class="c-chrome">
+    <span class="term">whoami</span>
+    <span>11.agents.ai · v1 · build 2026.05.27 · pre-order open</span>
+    <span class="term">hire --eleven</span>
+  </div>
+
+  <section class="c-manifesto">
+    <span class="c-manifesto-eyebrow">/ MANIFESTO / 2026 /</span>
+    <div class="c-manifesto-text">
+      GTM was always the bottleneck.<br>
+      Not the product. Not the funding. <span class="strike">Not even the founder.</span><br><br>
+      Eleven <strong>specialised</strong> agents, each held in an Iron Triangle,<br>
+      take over the channels you never had time to run.<br><br>
+      <em>You ship the product.</em><br>
+      <strong>We sell it.</strong>
+    </div>
+    <div class="c-manifesto-cn">让天下没有难做的 <span class="gtm">GTM</span>。</div>
+    <button class="c-manifesto-cta">engage 11-agent team — $999/yr</button>
+  </section>
+
+  <section class="c-numbers">
+    <div class="c-numbers-head">/ BY THE NUMBERS / 2026.05.27 /</div>
+    <div class="c-num-grid">
+      <div class="c-num">
+        <div class="big">11</div>
+        <div class="cap">SPECIALISED AGENTS<br>One swarm per business.</div>
+      </div>
+      <div class="c-num">
+        <div class="big">33</div>
+        <div class="cap">IRON TRIANGLE ROLES<br>Builder × Reviewer × Cron, 11 times.</div>
+      </div>
+      <div class="c-num">
+        <div class="big">6 / <span class="red">11</span></div>
+        <div class="cap">LIVE TODAY<br>Five more pending. All ship by Q4.</div>
+      </div>
+      <div class="c-num">
+        <div class="big">$<span class="red">999</span></div>
+        <div class="cap">ONE-TIME · FIRST YEAR<br>No subscription. No surprises.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="c-dir">
+    <div class="c-dir-head">$ ls -la /agents/<span class="red"> &nbsp;·&nbsp; THE 11</span></div>
+    <div class="c-dir-row"><span class="id">01</span><span class="codename">X-AGENT</span><span class="ships">drafts and ships 30 ICP-aligned posts/mo · Reviewer locked</span><span class="status">DEPLOYED</span></div>
+    <div class="c-dir-row"><span class="id">02</span><span class="codename">REDDIT-AGENT</span><span class="ships">8 community threads + 4 AMA-style per month</span><span class="status">DEPLOYED</span></div>
+    <div class="c-dir-row"><span class="id">03</span><span class="codename">SEO-AGENT</span><span class="ships">12 articles + internal linking + 80 backlinks/mo</span><span class="status">DEPLOYED</span></div>
+    <div class="c-dir-row"><span class="id">04</span><span class="codename">GEO-AGENT</span><span class="ships">generative-engine citation pages — Perplexity/ChatGPT/Claude search</span><span class="status pending">PENDING Q3</span></div>
+    <div class="c-dir-row"><span class="id">05</span><span class="codename">TIKTOK-AGENT</span><span class="ships">15 short-form videos per month — script→edit→post</span><span class="status">DEPLOYED</span></div>
+    <div class="c-dir-row"><span class="id">06</span><span class="codename">KOC-AGENT</span><span class="ships">20 micro-creator partnerships sourced and briefed/mo</span><span class="status">DEPLOYED</span></div>
+    <div class="c-dir-row"><span class="id">07</span><span class="codename">KOL-AGENT</span><span class="ships">4 tier-1 creator deals per quarter</span><span class="status">DEPLOYED</span></div>
+    <div class="c-dir-row"><span class="id">08</span><span class="codename">MCP-AGENT</span><span class="ships">product listed in Claude / Cursor / OpenAI tool catalogs</span><span class="status pending">PENDING Q3</span></div>
+    <div class="c-dir-row"><span class="id">09</span><span class="codename">ADS-AGENT</span><span class="ships">weekly launched + optimised campaigns — G / Meta / X / Reddit</span><span class="status pending">PENDING Q3</span></div>
+    <div class="c-dir-row"><span class="id">10</span><span class="codename">OWNED-CHANNELS</span><span class="ships">公众号 / 视频号 / Douyin / 小红书 / LinkedIn / Notes / Qiita / dev.to</span><span class="status pending">PENDING Q4</span></div>
+    <div class="c-dir-row"><span class="id">11</span><span class="codename">EDM-AGENT</span><span class="ships">weekly newsletter + 4 lifecycle sequences/qtr</span><span class="status pending">PENDING Q4</span></div>
+  </section>
+
+  <section class="c-hw">
+    <div class="footnote-top">/ ONE MORE THING /</div>
+    <div class="box-mono"></div>
+    <div class="caption">A device on your desk.<br>An <span class="gtm">11-person GTM team</span> in the cloud.</div>
+    <div class="stat">$<span class="red">999</span> · ONE-TIME · FIRST YEAR INCLUDED · 30-DAY REFUND</div>
+    <button class="engage">reserve — $99 deposit</button>
+  </section>
+</div>
+
+<!-- ============================================================
+     ==== PICK ====
+     ============================================================ -->
+<div class="pick">
+  <div class="label">/ PICK A CARD /</div>
+  <div class="opts">
+    <strong>A</strong> Viktor Hijack &nbsp;·&nbsp; dense ops, comparison table front-and-centre<br>
+    <strong>B</strong> Apple One More Thing &nbsp;·&nbsp; product photography hero, cinematic glow<br>
+    <strong>C</strong> Manifesto &nbsp;·&nbsp; typographic, founder-voice, terminal aesthetic<br><br>
+    tell Hunter the letter &nbsp;·&nbsp; we'll build that one for real
+  </div>
+</div>
+
+</body>
+</html>

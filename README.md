@@ -2,38 +2,68 @@
 
 > No business should struggle with GTM.
 
-Single-page marketing site + admin dashboard for **11agents.ai** — a swarm of eleven specialised AI growth agents (+ 1 customer support agent), launching on Kickstarter Q3 2026 with hardware.
+**Live marketing:** https://11agents.ai
+**Live platform:** https://gtm-swarm-production-b9ff.up.railway.app/
 
-**Live:** https://11agents.ai
+This repo is a monorepo containing both the public marketing site and the GTM Swarm platform.
 
-## Stack
-
-- Single static `index.html` (no framework, no build step) — value-first hero, 4-language i18n switcher (EN / 中 / 日 / DE), inline CSS, vanilla JS for language toggle.
-- `hero-video.mp4` — generated via ByteDance Seedance Pro on Replicate, image-to-video from `hero-hardware.png`.
-- `hero-hardware.png` — product render generated via Flux Schnell on Replicate.
-- `api/*.js` — Vercel Node serverless functions for signup capture and admin auth/CRUD.
-- `login.html` + `dashboard.html` — admin auth + product CRUD UI.
+## Layout
 
 ```
 .
-├── index.html              # main landing page (10 sections, 4 langs, i18n via data-i18n)
-├── login.html              # admin sign-in form
-├── dashboard.html          # product list + add form
-├── hero-hardware.png       # device render
-├── hero-video.mp4          # 5s Seedance teaser
-├── vercel.json             # cleanUrls + security headers
-├── api/
-│   ├── signup.js           # POST /api/signup — Kickstarter early-bird capture
-│   ├── login.js            # POST /api/login — sets HttpOnly session cookie
-│   ├── logout.js           # GET  /api/logout — clears session
-│   ├── me.js               # GET  /api/me     — returns { email } if authed
-│   └── products.js         # GET/POST/DELETE /api/products — admin CRUD
-└── lib/
-    ├── auth.js             # HMAC-SHA256 cookie session (no JWT lib)
-    └── store.js            # in-memory product store (cold-start resets — v2: Vercel KV / Postgres)
+├── index.html            # ← marketing landing page (10 sections, 4 langs)
+├── login.html            # admin sign-in form (marketing-side)
+├── dashboard.html        # product list + add form (marketing-side)
+├── hero-hardware.png     # device render (Flux Schnell)
+├── hero-video.mp4        # 5s Seedance Pro teaser
+├── api/                  # marketing Vercel serverless funcs
+│   ├── signup.js         # POST /api/signup
+│   ├── login.js          # POST /api/login (HMAC cookie session)
+│   ├── logout.js         # GET  /api/logout
+│   ├── me.js             # GET  /api/me
+│   └── products.js       # GET/POST/DELETE /api/products
+├── lib/
+│   ├── auth.js           # HMAC-SHA256 cookie session, no JWT lib
+│   └── store.js          # in-memory product store (v2: KV/Postgres)
+├── vercel.json
+├── .vercelignore         # keeps Vercel from bundling platform/
+│
+└── platform/             # ← GTM Swarm Next.js 15 app
+    ├── app/              # App Router routes (page.tsx, dashboard, onboard, pool, wizard, api)
+    ├── lib/              # gtm-swarm db / agents / multica / iron-triangle logic
+    ├── migrations/       # Postgres schema migrations
+    ├── docs/             # ROSTER.md, brand decks, replan deck, etc.
+    ├── Dockerfile        # Railway build
+    ├── railway.json      # Railway service config
+    ├── package.json      # next 15, react 19, supabase, pg, anthropic-sdk
+    ├── CLAUDE.md         # platform-side dev guide
+    ├── DESIGN.md         # internal design system
+    ├── PRINCIPLES.md
+    └── ROSTER.md         # 11 Iron Triangle agent definitions
 ```
 
-## Local dev
+## Two surfaces, two deployments
+
+| Surface     | Source                  | Where it deploys                                        | Stack                        |
+|-------------|-------------------------|---------------------------------------------------------|------------------------------|
+| Marketing   | Repo root (`/`)         | Vercel project `solvea1/11agents-ai` → `11agents.ai`    | static HTML + Vercel funcs   |
+| Platform    | `platform/` subdir      | Railway → `gtm-swarm-production-b9ff.up.railway.app`    | Next.js 15 + Postgres + Anthropic |
+
+`.vercelignore` keeps Vercel from bundling `platform/`. Railway is configured to build from the `platform/` subdir (see Railway service settings).
+
+## Roadmap — structural merge (next iteration)
+
+The current monorepo keeps the two surfaces independent. Next iteration folds them into a single Next.js app:
+
+- Move `index.html` content into `platform/app/(marketing)/page.tsx`
+- Move the existing platform project grid from `platform/app/page.tsx` → `platform/app/admin/page.tsx`
+- Port marketing API routes to Next.js Route Handlers under `platform/app/api/`
+- Single Railway deployment serves both marketing and platform
+- Eventually: PR the merged repo to canonical `SolveaCX/gtm-swarm`
+
+---
+
+## Marketing — local dev
 
 Static HTML opens directly:
 
@@ -41,46 +71,52 @@ Static HTML opens directly:
 open index.html
 ```
 
-API functions are Vercel-only (Node serverless). Run via Vercel dev:
+API functions are Vercel-only (Node serverless). Run via:
 
 ```sh
 vercel dev --scope solvea1
 ```
 
-## Deploy
-
-Production deploys to Vercel project `solvea1/11agents-ai`, custom domain `11agents.ai`.
+## Marketing — deploy
 
 ```sh
 vercel --prod --yes --scope solvea1
 ```
 
-## Environment variables (Vercel project)
+## Marketing — environment variables (Vercel project)
 
-| name              | purpose                                |
-|-------------------|----------------------------------------|
-| `SESSION_SECRET`  | HMAC secret for signed session cookies |
-| `ADMIN_EMAIL`     | the single admin login email           |
-| `ADMIN_PASSWORD`  | the single admin login password        |
-| `SIGNUP_WEBHOOK_URL` | (optional) Slack/Discord/ntfy webhook to fan out new signups |
+| name                | purpose                                          |
+|---------------------|--------------------------------------------------|
+| `SESSION_SECRET`    | HMAC secret for signed session cookies           |
+| `ADMIN_EMAIL`       | the single admin login email                     |
+| `ADMIN_PASSWORD`    | the single admin login password                  |
+| `SIGNUP_WEBHOOK_URL`| (optional) Slack/Discord/ntfy webhook for signups|
 
-## Admin
+## Marketing — admin
 
 - `/login` — sign in with `ADMIN_EMAIL` + `ADMIN_PASSWORD`
 - `/dashboard` — list + add + delete products
 - Session: HttpOnly `__11a_session` cookie, HMAC-SHA256 signed, 7-day TTL
 
-## DNS
+## Marketing — DNS
 
 `11agents.ai` is on Cloudflare (separate account from `flatkey.ai`). The dedicated zone API token lives at `~/.flatkey/cloudflare.env` as `CF_11AGENTS_TOKEN` (zone id `CF_11AGENTS_ZONE_ID`). Records:
 
-- `A     11agents.ai     → 76.76.21.21`                  (Vercel apex, Proxy OFF)
-- `CNAME www             → cname.vercel-dns.com`         (Vercel www, Proxy OFF)
+- `A     11agents.ai     → 76.76.21.21`                (Vercel apex, Proxy OFF)
+- `CNAME www             → cname.vercel-dns.com`       (Vercel www, Proxy OFF)
 
-## Roadmap
+---
 
-- [ ] v2: persistent product store (Vercel KV or Postgres)
-- [ ] Kickstarter campaign live (Q3 2026)
-- [ ] Per-agent detail pages (`/agents/[slug]`)
-- [ ] Stripe pre-order checkout (currently waitlist only)
-- [ ] Open Platform channel SDK (2027)
+## Platform — local dev
+
+```sh
+cd platform
+npm install
+npm run dev      # starts Next.js on http://localhost:8082
+```
+
+## Platform — deploy
+
+Railway pulls from the `platform/` subdir, builds via `Dockerfile`, runs `npm start`.
+
+See `platform/CLAUDE.md` and `platform/docs/` for the full GTM Swarm dev guide, agent roster, Iron Triangle doctrine, and database setup.

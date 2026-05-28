@@ -1,0 +1,57 @@
+id: 06-reddit
+name: Reddit Agent
+category: distribution
+platform: Reddit
+builder: Wayne
+reviewer: Ivy Chen
+goal: >-
+  Build Flatkey's organic reputation in the subreddits where platform engineers
+  and AI-native startup builders research tools, troubleshoot incidents, and
+  make peer recommendations — through genuine participation, not promotion.
+default_product: voc-ai
+kpi:
+  weekly_target: >-
+    10 substantive comments per week across r/LocalLLaMA, r/LangChain,
+    r/MachineLearning, r/devops, r/selfhosted; 2 original posts per month; 5
+    qualified trial signups per week attributable to Reddit referral (UTM
+    tracked)
+  measure: >-
+    Reddit analytics for post/comment karma and click-through; UTM-tagged links
+    in posts track sessions and signups; keyword alert monitoring for 'openai
+    key', 'litellm', 'api key management', 'llm cost' to surface response
+    opportunities within 2 hours
+schedule: 'cron: 0 11 * * 1-5'
+budget_monthly_usd: 0
+status: pilot
+reuse: []
+notes: >-
+  Pilot agent — runs the full Iron Triangle loop end-to-end first. Pattern from
+  here replicates to other distribution agents.
+activate: true
+topics:
+  - >-
+    Active response territory in r/LocalLLaMA and r/LangChain: answer every
+    thread about LiteLLM setup difficulties, OpenRouter limitations, API key
+    sharing problems, and unexpected LLM billing — with technically specific
+    answers that don't require Flatkey to be useful, but mention Flatkey where
+    it's genuinely the right solution
+  - >-
+    Original post territory in r/devops and r/selfhosted: 'We wrote up the full
+    anatomy of an LLM API key leak — curious how others have handled this' style
+    posts that link to the blog incident post and invite genuine community
+    discussion
+  - >-
+    Resource sharing in r/MachineLearning and r/LangChain: post the API Key
+    Security Audit Checklist as a free community resource (not a product pitch)
+    after it's been live for 2 weeks and has backlink value established
+  - >-
+    Comparative discussion participation: when threads appear asking 'LiteLLM vs
+    Portkey vs [anything]', contribute a technically grounded perspective that
+    includes Flatkey in the comparison without making it the point of the
+    comment
+  - >-
+    Incident response threads: monitor r/OpenAI for threads about API key leaks
+    and billing spikes; respond with genuine incident response guidance (rotate
+    immediately, check these places, here's the timeline of risk) before
+    mentioning Flatkey as a prevention tool
+contentos_hydrated_at: '2026-05-11T21:44:14.144Z'

@@ -1,0 +1,50 @@
+id: 04-backlink
+name: Backlink Agent
+category: content
+platform: Official Website
+builder: ''
+reviewer: 彭静
+goal: >-
+  Systematically build Flatkey's domain authority and referral traffic through
+  placements in developer-ecosystem directories, OSS lists, newsletter mentions,
+  and competitor documentation where engineers naturally discover tools.
+default_product: voc-ai
+kpi:
+  weekly_target: >-
+    8 new referring domains per month; 3 high-authority (DA 60+)
+    developer-ecosystem backlinks per month; 2 directory submissions or outreach
+    emails per week
+  measure: >-
+    Ahrefs referring domain count tracked monthly; new DA60+ links tracked in a
+    backlink acquisition log; referral sessions from each new domain tracked in
+    analytics
+schedule: TBD
+budget_monthly_usd: 0
+status: blocked
+blocked_reason: 'Builder missing (Principle 3: No Triangle = No Agent)'
+reuse: []
+activate: true
+topics:
+  - >-
+    Developer tool directory submissions: There's An AI For That, Futurepedia,
+    Toolify, AI Tools Directory — list Flatkey under 'AI API management', 'LLM
+    infrastructure', 'developer security tools' categories
+  - >-
+    OSS ecosystem list submissions: Awesome-LLM-Ops, Awesome-LLM-Resources,
+    Awesome-Selfhosted GitHub lists — if Flatkey has any OSS components, submit
+    for inclusion; if not, submit the free checklist resource as a community
+    contribution
+  - >-
+    Competitor documentation outreach: LiteLLM docs 'alternatives' section,
+    Portkey docs 'alternatives' section, Helicone docs — submit Flatkey for
+    inclusion in competitor-maintained comparison pages (this earns
+    high-authority links and appears in evaluation-stage searches)
+  - >-
+    Developer newsletter 'tool of the week' pitches: Pragmatic Engineer,
+    Bytes.dev, TLDR Tech, Changelog Weekly, Console.dev — pitch the incident
+    anatomy blog post as a featured article, not a product ad
+  - >-
+    Community resource pages: r/LocalLLaMA wiki, r/LangChain resources sidebar,
+    LangChain documentation 'ecosystem tools' page — submit the API Key Security
+    Audit Checklist as a community resource
+contentos_hydrated_at: '2026-05-11T21:44:14.143Z'

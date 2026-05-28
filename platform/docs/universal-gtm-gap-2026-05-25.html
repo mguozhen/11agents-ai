@@ -1,0 +1,545 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Universal GTM Swarm · 从「现 swarm」到「无论卖什么都能卖出去」</title>
+<style>
+:root{
+  --ink:#1a2620; --mut:#5c6b62; --faint:#8a978d;
+  --green:#2f6b3f; --green-soft:#e8f1ea; --green-line:#bcd6c3;
+  --paper:#fbfcfb; --card:#ffffff; --line:#e2e7e3;
+  --red:#b4452f; --red-soft:#faf3f1; --red-line:#e8cfc7;
+  --amber:#b67d1e; --amber-soft:#fdf7e9; --amber-line:#ecd9a8;
+  --blue:#2d5b8f; --blue-soft:#e9eff7; --blue-line:#bccde0;
+  --pink:#c43d6e;
+  --mono:'SF Mono',ui-monospace,Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--paper);color:var(--ink);
+  font-family:-apple-system,'Helvetica Neue',Arial,'PingFang SC','Hiragino Sans GB',sans-serif;
+  line-height:1.62;-webkit-font-smoothing:antialiased;padding:0 0 90px}
+.wrap{max-width:1040px;margin:0 auto;padding:0 28px}
+code,.m{font-family:var(--mono);font-size:.86em}
+code{background:var(--green-soft);color:var(--green);padding:.1em .4em;border-radius:4px}
+
+/* Quote block */
+.principle{background:var(--ink);color:#fff;border-radius:14px;padding:34px 36px;margin:32px 0 0;
+  position:relative}
+.principle::before{content:"P04";position:absolute;top:-14px;left:30px;background:var(--pink);
+  color:#fff;font-family:var(--mono);font-size:13px;font-weight:800;padding:5px 12px;
+  border-radius:6px;letter-spacing:.05em}
+.principle blockquote{font-family:'Iowan Old Style',Georgia,'Songti SC',serif;font-size:24px;
+  line-height:1.45;color:#fff;font-style:italic;margin:6px 0 12px;letter-spacing:-.01em}
+.principle blockquote b{color:#f6d36a;font-style:normal}
+.principle cite{font-family:var(--mono);font-size:12px;color:#9aa49e;text-transform:uppercase;
+  letter-spacing:.1em;font-style:normal}
+
+header{padding:50px 0 32px;border-bottom:3px solid var(--ink)}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--pink);font-weight:700}
+h1{font-size:46px;line-height:1.12;margin:14px 0 12px;letter-spacing:-.02em;font-weight:800}
+h1 em{font-style:normal;color:var(--pink)}
+.thesis{font-size:18px;color:var(--mut);max-width:830px}
+.thesis b{color:var(--ink)}
+.meta-row{font-family:var(--mono);font-size:12.5px;color:var(--faint);
+  padding-top:14px;border-top:1px dashed var(--line);margin-top:18px}
+.meta-row span{margin-right:22px} .meta-row b{color:var(--ink)}
+
+section{padding:46px 0;border-bottom:1px solid var(--line)}
+.snum{font-family:var(--mono);font-size:11.5px;color:var(--faint);letter-spacing:.1em}
+h2{font-size:28px;margin:6px 0 14px;letter-spacing:-.01em;font-weight:800}
+h2 em{font-style:normal;color:var(--pink)}
+h3{font-size:18px;margin:18px 0 8px;font-weight:800}
+
+/* Reality gap */
+.gap-vs{display:grid;grid-template-columns:1fr 80px 1fr;gap:14px;margin:24px 0;align-items:stretch}
+.box{border:1px solid var(--line);border-radius:12px;background:var(--card);padding:22px 24px}
+.box.principle-bx{background:var(--green-soft);border-color:var(--green-line)}
+.box.reality-bx{background:var(--red-soft);border-color:var(--red-line)}
+.box h4{font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;
+  margin:0 0 12px;font-weight:700}
+.box.principle-bx h4{color:var(--green)} .box.reality-bx h4{color:var(--red)}
+.box ul{list-style:none;padding:0;margin:0}
+.box li{padding:6px 0;font-size:14px;border-top:1px dashed rgba(0,0,0,.08)}
+.box li:first-child{border-top:0}
+.gap-vs .arr{display:flex;align-items:center;justify-content:center;font-family:var(--mono);
+  font-size:20px;color:var(--faint);font-weight:800}
+
+/* Invariants */
+.invariants{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:24px 0 18px}
+.inv{border:1px solid var(--line);border-radius:10px;background:var(--card);padding:18px 16px;
+  display:flex;flex-direction:column;text-align:center}
+.inv .n{font-family:var(--mono);font-size:11px;color:var(--faint);letter-spacing:.1em}
+.inv .h{font-size:14.5px;font-weight:800;margin:8px 0 6px;line-height:1.3}
+.inv .s{font-size:12px;color:var(--mut);margin-bottom:12px;line-height:1.45}
+.inv .st{margin-top:auto;font-family:var(--mono);font-size:11px;font-weight:800;
+  padding:5px 10px;border-radius:999px;align-self:center}
+.inv .st.ok{background:var(--green-soft);color:var(--green);border:1px solid var(--green-line)}
+.inv .st.warn{background:var(--amber-soft);color:var(--amber);border:1px solid var(--amber-line)}
+.inv .st.bad{background:var(--red-soft);color:var(--red);border:1px solid var(--red-line)}
+
+/* Per-invariant detail block */
+.inv-detail{margin:24px 0;border:1px solid var(--line);border-radius:12px;background:var(--card);
+  padding:24px 28px}
+.inv-detail .head{display:flex;align-items:baseline;gap:14px;margin-bottom:12px}
+.inv-detail .head .tag{font-family:var(--mono);font-size:11.5px;letter-spacing:.08em;
+  background:var(--ink);color:#fff;padding:3px 9px;border-radius:5px;text-transform:uppercase;font-weight:700}
+.inv-detail h3{font-size:22px;margin:0;font-weight:800}
+.inv-detail .qsub{font-size:13.5px;color:var(--mut);font-style:italic;margin-bottom:18px;
+  padding-bottom:14px;border-bottom:1px dashed var(--line)}
+.inv-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px}
+.inv-col h5{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--faint);margin:0 0 8px;font-weight:700}
+.inv-col .body{font-size:14px;color:var(--mut);line-height:1.55}
+.inv-col .body b{color:var(--ink)}
+.inv-col.now h5{color:var(--red)}
+.inv-col.target h5{color:var(--green)}
+.inv-col.build h5{color:var(--blue)}
+
+/* Litmus */
+.litmus{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin:22px 0}
+.lit{border:1px solid var(--line);border-radius:12px;background:var(--card);padding:22px;display:flex;flex-direction:column}
+.lit .who{font-family:var(--mono);font-size:11.5px;letter-spacing:.08em;color:var(--faint);text-transform:uppercase}
+.lit h4{font-size:17px;margin:6px 0 8px;font-weight:800}
+.lit .desc{font-size:13.5px;color:var(--mut);line-height:1.5;margin-bottom:14px}
+.lit ul{list-style:none;padding:0;margin:0}
+.lit li{padding:6px 0;font-size:13px;border-top:1px dashed var(--line);color:var(--mut)}
+.lit li:first-child{border-top:0}
+.lit li b{color:var(--ink);font-family:var(--mono);font-size:.9em}
+.lit .pass{margin-top:auto;padding-top:14px;border-top:2px solid var(--ink);font-family:var(--mono);
+  font-size:12px;color:var(--ink)}
+.lit .pass b{color:var(--green)}
+
+/* Roadmap timeline */
+.roadmap{margin:22px 0;border-left:2px solid var(--ink);padding-left:22px;position:relative}
+.rm{position:relative;padding:10px 0 16px}
+.rm::before{content:"";position:absolute;left:-29px;top:14px;width:12px;height:12px;
+  border-radius:50%;background:#fff;border:2px solid var(--ink)}
+.rm.now::before{background:var(--green);border-color:var(--green)}
+.rm .when{font-family:var(--mono);font-size:11.5px;color:var(--faint);text-transform:uppercase;letter-spacing:.05em}
+.rm b{font-size:15px;display:block;margin:3px 0}
+.rm .what{font-size:13.5px;color:var(--mut)}
+.rm .ships{margin-top:6px;font-family:var(--mono);font-size:11.5px}
+.rm .ships .pill{display:inline-block;padding:2px 8px;border-radius:999px;margin:2px 4px 2px 0;
+  font-size:10.5px;border:1px solid var(--line);background:#fafbfa;color:var(--ink);font-weight:600}
+
+/* First moves */
+.moves{background:var(--ink);color:#fff;padding:32px 32px;border-radius:14px;margin:22px 0}
+.moves h3{color:#fff;font-size:18px;margin:0 0 16px;font-family:var(--mono);
+  text-transform:uppercase;letter-spacing:.08em}
+.moves ol{margin:0;padding-left:24px}
+.moves li{padding:9px 0;font-size:15px}
+.moves li b{color:#f6d36a}
+.moves li code{background:#2e3934;color:#cfd6d2}
+.moves .meta{font-family:var(--mono);font-size:12px;color:#9aa49e;
+  margin-top:18px;border-top:1px solid #2e3934;padding-top:12px}
+
+footer{font-family:var(--mono);font-size:12px;color:var(--faint);padding:40px 0 0;text-align:center}
+</style>
+</head>
+<body>
+
+<header class="wrap">
+  <div class="eyebrow">Strategic Vision · 2026-05-25</div>
+  <h1>Universal GTM Swarm ——<br>从「现 swarm」到 <em>无论卖什么都能卖出去</em></h1>
+  <p class="thesis">
+    Goal:<b>build 一个无论卖什么,都能卖的出去的 GTM Swarm</b>。
+    好消息 —— 这不是新方向,<b>Principle 04 早就这么写了</b>。
+    坏消息 —— 平台<b>有 4 处没兑现这条原则</b>。
+    这份 deck 框定 5 项 invariant、定位缺口、给出 90 天 build 路径,以及现在就能开干的 3 个 first move。
+  </p>
+  <div class="principle">
+    <blockquote>
+      What You Sell Doesn't Matter. Traffic + Revenue Is the Only Goal.<br>
+      <b>The swarm adapts to whatever you need to sell.</b>
+    </blockquote>
+    <cite>PRINCIPLES.md · Principle 04 · Solvea Founder Mix Party 沿用</cite>
+  </div>
+  <div class="meta-row" style="margin-top:24px">
+    <span>Repo: <b>SolveaCX/gtm-swarm</b></span>
+    <span>Current scope: <b>6 products / 11 fixed agents</b></span>
+    <span>Universal target: <b>∞ products / N pluggable channels / 闭环可度量</b></span>
+  </div>
+</header>
+
+<!-- ============== §01 原则 vs 现实 ============== -->
+<section class="wrap">
+  <div class="snum">§ 01 · PRINCIPLE vs REALITY</div>
+  <h2>原则 vs 实装 —— <em>差在哪</em></h2>
+
+  <div class="gap-vs">
+    <div class="box principle-bx">
+      <h4>P04 说</h4>
+      <ul>
+        <li>卖什么都行 —— swarm 是 capability,不绑特定产品</li>
+        <li>traffic + revenue 是唯一 KPI</li>
+        <li>渠道随产品需要而变,不是固定的</li>
+        <li>swarm <b>adapts</b> to whatever you need to sell</li>
+      </ul>
+    </div>
+    <div class="arr">→ vs →</div>
+    <div class="box reality-bx">
+      <h4>2026-05-25 实际</h4>
+      <ul>
+        <li><b>11 个 agent 写死</b>在 <code>04-content-strategy.md</code> 的 hydration YAML schema</li>
+        <li><b>0 处</b>涉及 <code>conversion / utm / revenue</code>(grep 实证)</li>
+        <li><code>engines/&lt;slug&gt;/</code> 是手写 audience/voice/platforms,新产品要手动建 30+ 文件</li>
+        <li>Iron Triangle Reviewer 是<b>每产品每 agent 一个真人</b> → 不 scale</li>
+      </ul>
+    </div>
+  </div>
+
+  <p style="font-size:15px;color:var(--mut);max-width:830px;margin-top:14px">
+    原则在墙上,执行没跟上。<b>差距不是原则要改,是平台要补</b>。把这 4 处补上,就兑现了 P04 的承诺。
+  </p>
+</section>
+
+<!-- ============== §02 5 个 invariant ============== -->
+<section class="wrap">
+  <div class="snum">§ 02 · THE 5 INVARIANTS</div>
+  <h2>「无论卖什么都能卖出去」拆成 <em>5 项不变量</em></h2>
+
+  <p style="font-size:15.5px;color:var(--mut);max-width:830px">
+    一句目标听起来像愿景,要落地必须分解。下面 5 项每项都是平台必须满足的不变量 —— 任何一项失守,「universal」就破。
+  </p>
+
+  <div class="invariants">
+    <div class="inv">
+      <div class="n">I1</div>
+      <div class="h">任何垂直 onboard</div>
+      <div class="s">B2B SaaS / DTC / crypto / hardware / service 都能进 4-step</div>
+      <span class="st ok">85% ✅</span>
+    </div>
+    <div class="inv">
+      <div class="n">I2</div>
+      <div class="h">任何渠道可插拔</div>
+      <div class="s">11 → N 个 agent,新增渠道不动 schema 不改 prompt</div>
+      <span class="st bad">20% ❌</span>
+    </div>
+    <div class="inv">
+      <div class="n">I3</div>
+      <div class="h">Reviewer 可扩展</div>
+      <div class="s">N 个产品 × N 个 agent 不再线性需要 N² 个人</div>
+      <span class="st bad">10% ❌</span>
+    </div>
+    <div class="inv">
+      <div class="n">I4</div>
+      <div class="h">转化闭环可度量</div>
+      <div class="s">每个 published 出口都能归因到 revenue / signup</div>
+      <span class="st bad">0% ❌</span>
+    </div>
+    <div class="inv">
+      <div class="n">I5</div>
+      <div class="h">Mix 自动决策</div>
+      <div class="s">输入产品 → 自动选 channel mix · 自动配 KPI · 自动启动</div>
+      <span class="st warn">50% ⚠</span>
+    </div>
+  </div>
+</section>
+
+<!-- ========= I1 ========= -->
+<section class="wrap">
+  <div class="snum">§ 03.1 · INVARIANT 1</div>
+  <div class="inv-detail">
+    <div class="head"><span class="tag">I1 · 85% ✅</span><h3>任何垂直都能 onboard</h3></div>
+    <div class="qsub">「输入一个 url 或产品描述,4-step ContentOS 跑得通,无论产品是律所、SaaS API、还是 NFT collection。」</div>
+    <div class="inv-grid">
+      <div class="inv-col now">
+        <h5>现状</h5>
+        <div class="body">
+          <b>Step 1 (Market Insight)</b> 已 universal —— CIA 方法论,5-8 tracks,任何垂直都适用。<br><br>
+          <b>但</b>:<code>engines/&lt;slug&gt;/</code> 下的 audience / voice / platforms 是<b>手写</b>的 30+ markdown 文件。
+          目前只有 voc-ai 完整,solvea 半完整。新产品 onboard 后这一层是空的。
+        </div>
+      </div>
+      <div class="inv-col target">
+        <h5>universal 标准</h5>
+        <div class="body">
+          <b>Step 1 输入产品 → Step 4 输出后</b>,系统自动生成完整 <code>engines/&lt;slug&gt;/</code>:audience 2-4 segment / voice 1 brand-voice / platforms 8 个 platform-specific tone。<br><br>
+          人不需要手动写一行 md。
+        </div>
+      </div>
+      <div class="inv-col build">
+        <h5>要 build</h5>
+        <div class="body">
+          <b>① Engine Hydrator</b>:接 Step 4 输出,LLM 自动生成 engines/&lt;slug&gt;/ 全套.<br>
+          <b>② Template Library</b>:把 voc-ai 的 engines 抽成 vertical 模板(B2B SaaS / DTC / dev-tool / crypto / service 5 套).<br>
+          <b>③ Quality gate</b>:hydrator 跑完后 lint:每个文件 ≥ 200 字、有具体例子、与 brand-voice 一致。
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========= I2 ========= -->
+<section class="wrap">
+  <div class="snum">§ 03.2 · INVARIANT 2</div>
+  <div class="inv-detail">
+    <div class="head"><span class="tag" style="background:var(--red)">I2 · 20% ❌</span><h3>任何渠道都能插拔</h3></div>
+    <div class="qsub">「想加 Producthunt / HN / TikTok Shop / Discord / Substack / Apple Search Ads —— 不改 schema、不改 prompt、不动 hydrate-agents.py。」</div>
+    <div class="inv-grid">
+      <div class="inv-col now">
+        <h5>现状</h5>
+        <div class="body">
+          <b>11 个 agent 硬编码</b>在 3 个地方:<br>
+          · <code>ROSTER.md</code>(11 行表)<br>
+          · <code>templates/04-content-strategy.md</code> 的 YAML schema(<code>01-foundation</code>...<code>11-poster</code>)<br>
+          · <code>scripts/hydrate-agents.py</code>(parser 写死)<br><br>
+          想加第 12 个 agent → 3 处都要改 + 重跑所有产品的 Step 4。
+        </div>
+      </div>
+      <div class="inv-col target">
+        <h5>universal 标准</h5>
+        <div class="body">
+          <b>Agent Registry 表</b>(<code>agent_definitions</code>):每个 agent 是一行 db 记录,有 name / platforms / kpi_schema / builder_skill / reviewer_template。<br><br>
+          Step 4 prompt 改成「读 registry 选 N 个 agent activate」—— prompt 不写死名字。<br><br>
+          想加 PH agent?往 registry insert 一行就行。
+        </div>
+      </div>
+      <div class="inv-col build">
+        <h5>要 build</h5>
+        <div class="body">
+          <b>① 新表</b> <code>agent_definitions</code> + <code>workspace_agents</code>(per-product 启用关系).<br>
+          <b>② Migration</b>:把现 11 agent 灌进 registry.<br>
+          <b>③ Step 4 prompt</b> 改写成动态版.<br>
+          <b>④ Hydrator</b> 改成 schema-driven.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========= I3 ========= -->
+<section class="wrap">
+  <div class="snum">§ 03.3 · INVARIANT 3</div>
+  <div class="inv-detail">
+    <div class="head"><span class="tag" style="background:var(--red)">I3 · 10% ❌</span><h3>Reviewer 可扩展</h3></div>
+    <div class="qsub">「100 个产品 × 11 agent = 1100 个 Iron Triangle 槽位。不能塞 1100 个人。」</div>
+    <div class="inv-grid">
+      <div class="inv-col now">
+        <h5>现状</h5>
+        <div class="body">
+          P03 立法「No Triangle = No Agent」 —— 每个 agent 需要 1 个真人 Reviewer。<br><br>
+          6 个产品 × 6 active agent ≈ 36 槽位,目前已经塞不下(5 个 TBD slot 卡 P0 招人)。<br><br>
+          往 ∞ product 走完全不可能。
+        </div>
+      </div>
+      <div class="inv-col target">
+        <h5>universal 标准</h5>
+        <div class="body">
+          Reviewer 分 <b>3 层</b>:<br>
+          · <b>L1 模板 reviewer</b> — content 通过 rubric 自动过(80% 流量)<br>
+          · <b>L2 样本 reviewer</b> — 真人审 10% 抽样,刷新 rubric<br>
+          · <b>L3 升级 reviewer</b> — 异常 / 高价 content 真人逐条审<br><br>
+          1 个真人可以 cover 10 产品 × 11 agent.
+        </div>
+      </div>
+      <div class="inv-col build">
+        <h5>要 build</h5>
+        <div class="body">
+          <b>① Rubric system</b>:每 agent 有 <code>review_rubric.json</code>,5-10 条可机器判规则.<br>
+          <b>② Auto-grader</b>:接 LLM-as-Judge,给每 draft 评 0-100.<br>
+          <b>③ Sampling cron</b>:每周抽 10% 给真人 reviewer,反写 rubric.<br>
+          <b>④ Escalation</b>:&gt;10% draft 不过 / 单 content 预期曝光 &gt; 阈值 → L3 真人.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========= I4 ========= -->
+<section class="wrap">
+  <div class="snum">§ 03.4 · INVARIANT 4</div>
+  <div class="inv-detail">
+    <div class="head"><span class="tag" style="background:var(--red)">I4 · 0% ❌</span><h3>转化闭环可度量</h3></div>
+    <div class="qsub">「P04 说 traffic + revenue is the goal —— 但今天平台 0 行代码涉及 conversion / utm / revenue。grep 实证。」</div>
+    <div class="inv-grid">
+      <div class="inv-col now">
+        <h5>现状</h5>
+        <div class="body">
+          Pipeline 在 <b>Published</b> 就断了。Bank tab 有 7 条 published,但没有任何字段记录「哪条带来了多少 signup / 多少 revenue」。<br><br>
+          <code>grep -rE "conversion|utm|attribution"</code> 在 app 代码里 <b>0 命中</b>。<br><br>
+          → 没有反馈 → swarm 无法 learn → 第 100 条 content 不会比第 1 条更好。
+        </div>
+      </div>
+      <div class="inv-col target">
+        <h5>universal 标准</h5>
+        <div class="body">
+          每条 published 出口自带 <b>tracking handle</b>(UTM + 短链 + post-id),后端跑 <b>定时归因 job</b>:<br><br>
+          · 拉 GA4 / Plausible / 自有 db 看每条 link 的 conversion<br>
+          · 写回 <code>conversion_events</code> 表(content_id, channel, signups, revenue_usd, ts)<br>
+          · Dashboard 出 <b>per-agent ROI 看板</b>:每个 agent 这周给每个产品贡献了多少 traffic+revenue
+        </div>
+      </div>
+      <div class="inv-col build">
+        <h5>要 build</h5>
+        <div class="body">
+          <b>① Schema</b>:<code>conversion_events</code> + <code>tracking_handles</code> 两张表.<br>
+          <b>② 出口注入</b>:agent runner 在发布时自动生成 UTM/短链/post-id 写入 tracking_handles.<br>
+          <b>③ Attribution cron</b>:每天拉 GA4 / 自有 db,merge 回 conversion_events.<br>
+          <b>④ ROI dashboard</b>:Foundation tab 新增 "Per-Agent ROI" 卡.<br>
+          <b>⑤ Feedback loop</b>:rubric grader 拿 ROI 信号调权.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========= I5 ========= -->
+<section class="wrap">
+  <div class="snum">§ 03.5 · INVARIANT 5</div>
+  <div class="inv-detail">
+    <div class="head"><span class="tag" style="background:var(--amber)">I5 · 50% ⚠</span><h3>Mix 自动决策</h3></div>
+    <div class="qsub">「Step 4 prompt 已经会 activate / skip channel,但只在 11 个固定 agent 里挑。I2 解锁后 I5 才能真正 universal。」</div>
+    <div class="inv-grid">
+      <div class="inv-col now">
+        <h5>现状</h5>
+        <div class="body">
+          Step 4 LLM 会判断:B2B SaaS → skip 11-poster;crypto → lean reddit/social。这个已经在 prompt 立法.<br><br>
+          但 channel pool 还是 11 个写死的.LLM 没法说「这个产品要加个 PH 上线 agent」.
+        </div>
+      </div>
+      <div class="inv-col target">
+        <h5>universal 标准</h5>
+        <div class="body">
+          Step 4 输入 = 产品 + agent registry(N 个).<br>
+          输出 = (active subset, per-agent KPI, expected ROI rank).<br><br>
+          人在 dashboard 上可以接受 / 否决 / 调整,但 default 是 swarm 自己决定.
+        </div>
+      </div>
+      <div class="inv-col build">
+        <h5>要 build</h5>
+        <div class="body">
+          <b>① 等 I2</b> 解锁 registry.<br>
+          <b>② Step 4 prompt 改造</b>:不再列 01-11,改成「从 registry 里挑」.<br>
+          <b>③ 加 ROI 先验</b>(I4 落地后):告诉 Step 4 prompt「同类产品 channel X 历史 ROI 12.3」.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== §04 90 天 roadmap ============== -->
+<section class="wrap">
+  <div class="snum">§ 04 · 90-DAY ROADMAP</div>
+  <h2>90 天到 universal —— <em>每 30 天解锁一个 invariant 集合</em></h2>
+
+  <div class="roadmap">
+    <div class="rm now">
+      <div class="when">Day 0 · 2026-05-25(本周)</div>
+      <b>并行起手三件事(不阻塞 Boyuan 回归)</b>
+      <div class="what">audit ContentOS prompt bias + 草 conversion schema + agent registry schema 设计</div>
+      <div class="ships"><span class="pill">audit-report.md</span><span class="pill">schema-draft.sql</span></div>
+    </div>
+
+    <div class="rm">
+      <div class="when">Day 1–30 · 6 月</div>
+      <b>解锁 I4 (转化闭环) + I1 (engine hydrator)</b>
+      <div class="what">
+        建 conversion_events 表 + tracking_handles 表;改 agent runner 自动注入 UTM/post-id;接 GA4 拉数据 cron;
+        Foundation tab 加 ROI 卡;同时建 engine hydrator(LLM 自动生成 engines/&lt;slug&gt;/)
+      </div>
+      <div class="ships"><span class="pill">conversion_events</span><span class="pill">tracking_handles</span><span class="pill">attribution-cron</span><span class="pill">per-agent-roi-card</span><span class="pill">engine-hydrator</span></div>
+    </div>
+
+    <div class="rm">
+      <div class="when">Day 31–60 · 7 月</div>
+      <b>解锁 I2 (agent registry) + I5 (auto-mix)</b>
+      <div class="what">
+        agent_definitions 表 + migration 灌 11;Step 4 prompt 改造成 schema-driven;hydrate-agents.py 重写;
+        dashboard 加 agent activate/deactivate 开关;为「想试 PH agent」准备好插拔位
+      </div>
+      <div class="ships"><span class="pill">agent_definitions</span><span class="pill">workspace_agents</span><span class="pill">step4-v2</span><span class="pill">activation-ui</span></div>
+    </div>
+
+    <div class="rm">
+      <div class="when">Day 61–90 · 8 月</div>
+      <b>解锁 I3 (reviewer 三层)</b>
+      <div class="what">
+        每 agent 加 review_rubric.json;LLM-as-Judge auto-grader;sampling cron 每周 10% 抽样;escalation 阈值;
+        1 个真人 reviewer cover 多产品的实测
+      </div>
+      <div class="ships"><span class="pill">review-rubrics</span><span class="pill">auto-grader</span><span class="pill">sampling-cron</span><span class="pill">escalation</span></div>
+    </div>
+
+    <div class="rm">
+      <div class="when">Day 90 · 验收</div>
+      <b>跑 universal 试金石(下方 §05)</b>
+      <div class="what">用 3 个跟现有 6 产品完全无关的产品 onboard 验证</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== §05 universal 试金石 ============== -->
+<section class="wrap">
+  <div class="snum">§ 05 · LITMUS TEST</div>
+  <h2>universal 试金石 —— <em>3 个跟现有 6 个完全不同的产品</em></h2>
+  <p style="font-size:15px;color:var(--mut);max-width:830px">
+    系统是不是真 universal,不靠自我评估,靠<b>能否独立 onboard 这 3 个跟现有 6 产品无亲缘的样本</b>。
+    都跑通 + 都能在 30 天内产出有归因数据的 traffic+revenue → 通过.
+  </p>
+
+  <div class="litmus">
+    <div class="lit">
+      <div class="who">Sample A · Service business</div>
+      <h4>邻家律所 / 一家社区律师事务所</h4>
+      <div class="desc">完全不是 SaaS / 不是 Amazon / 不是技术产品。本地 service。<br>价位 $200–$2000/case · 受众小且地域化.</div>
+      <ul>
+        <li><b>I1</b> · engines/lawyer-firm/ 自动 hydrate</li>
+        <li><b>I2</b> · 自动启用 Yelp / Google Maps / 本地 SEO,跳过 reddit</li>
+        <li><b>I5</b> · auto-mix 给出 3 channel 重点</li>
+        <li><b>I4</b> · 4 周后能看到 X 个 inbound consult</li>
+      </ul>
+      <div class="pass">通过条件:<b>30 天 ≥ 3 个 inbound + UTM 归因</b></div>
+    </div>
+
+    <div class="lit">
+      <div class="who">Sample B · Hardware</div>
+      <h4>智能宠物喂食器(Kickstarter)</h4>
+      <div class="desc">实体硬件 · 一次性 $99–$199 销售 · 受众 DTC.<br>跟所有现 6 产品形态完全不同.</div>
+      <ul>
+        <li><b>I1</b> · 4-step 跑出 hardware-vertical 风格的 brief</li>
+        <li><b>I2</b> · 自动启用 IG / TikTok / Kickstarter / 宠物 reddit</li>
+        <li><b>I5</b> · 跳过 SEO blog · 重 UGC + KOL</li>
+        <li><b>I4</b> · KS 页面 traffic + 真实 pre-order 归因</li>
+      </ul>
+      <div class="pass">通过条件:<b>30 天 ≥ 10 个 pre-order 可溯源</b></div>
+    </div>
+
+    <div class="lit">
+      <div class="who">Sample C · Agent-native</div>
+      <h4>纯 MCP 工具(没有 UI)</h4>
+      <div class="desc">P06 立法的目标 —— agent 是新分发渠道.<br>产品没有人类 UI,只暴露 MCP / OpenAPI.</div>
+      <ul>
+        <li><b>I1</b> · 4-step 不假设产品有官网</li>
+        <li><b>I2</b> · 自动启用 mcp.so / smithery / awesome-mcp / agent 编辑器集成</li>
+        <li><b>I5</b> · 完全跳过传统社交,重 agent registry / SDK demo</li>
+        <li><b>I4</b> · MCP tool call 计数 / API key 注册数 归因</li>
+      </ul>
+      <div class="pass">通过条件:<b>30 天 ≥ 50 次 MCP 调用 来自 ≥ 5 个 agent host</b></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== §06 first moves ============== -->
+<section class="wrap">
+  <div class="snum">§ 06 · FIRST MOVES — STARTING NOW</div>
+  <div class="moves">
+    <h3>本周 3 件并行(不阻塞 Boyuan 回归)</h3>
+    <ol>
+      <li><b>Audit ContentOS prompts 的 vertical bias</b> · 已读完 Step 1 + Step 4,Step 1 OK · Step 4 写死 11 agent · 出一份 audit report 给后续 prompt 改造铺垫</li>
+      <li><b>设计 <code>conversion_events</code> + <code>tracking_handles</code> schema</b> · SQL 草稿 · 字段含 content_id / channel / utm / signups / revenue_usd / ts · 出 migration 文件</li>
+      <li><b>设计 <code>agent_definitions</code> + <code>workspace_agents</code> schema</b> · SQL 草稿 · 把 11 hardcoded agent 模型化 · 出 migration 文件 + 灌种子数据</li>
+    </ol>
+    <div class="meta">三件都是<b>纯设计 + 文档</b>,不动 production,与 Boyuan 回归互不干扰 · 设计稿出来后等 Boyuan ✅ 再 PR</div>
+  </div>
+</section>
+
+<footer class="wrap">
+  <p>SolveaCX/gtm-swarm · universal-GTM gap analysis · 2026-05-25</p>
+  <p style="margin-top:6px">P04 在墙上,执行要跟上 · 这份 deck 是承诺,90 天落地</p>
+</footer>
+
+</body>
+</html>

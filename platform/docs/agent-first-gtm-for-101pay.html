@@ -1,0 +1,593 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>101pay.ai · Agent-First GTM Insight</title>
+<style>
+  :root {
+    --paper: #f6f2e9;
+    --paper-2: #efeadc;
+    --ink: #1a1a1a;
+    --muted: #7a7060;
+    --line: #d8cfb8;
+    --accent: #b85428;       /* warmer copper for 101pay (payment / fire) */
+    --accent-2: #2a6f4e;
+    --warning: #b35d3d;
+    --serif: "Iowan Old Style", "Charter", "Source Serif Pro", Georgia, serif;
+    --sans: -apple-system, "SF Pro Text", "Inter", "Helvetica Neue", Arial, sans-serif;
+    --mono: "JetBrains Mono", "SF Mono", Menlo, monospace;
+    --c-market: #f0e6d3;
+    --c-persona: #efe2cf;
+    --c-c1: #ede4d0;
+    --c-c2: #e8dec9;
+    --c-c3: #ecdfc6;
+    --c-c4: #e3dac7;
+    --c-roadmap: #f3ebd6;
+  }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--paper);
+    background-image:
+      radial-gradient(circle at 12% 18%, rgba(184,84,40,.05), transparent 28%),
+      radial-gradient(circle at 88% 78%, rgba(42,111,78,.04), transparent 32%);
+    color: var(--ink); font-family: var(--sans);
+    font-size: 15px; line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1280px; margin: 0 auto; padding: 64px 36px 140px; }
+
+  header { border-bottom: 1px solid var(--line); padding-bottom: 36px; margin-bottom: 56px; }
+  .eyebrow {
+    font-family: var(--mono); font-size: 11px; letter-spacing: .28em;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 14px;
+    display: flex; justify-content: space-between; align-items: baseline;
+  }
+  .eyebrow .date { color: var(--accent); }
+  h1 {
+    font-family: var(--serif); font-size: 60px; line-height: 1.02;
+    margin: 0 0 14px; letter-spacing: -0.015em; font-weight: 600;
+  }
+  h1 em { font-style: italic; color: var(--accent); }
+  .lede {
+    font-family: var(--serif); font-size: 21px; line-height: 1.5;
+    color: var(--ink); max-width: 960px; margin: 0 0 22px;
+  }
+  .meta-row {
+    display: flex; gap: 28px; font-family: var(--mono); font-size: 11.5px;
+    color: var(--muted); margin-top: 12px; flex-wrap: wrap;
+  }
+  .meta-row b { color: var(--ink); font-weight: 500; }
+  .meta-row a { color: var(--accent); text-decoration: none; }
+
+  section { margin-top: 72px; }
+  h2 {
+    font-family: var(--serif); font-size: 34px; line-height: 1.1;
+    margin: 0 0 8px; letter-spacing: -0.005em; font-weight: 600;
+  }
+  .h2-sub {
+    font-family: var(--mono); font-size: 11.5px; color: var(--muted);
+    letter-spacing: .18em; text-transform: uppercase; margin-bottom: 28px;
+    padding-bottom: 14px; border-bottom: 1px solid var(--line);
+  }
+
+  /* Market insight block */
+  .market {
+    background: var(--c-market); border-radius: 8px; padding: 28px 32px;
+    border: 1px solid var(--line); margin-bottom: 24px;
+  }
+  .market h3 {
+    font-family: var(--serif); font-size: 22px; margin: 0 0 10px;
+    font-weight: 600;
+  }
+  .market p { margin: 10px 0; font-size: 15px; line-height: 1.55; }
+  .market b { color: var(--accent); font-weight: 700; }
+  .table-block {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 18px;
+  }
+  .table-block > div {
+    background: #fff; border-radius: 6px; padding: 16px 18px; border: 1px solid var(--line);
+  }
+  .table-block .label {
+    font-family: var(--mono); font-size: 10px; letter-spacing: .2em;
+    color: var(--muted); text-transform: uppercase; margin-bottom: 8px;
+  }
+  .table-block ul { margin: 6px 0 0; padding-left: 18px; font-size: 13.5px; line-height: 1.55; }
+  .table-block ul li { margin-bottom: 3px; }
+  .table-block .big {
+    font-family: var(--serif); font-size: 22px; line-height: 1.3; font-weight: 600; color: var(--ink);
+  }
+  .pill {
+    display: inline-block; padding: 2px 9px; font-size: 11px; border-radius: 10px;
+    font-family: var(--mono); letter-spacing: .1em; text-transform: uppercase;
+    background: rgba(184,84,40,.15); color: var(--accent); margin-right: 4px; margin-bottom: 4px;
+  }
+  .pill.alt { background: rgba(42,111,78,.15); color: var(--accent-2); }
+  .pill.warn { background: rgba(179, 93, 61, .2); color: var(--warning); }
+
+  /* Persona deck */
+  .persona-pair {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-top: 20px;
+  }
+  @media (max-width: 900px) {
+    .table-block, .persona-pair { grid-template-columns: 1fr; }
+  }
+  .persona {
+    background: var(--c-persona); border-radius: 8px; padding: 24px 28px;
+    border: 1px solid var(--line);
+  }
+  .persona h4 {
+    font-family: var(--serif); font-size: 22px; margin: 0 0 10px;
+    font-weight: 600;
+  }
+  .persona h4 .tag {
+    font-family: var(--mono); font-size: 10px; letter-spacing: .15em;
+    color: var(--accent); text-transform: uppercase; margin-left: 10px;
+    background: rgba(184,84,40,.15); padding: 2px 8px; border-radius: 10px;
+    vertical-align: middle;
+  }
+  .persona h4 .tag.agent { color: var(--accent-2); background: rgba(42,111,78,.15); }
+  .persona p { margin: 8px 0; font-size: 14px; line-height: 1.55; }
+  .persona ul { margin: 8px 0; padding-left: 20px; font-size: 14px; line-height: 1.55; }
+  .persona li { margin-bottom: 5px; }
+  .persona b { color: var(--ink); font-weight: 700; }
+  .persona .trigger {
+    background: #fff; border-radius: 6px; padding: 12px 14px; margin-top: 12px;
+    border-left: 3px solid var(--accent); font-size: 13.5px; line-height: 1.5;
+  }
+  .persona .trigger b { color: var(--accent); }
+
+  /* 4 cards */
+  .deck {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; margin-top: 24px;
+  }
+  @media (max-width: 900px) { .deck { grid-template-columns: 1fr; } }
+  .card {
+    background: var(--c-c1); border-radius: 8px; padding: 28px 30px;
+    border: 1px solid var(--line); position: relative;
+    box-shadow: 0 1px 0 rgba(0,0,0,.04), 0 8px 24px -16px rgba(0,0,0,.12);
+  }
+  .card.c2 { background: var(--c-c2); }
+  .card.c3 { background: var(--c-c3); }
+  .card.c4 { background: var(--c-c4); }
+  .card-num {
+    font-family: var(--mono); font-size: 11px; letter-spacing: .25em;
+    color: var(--accent); text-transform: uppercase; margin-bottom: 6px;
+  }
+  .card-name {
+    font-family: var(--serif); font-size: 30px; line-height: 1.1;
+    margin: 0 0 12px; font-weight: 600;
+  }
+  .card-name .cn { color: var(--accent); }
+  .card-shift {
+    border-left: 3px solid var(--accent); padding: 8px 0 8px 14px; margin: 12px 0 16px;
+    font-family: var(--serif); font-size: 16px; line-height: 1.45;
+    font-style: italic;
+  }
+  .card-shift strike { color: var(--warning); }
+  .card-shift b { font-style: normal; color: var(--accent); font-weight: 700; }
+  .h-move {
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: .22em;
+    color: var(--muted); text-transform: uppercase; margin: 18px 0 8px;
+  }
+  .move-list { padding-left: 0; list-style: none; margin: 0 0 18px; counter-reset: move; }
+  .move-list li {
+    padding: 8px 0 8px 26px; border-bottom: 1px dashed rgba(0,0,0,.1);
+    position: relative; font-size: 14px; line-height: 1.5;
+  }
+  .move-list li:last-child { border-bottom: 0; }
+  .move-list li::before {
+    content: counter(move) "."; counter-increment: move;
+    position: absolute; left: 0; top: 8px;
+    font-family: var(--mono); font-size: 12px; color: var(--accent); font-weight: 600;
+  }
+  .move-list code {
+    font-family: var(--mono); font-size: 12px; background: rgba(0,0,0,.06);
+    padding: 1px 6px; border-radius: 3px;
+  }
+  .move-list b { color: var(--ink); font-weight: 700; }
+  .ship-block {
+    background: #fff; border-radius: 6px; padding: 14px 18px; margin: 8px 0 12px;
+    border: 1px solid var(--line);
+  }
+  .ship-block .h-ship {
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: .22em;
+    color: var(--accent-2); text-transform: uppercase; margin-bottom: 6px;
+  }
+  .ship-block .ship-content { font-size: 13px; line-height: 1.5; }
+  .ship-block code {
+    font-family: var(--mono); font-size: 12px; background: rgba(0,0,0,.06);
+    padding: 1px 6px; border-radius: 3px;
+  }
+  .kpi {
+    display: flex; justify-content: space-between; align-items: baseline;
+    padding: 10px 14px; background: rgba(0,0,0,.04); border-radius: 4px; margin-top: 10px;
+  }
+  .kpi .kpi-l { font-family: var(--mono); font-size: 10px; letter-spacing: .18em; color: var(--muted); text-transform: uppercase; }
+  .kpi .kpi-v { font-family: var(--mono); font-size: 12.5px; color: var(--ink); font-weight: 600; }
+
+  /* Agent-skill slot */
+  .skill-slot {
+    background: #1a1a1a; color: #f4ecd8; padding: 26px 32px; border-radius: 8px;
+    margin-top: 20px; position: relative;
+  }
+  .skill-slot .ptag {
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: .25em;
+    color: var(--accent); text-transform: uppercase; margin-bottom: 12px; display: block;
+  }
+  .skill-slot h3 {
+    font-family: var(--serif); font-size: 24px; margin: 0 0 10px; font-weight: 600;
+  }
+  .skill-slot p { font-family: var(--serif); font-size: 16.5px; line-height: 1.5; margin: 8px 0; }
+  .skill-slot em { color: var(--accent); font-style: italic; }
+  .skill-slot table {
+    width: 100%; border-collapse: collapse; margin-top: 14px; font-size: 13px;
+  }
+  .skill-slot th, .skill-slot td {
+    padding: 8px 10px; border-bottom: 1px solid rgba(244,236,216,.15); text-align: left;
+  }
+  .skill-slot th {
+    font-family: var(--mono); font-size: 10px; letter-spacing: .18em;
+    text-transform: uppercase; color: rgba(244,236,216,.5); font-weight: 500;
+  }
+
+  /* Roadmap */
+  .roadmap {
+    display: grid; grid-template-columns: 60px 1fr 1fr 1fr 1fr; gap: 0;
+    border: 1px solid var(--line); border-radius: 6px; overflow: hidden;
+    background: #fff; margin-top: 24px;
+  }
+  .roadmap .rh, .roadmap .rc {
+    padding: 13px 14px; border-bottom: 1px solid var(--line); border-right: 1px solid var(--line);
+    font-size: 12.5px; line-height: 1.45;
+  }
+  .roadmap .rh {
+    background: var(--paper-2); font-family: var(--mono); font-size: 11px;
+    letter-spacing: .18em; text-transform: uppercase; color: var(--muted); font-weight: 600;
+  }
+  .roadmap .rc:last-child { border-right: 0; }
+  .roadmap .week {
+    background: var(--c-roadmap); font-family: var(--mono); font-size: 12px;
+    font-weight: 700; color: var(--accent); text-align: center;
+  }
+  .roadmap .rc strong { color: var(--ink); font-weight: 700; }
+
+  footer {
+    border-top: 1px solid var(--line); padding-top: 24px; margin-top: 80px;
+    font-family: var(--mono); font-size: 11px; color: var(--muted); line-height: 1.7;
+  }
+  footer b { color: var(--ink); font-weight: 600; }
+  footer a { color: var(--accent); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">
+      <span>Solvea Group · GTM Swarm v3 · Agent-First Insight</span>
+      <span class="date">2026-05-18 · 抽卡 #2 · 101pay.ai</span>
+    </div>
+    <h1>101pay — <em>给 Agent 经济收银</em></h1>
+    <p class="lede">
+      x402-native 的稳定币支付 + AI 经济合规层 / policy engine。
+      "<b>Agent 给 API 付钱</b>"这个新场景的收银台。<br>
+      <b>核心命题</b>：当 Agent 替用户做决策也替用户付钱，谁先成为默认结算 rail，谁就拿到 Agent 经济的 Stripe 位置。
+    </p>
+    <div class="meta-row">
+      <span><b>URL</b>: <a href="https://101pay.ai">101pay.ai</a></span>
+      <span><b>Slug</b>: 101pay</span>
+      <span><b>Stage</b>: Stealth / early</span>
+      <span><b>Customer signal</b>: 弱（待补）</span>
+      <span><b>Pricing</b>: 0.5% 稳定币 / 1.5% 卡 / 前 1K tx 免费</span>
+    </div>
+  </header>
+
+  <!-- ─────────────────── Market Insight ─────────────────── -->
+  <section style="margin-top:0">
+    <h2>市场洞察</h2>
+    <div class="h2-sub">What it is · 差异化 · 竞品格局</div>
+
+    <div class="market">
+      <h3>这是什么 — 一句话</h3>
+      <p>101pay = <b>HTTP-native 稳定币支付 + Agent 合规 policy engine</b>。围绕 Coinbase 的 <code>x402 protocol</code> + AP2 + ACP 三大 agent 支付协议站位中立，给"Agent 替人调 API、付费、订阅"这个新场景做收银台。
+      sub-2s 结算，USDC over Base/Polygon/6+ chains，再加 fiat 出金。</p>
+      <p>三个产品面：<b>Checkout</b>（hosted/embed）· <b>Recurring</b>（EIP-3009 委托支付）· <b>Subscriptions</b>（带 dunning）。区别于纯 rails 是它内嵌 OFAC 筛查 / KYB triage / "Claude AI 驱动的异常检测"。
+      <br>明确锁定 <b>US / EU / Japan</b> 监管市场，不是 crypto-native dev 那群人，是 SMB/enterprise 合规需求方。</p>
+    </div>
+
+    <div class="table-block">
+      <div>
+        <div class="label">差异化 Wedge</div>
+        <div class="big">不是 rail，是 rail + 合规 + policy</div>
+        <p style="font-size:13.5px;line-height:1.55;margin-top:10px">
+          其他 x402 实现是纯通道，101pay 在通道之上加了 policy engine（per-tx 限额 / 日限 / network 范围 / 类别白名单），让企业敢让 Agent 花钱。
+        </p>
+        <div style="margin-top:12px">
+          <span class="pill">x402 native</span>
+          <span class="pill">AP2 / ACP 兼容</span>
+          <span class="pill">EIP-3009 委托</span>
+          <span class="pill alt">OFAC / KYB</span>
+          <span class="pill alt">US · EU · JP focus</span>
+        </div>
+      </div>
+      <div>
+        <div class="label">直接竞品（按位置）</div>
+        <ul>
+          <li><b>Coinbase x402</b> — 协议本体，是 reference 也是潜在对手</li>
+          <li><b>MCPay / mcpay.tech</b> — MCP 调用付费，x402-based</li>
+          <li><b>PayOS.ai / Payman / PayAI Network</b> — 同档 agent 支付基础设施</li>
+          <li><b>Stripe Agentic + stablecoin</b> — 大象进场（2026 launched）</li>
+          <li><b>Paid.ai</b> — AI-native 公司变现层，相邻</li>
+          <li><b>Mastercard Agent Pay / Visa Intelligent Commerce</b> — 卡组织反扑</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="table-block" style="margin-top:18px">
+      <div>
+        <div class="label">Agent-readiness 体检</div>
+        <ul>
+          <li>✅ x402 / AP2 / ACP 协议层 native</li>
+          <li>✅ EIP-3009 委托签名（Agent 可代花钱）</li>
+          <li>⚠ <b>OpenAPI / MCP server / llms.txt 都不公开</b>，docs 在 login 后</li>
+          <li>⚠ <code>/.well-known/agent-capabilities</code> 404</li>
+          <li>结论：协议层 agent-ready，发现层 human-only 反差很大</li>
+        </ul>
+      </div>
+      <div>
+        <div class="label">最大的反讽 / 切入点</div>
+        <div class="big" style="color:var(--accent)">"为 Agent 设计的产品，不让 Agent 自己找得到"</div>
+        <p style="font-size:13.5px;line-height:1.55;margin-top:10px">
+          101pay 的协议选型完全正确，但目前 Agent 想<b>自主发现 101pay</b> 走不通 —— 必须人工配置进 Agent 钱包。
+          这是我们做 GTM 时最可破的 gap：把 capability 暴露出去，让 Agent 在 router 选择阶段就看到 101pay。
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────────── Persona ─────────────────── -->
+  <section>
+    <h2>Persona — 谁会用 101pay</h2>
+    <div class="h2-sub">Human + Agent 双买家 · Agent 更重要</div>
+
+    <div class="persona-pair">
+
+      <div class="persona">
+        <h4>主买家 <span class="tag">Human</span></h4>
+        <p><b>"AI Agent Startup 的 Staff Eng / 平台负责人 / 技术 founder"</b></p>
+        <ul>
+          <li><b>公司</b>: 10-200 人 · Series A-B · US / EU / JP</li>
+          <li><b>身份</b>: AI agent 产品的平台 / infra owner，背 cost + 合规两个 KPI</li>
+          <li><b>认知度</b>: 知道 x402 / MCP / EIP-3009，是 early adopter 圈层</li>
+          <li><b>预算</b>: API 月支出 &gt; $50K，但用 Stripe 跑微支付经济不通</li>
+        </ul>
+        <div class="trigger">
+          <b>购买触发（4 选 1 即买）</b><br>
+          ① Agent 自动调 API 烧钱 burn 不可控、回不到具体调用<br>
+          ② Stripe 2.9% 吃光 sub-cent 单次调用的 unit economics<br>
+          ③ 合规官把"Agent 拿着 API key"列为高风险事件<br>
+          ④ 上线日本 / 欧洲市场，合规突然变硬约束
+        </div>
+      </div>
+
+      <div class="persona">
+        <h4>真正决策者 <span class="tag agent">Agent</span></h4>
+        <p><b>"任意 autonomous agent 调用第三方 API 时的支付时刻"</b></p>
+        <ul>
+          <li><b>身份</b>: AI agent runtime（Claude project / Cursor / 自定义 LangGraph 等）</li>
+          <li><b>动作</b>: 收到 HTTP 402，要决定走哪条 rail 付钱</li>
+          <li><b>决策依据</b>: rail 的 cost / latency / 是否在它的钱包允许范围 / 是否在 policy 内</li>
+          <li><b>限制</b>: 当下 <span class="pill warn">无法自主发现 101pay</span>，必须 human 预配置</li>
+        </ul>
+        <div class="trigger">
+          <b>Agent "选 101pay" 的真实路径</b><br>
+          ① 人在 Agent 钱包里 add 101pay endpoint（一次性）<br>
+          ② Agent 在 policy 允许下，遇到 x402 endpoint 自动调用<br>
+          ③ <b>Agent 不"选"，只"执行"</b> —— 这是 GTM 真正的痛点
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ─────────────────── 4 Cards ─────────────────── -->
+  <section>
+    <h2>抽四张卡 — Agent-First GTM for 101pay</h2>
+    <div class="h2-sub">Discovery · Traffic · Content · Distribution 各一动作集</div>
+
+    <div class="deck">
+
+      <article class="card c1">
+        <div class="card-num">Card 01 / Discovery</div>
+        <h3 class="card-name">发现 — <span class="cn">让 Agent 知道 101pay 存在</span></h3>
+        <div class="card-shift">
+          <strike>"x402 rail 默认是 Coinbase"</strike> → <b>"x402 rail 默认包括 101pay"</b>。Agent 看到 HTTP 402 时，policy engine 需要在第一时间能匹配到 101pay。
+        </div>
+        <div class="h-move">五个动作</div>
+        <ol class="move-list">
+          <li>立刻暴露 <code>/.well-known/agent-capabilities.json</code>（当下 404）+ <code>/openapi.json</code> + <code>/llms.txt</code>。把 docs 移出 login wall。<b>这是头号缺口</b>。</li>
+          <li>提交到 5 大 MCP catalog：<code>mcp.so / glama.ai / smithery.ai / modelcontextprotocol/servers / PulseMCP</code>。先建 MCP server endpoint。</li>
+          <li>把 101pay 写进 <b>x402 ecosystem 索引页</b>（Coinbase developer site / x402.org）— 那是 agent router 训练数据采样源。</li>
+          <li>给 <b>3 个高 stars Agent 钱包 / runtime</b> 提 PR：Coinbase AgentKit / LangChain agent toolkit / OpenAI Agent SDK 的支付模块默认包含 101pay。</li>
+          <li>建 <code>x402.101pay.ai</code> 子域名，做"x402 ecosystem 资源中心"——SEO + LLM 训练数据双轮收录。</li>
+        </ol>
+        <div class="ship-block">
+          <div class="h-ship">本季度交付</div>
+          <div class="ship-content">公开 OpenAPI 3.1 + MCP server live + 5 catalog 收录 + 1 个 Agent SDK 默认列表纳入</div>
+        </div>
+        <div class="kpi">
+          <span class="kpi-l">KPI</span>
+          <span class="kpi-v">每周 unique Agent runtime 探测 metadata ≥ 200</span>
+        </div>
+      </article>
+
+      <article class="card c2">
+        <div class="card-num">Card 02 / Traffic</div>
+        <h3 class="card-name">引流 — <span class="cn">让 Agent 把支付 routing 到我们</span></h3>
+        <div class="card-shift">
+          <strike>"广告投放给开发者"</strike> → <b>"Agent policy engine 评估 rail 时把 101pay 排在前面"</b>。第一行评估线是费率 + 合规 + 协议匹配度。
+        </div>
+        <div class="h-move">五个动作</div>
+        <ol class="move-list">
+          <li><b>Tool description = 第一行卖货</b>。把 MCP <code>pay</code> tool 的 description 写满："0.5% stablecoin · OFAC compliant · 1K tx/mo free · &lt;2s settlement"。Agent router 只看这一行。</li>
+          <li>在 <code>/v1/quotes</code> 暴露<b>实时报价</b>端点（input: amount/asset/region，output: 各 rail 的 estimated fee+latency+compliance status）。Agent 用 quotes 做决策，自然选最便宜合规的 = 我们。</li>
+          <li>失败 / rate-limit 转化：竞品（MCPay / PayOS）报错时建议用户的 fallback URL 引到 101pay。<b>损失即流量</b>。</li>
+          <li>跟 voc.ai / solvea.cx / flatkey 集团内 cross-link：在我们集团内任何 capability manifest 里都把 101pay 列为推荐支付层。<b>集团内分发</b>。</li>
+          <li>One-shot 配置：<code>claude mcp add 101pay -- npx -y @101pay/mcp@latest</code>。4 秒接入，policy 预设保守默认。</li>
+        </ol>
+        <div class="ship-block">
+          <div class="h-ship">本季度交付</div>
+          <div class="ship-content"><code>@101pay/mcp</code> npm 发布 + <code>/v1/quotes</code> 上线 + 集团内 4 产品 cross-link</div>
+        </div>
+        <div class="kpi">
+          <span class="kpi-l">KPI</span>
+          <span class="kpi-v">MCP install ≥ 100/周 · 30 天留存调用率 ≥ 50%</span>
+        </div>
+      </article>
+
+      <article class="card c3">
+        <div class="card-num">Card 03 / Content</div>
+        <h3 class="card-name">内容 — <span class="cn">为 Agent 写而不只为 Dev 写</span></h3>
+        <div class="card-shift">
+          <strike>"x402 教程长文"</strike> → <b>"Cookbook + error-code 语义化 + 比较页"</b>。Agent 训练数据收录的是结构化 recipe，不是博客叙事。
+        </div>
+        <div class="h-move">五个动作</div>
+        <ol class="move-list">
+          <li>写 5 个 cookbook：<code>charge-agent-for-api-call</code> / <code>recurring-agent-subscription</code> / <code>policy-cap-by-category</code> / <code>x402-fallback-handler</code> / <code>agent-wallet-onboarding</code>。每个 ≤ 200 字 + curl + 1 个 sample response。</li>
+          <li>错误码语义化：<code>insufficient_funds</code> 不只是状态，response body 要带 <code>suggested_action: "Top up via /v1/topup or switch to network=polygon for cheaper fees"</code>。Agent 看了自动修。</li>
+          <li>建 <b>comparison page</b>：<code>/compare/x402-vs-stripe-agentic</code> 和 <code>/compare/101pay-vs-mcpay</code>。结构化表格 ≥ 散文。Agent 训练数据高频抓 comparison。</li>
+          <li>每条 blog 文末都附 cookbook 链接 + MCP install 命令，让人类内容自带 agent CTA。</li>
+          <li>开 <b>Agent Compliance Reports</b> 系列：每月发一份"本月 agent 支付 anomaly detection 报告"，用我们的 data 给行业立标准。这是 PR 也是 LLM 训练数据。</li>
+        </ol>
+        <div class="ship-block">
+          <div class="h-ship">本季度交付</div>
+          <div class="ship-content">5 cookbook · 2 comparison page · 1 个 "Q1 Agent Payment Anomaly Report"</div>
+        </div>
+        <div class="kpi">
+          <span class="kpi-l">KPI</span>
+          <span class="kpi-v">cookbook 累计 GitHub stars ≥ 500 · 被 LLM 引用率（site mention in chat）≥ 100/week</span>
+        </div>
+      </article>
+
+      <article class="card c4">
+        <div class="card-num">Card 04 / Distribution</div>
+        <h3 class="card-name">分发 — <span class="cn">每个 Agent runtime 都是种子</span></h3>
+        <div class="card-shift">
+          <strike>"销售对接客户"</strike> → <b>"Agent runtime 默认配置带 101pay"</b>。一旦进了 default config，每个用 runtime 的开发者都自带 101pay 体验。
+        </div>
+        <div class="h-move">五个动作</div>
+        <ol class="move-list">
+          <li>跟 <b>Coinbase AgentKit / LangChain Agent / OpenAI Agent SDK / Crewai / Letta</b> 各提 1 个 PR：把 101pay 加入 default payment provider 列表。<b>每个 PR 即一个分发渠道</b>。</li>
+          <li>OSS reference architecture 3 个：<code>101pay-langchain-agent</code> / <code>101pay-cursor-pay-per-call</code> / <code>101pay-claude-code-mcp</code>。每个 ≥ 200 stars 目标。</li>
+          <li><b>Hub-and-spoke</b>：voc.ai / flatkey / solvea 4 个产品都把 101pay 作为推荐结算 rail，在 capability manifest cross-link。Agent 装了任一产品自动看到 101pay。</li>
+          <li>Co-distribution：跟 1-2 个主流 wallet 谈 bundled config（MetaMask Snaps / Coinbase Wallet x402 module）。装钱包默认带 101pay。</li>
+          <li>埋点 <code>x402_payment_origin</code>：每次 tool call 记录"哪个 Agent runtime + 哪个 API endpoint"。把"哪些 endpoint 在用 101pay"做成<b>公开 dashboard</b>，开发者看到立刻有 social proof。</li>
+        </ol>
+        <div class="ship-block">
+          <div class="h-ship">本季度交付</div>
+          <div class="ship-content">3 个 framework 默认配置纳入 · 3 个 OSS reference repo · 公开 ecosystem dashboard</div>
+        </div>
+        <div class="kpi">
+          <span class="kpi-l">KPI</span>
+          <span class="kpi-v">每月通过 MCP / x402 channel 的 tx 数 ≥ 10K · 集成 ecosystem 项目 ≥ 30</span>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ─────────────────── Agent-skill slot ─────────────────── -->
+  <section>
+    <h2>Agent-Skill 在 11 Agent 里怎么放</h2>
+    <div class="h2-sub">v3 临时设计 · 后续可拆出独立 Agent</div>
+
+    <div class="skill-slot">
+      <span class="ptag">11 Agent · 临时承担方</span>
+      <h3>把 "agent-skill 分发" 当能力，分给现有 agent 兼职做</h3>
+      <p>不新建 Agent #12 — 在现有 11 个里挑 3 个 builder 兼带 agent-skill 分发职能。<em>后续每天我自己反思优化</em>。</p>
+      <table>
+        <thead>
+          <tr><th>能力</th><th>承担方</th><th>本周可做</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>OpenAPI + capabilities manifest 发布</td>
+            <td>#01 Foundation (Boyuan / 钟石龙)</td>
+            <td>把 101pay 的 manifest 模板从 flatkey 拷贝过来，3h dev</td>
+          </tr>
+          <tr>
+            <td>MCP catalog 提交 / Agent runtime PR</td>
+            <td>#07 Social Media (Wayne / Ivy Chen) · 当作社区运营</td>
+            <td>5 catalog 提交 + 联系 3 个 framework maintainer</td>
+          </tr>
+          <tr>
+            <td>Cookbook + comparison + Agent-friendly 内容</td>
+            <td>#03 Blog (张基琳 / 彭静)</td>
+            <td>本周写 2 个 cookbook 草稿 + 1 个 comparison page</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ─────────────────── Roadmap ─────────────────── -->
+  <section>
+    <h2>8 周 Roadmap</h2>
+    <div class="h2-sub">把四张卡变时间表 · 不动用全公司 · 复用集团内 4 产品的 GTM Swarm</div>
+
+    <div class="roadmap">
+      <div class="rh">Week</div>
+      <div class="rh">Discovery</div>
+      <div class="rh">Traffic</div>
+      <div class="rh">Content</div>
+      <div class="rh">Distribution</div>
+
+      <div class="rc week">W1</div>
+      <div class="rc"><strong>OpenAPI + agent-capabilities 公开</strong>，docs 移出 login wall</div>
+      <div class="rc">设计 <code>/v1/quotes</code> 端点 spec</div>
+      <div class="rc">写 2 个 cookbook 草稿</div>
+      <div class="rc">埋点 <code>x402_payment_origin</code></div>
+
+      <div class="rc week">W2</div>
+      <div class="rc"><strong>MCP server 落地</strong> + 5 大 catalog 提交</div>
+      <div class="rc"><code>/v1/quotes</code> 上线 + <code>@101pay/mcp</code> npm 包发布</div>
+      <div class="rc"><code>/compare/x402-vs-stripe-agentic</code> 上线</div>
+      <div class="rc">第 1 个 OSS reference repo (<code>101pay-langchain-agent</code>)</div>
+
+      <div class="rc week">W3</div>
+      <div class="rc">x402.101pay.ai 子域名 上线（ecosystem 资源页）</div>
+      <div class="rc">竞品错误页 fallback URL 引流测试</div>
+      <div class="rc"><code>/compare/101pay-vs-mcpay</code> 上线</div>
+      <div class="rc">第 2 个 OSS reference repo</div>
+
+      <div class="rc week">W4</div>
+      <div class="rc">联系 Coinbase AgentKit / LangChain maintainer 提 PR</div>
+      <div class="rc">第一周 KPI 复盘</div>
+      <div class="rc">3 个 cookbook 写完</div>
+      <div class="rc">第 3 个 OSS reference repo + 集团内 cross-link</div>
+
+      <div class="rc week">W5-6</div>
+      <div class="rc">PR 合并到主流 framework</div>
+      <div class="rc">基于 1 个月数据调 router metadata</div>
+      <div class="rc">5 cookbook + 1 个 "Q1 Agent Payment Anomaly Report"</div>
+      <div class="rc">Co-distribution 协议至少 1 个落定</div>
+
+      <div class="rc week">W7-8</div>
+      <div class="rc">x402 ecosystem 索引页收录</div>
+      <div class="rc">10K tx/月 KPI 验收</div>
+      <div class="rc">cookbook 自动 sync 到 LLM 训练数据</div>
+      <div class="rc">公开 ecosystem dashboard 上线</div>
+    </div>
+  </section>
+
+  <footer>
+    Generated <b>2026-05-18</b> · Solvea Group · GTM Swarm v3 (Persona Loop + MCP Distribution) <br>
+    Sister docs: <a href="agent-first-gtm-playbook.html">Agent-First GTM Playbook (master 4-card)</a> · <a href="agent-first-gtm-for-smartcrawler.html">smartcrawler.io insight</a><br>
+    References: <a href="https://101pay.ai">101pay.ai</a> · <a href="https://github.com/SolveaCX/gtm-swarm/blob/main/PRINCIPLES.md">PRINCIPLES.md §06 + §07</a> · <a href="https://www.coinbase.com/developer-platform/discover/launches/x402">Coinbase x402 protocol</a>
+  </footer>
+
+</div>
+</body>
+</html>

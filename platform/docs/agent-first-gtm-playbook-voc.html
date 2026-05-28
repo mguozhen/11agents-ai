@@ -1,0 +1,459 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Agent-First GTM · voc-amazon-reviews</title>
+<style>
+  :root {
+    --paper: #f6f2e9;
+    --paper-2: #efeadc;
+    --ink: #1a1a1a;
+    --muted: #7a7060;
+    --line: #d8cfb8;
+    --accent: #c95400;
+    --accent-2: #2a6f4e;
+    --warning: #b35d3d;
+    --serif: "Iowan Old Style", "Charter", "Source Serif Pro", Georgia, serif;
+    --sans: -apple-system, "SF Pro Text", "Inter", "Helvetica Neue", Arial, sans-serif;
+    --mono: "JetBrains Mono", "SF Mono", Menlo, monospace;
+    --card-bg-1: #f0e8d5;
+    --card-bg-2: #e8e3d3;
+    --card-bg-3: #ecdfc8;
+    --card-bg-4: #e3decd;
+  }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--paper);
+    background-image:
+      radial-gradient(circle at 12% 18%, rgba(201,84,0,.04), transparent 28%),
+      radial-gradient(circle at 88% 78%, rgba(42,111,78,.04), transparent 32%);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1280px; margin: 0 auto; padding: 64px 36px 140px; }
+
+  header { border-bottom: 1px solid var(--line); padding-bottom: 36px; margin-bottom: 64px; position: relative; }
+  .eyebrow {
+    font-family: var(--mono); font-size: 11px; letter-spacing: .28em;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 14px;
+    display: flex; justify-content: space-between; align-items: baseline;
+  }
+  .eyebrow .date { color: var(--accent); }
+  h1 {
+    font-family: var(--serif); font-size: 64px; line-height: 1.02;
+    margin: 0 0 18px; letter-spacing: -0.015em; font-weight: 600;
+  }
+  h1 em { font-style: italic; color: var(--accent); }
+  .lede {
+    font-family: var(--serif); font-size: 22px; line-height: 1.5;
+    color: var(--ink); max-width: 960px; margin: 0 0 22px;
+  }
+  .lede b { color: var(--ink); font-weight: 700; }
+  .lede strike { text-decoration-thickness: 2.5px; color: var(--warning); }
+  .meta-row {
+    display: flex; gap: 28px; font-family: var(--mono); font-size: 11.5px;
+    color: var(--muted); margin-top: 12px; flex-wrap: wrap;
+  }
+  .meta-row b { color: var(--ink); font-weight: 500; }
+
+  .funnel {
+    display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px;
+    margin: 18px 0 0; align-items: center;
+  }
+  .fstage {
+    background: #fff; border: 1px solid var(--line); border-radius: 4px;
+    padding: 10px 12px; text-align: center; font-size: 12px;
+    font-family: var(--mono);
+  }
+  .fstage.before { background: rgba(179, 93, 61, 0.1); border-color: rgba(179, 93, 61, 0.4); }
+  .fstage.after { background: rgba(42, 111, 78, 0.1); border-color: rgba(42, 111, 78, 0.4); }
+  .fstage b { color: var(--ink); font-family: var(--sans); font-weight: 600; font-size: 13px; }
+  .fstage .label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .12em; margin-bottom: 4px; }
+  .farrow { font-family: var(--mono); color: var(--muted); text-align: center; font-size: 14px; }
+
+  .deck {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 28px;
+    margin: 56px 0;
+  }
+  @media (max-width: 900px) { .deck { grid-template-columns: 1fr; } }
+  .card {
+    background: var(--card-bg-1); border-radius: 8px; padding: 32px 34px;
+    position: relative; overflow: hidden;
+    box-shadow: 0 1px 0 rgba(0,0,0,.04), 0 8px 24px -16px rgba(0,0,0,.12);
+    border: 1px solid var(--line);
+  }
+  .card.c2 { background: var(--card-bg-2); }
+  .card.c3 { background: var(--card-bg-3); }
+  .card.c4 { background: var(--card-bg-4); }
+  .card-num {
+    font-family: var(--mono); font-size: 11px; letter-spacing: .25em;
+    color: var(--accent); text-transform: uppercase; margin-bottom: 6px;
+  }
+  .card-name {
+    font-family: var(--serif); font-size: 36px; line-height: 1.05;
+    margin: 0 0 14px; letter-spacing: -0.01em; font-weight: 600;
+  }
+  .card-name .cn { color: var(--accent); }
+  .card-shift {
+    border-left: 3px solid var(--accent); padding: 10px 0 10px 16px; margin: 16px 0 22px;
+    font-family: var(--serif); font-size: 17px; line-height: 1.45;
+    color: var(--ink); font-style: italic;
+  }
+  .card-shift strike { color: var(--warning); }
+  .card-shift b { font-style: normal; color: var(--accent); font-weight: 700; }
+
+  .h-move {
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: .22em;
+    color: var(--muted); text-transform: uppercase; margin: 26px 0 10px;
+  }
+  .move-list { padding-left: 0; list-style: none; margin: 0 0 22px; counter-reset: move; }
+  .move-list li {
+    padding: 10px 0 10px 28px; border-bottom: 1px dashed rgba(0,0,0,.1);
+    position: relative; font-size: 14.5px; line-height: 1.5;
+  }
+  .move-list li:last-child { border-bottom: 0; }
+  .move-list li::before {
+    content: counter(move) ".";
+    counter-increment: move;
+    position: absolute; left: 0; top: 10px;
+    font-family: var(--mono); font-size: 12px; color: var(--accent);
+    font-weight: 600;
+  }
+  .move-list code {
+    font-family: var(--mono); font-size: 12px; background: rgba(0,0,0,.06);
+    padding: 1px 6px; border-radius: 3px;
+  }
+  .move-list b { color: var(--ink); font-weight: 700; }
+
+  .ship-block {
+    background: #fff; border-radius: 6px; padding: 16px 20px; margin: 0 0 16px;
+    border: 1px solid var(--line);
+  }
+  .ship-block .h-ship {
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: .22em;
+    color: var(--accent-2); text-transform: uppercase; margin-bottom: 6px;
+  }
+  .ship-block .ship-content { font-size: 13.5px; line-height: 1.5; }
+  .ship-block code {
+    font-family: var(--mono); font-size: 12px; background: rgba(0,0,0,.06);
+    padding: 1px 6px; border-radius: 3px;
+  }
+
+  .kpi {
+    display: flex; justify-content: space-between; align-items: baseline;
+    padding: 12px 16px; background: rgba(0,0,0,.04); border-radius: 4px;
+    margin-top: 14px;
+  }
+  .kpi .kpi-l { font-family: var(--mono); font-size: 10px; letter-spacing: .18em; color: var(--muted); text-transform: uppercase; }
+  .kpi .kpi-v { font-family: var(--mono); font-size: 13px; color: var(--ink); font-weight: 600; }
+
+  section { margin-top: 80px; }
+  h2 {
+    font-family: var(--serif); font-size: 38px; line-height: 1.1;
+    margin: 0 0 8px; letter-spacing: -0.005em; font-weight: 600;
+  }
+  .h2-sub {
+    font-family: var(--mono); font-size: 11.5px; color: var(--muted);
+    letter-spacing: .18em; text-transform: uppercase; margin-bottom: 32px;
+    padding-bottom: 16px; border-bottom: 1px solid var(--line);
+  }
+
+  .roadmap {
+    display: grid; grid-template-columns: 60px 1fr 1fr 1fr 1fr; gap: 0;
+    border: 1px solid var(--line); border-radius: 6px; overflow: hidden;
+    background: #fff;
+  }
+  .roadmap .rh, .roadmap .rc {
+    padding: 14px 16px; border-bottom: 1px solid var(--line); border-right: 1px solid var(--line);
+    font-size: 13px; line-height: 1.45;
+  }
+  .roadmap .rh {
+    background: var(--paper-2); font-family: var(--mono); font-size: 11px;
+    letter-spacing: .18em; text-transform: uppercase; color: var(--muted);
+    font-weight: 600;
+  }
+  .roadmap .rc:last-child { border-right: 0; }
+  .roadmap .week {
+    background: var(--card-bg-1); font-family: var(--mono); font-size: 12px;
+    font-weight: 700; color: var(--accent); text-align: center;
+  }
+  .roadmap .rc strong { color: var(--ink); font-weight: 700; }
+  .roadmap .rc code {
+    font-family: var(--mono); font-size: 11.5px; background: rgba(0,0,0,.06);
+    padding: 1px 5px; border-radius: 3px;
+  }
+
+  /* Shipped status table */
+  .shipped {
+    display: grid; grid-template-columns: auto 80px 1fr;
+    border: 1px solid var(--line); border-radius: 6px; overflow: hidden;
+    background: #fff;
+  }
+  .shipped .sh, .shipped .sc {
+    padding: 12px 16px; border-bottom: 1px solid var(--line); font-size: 13px;
+  }
+  .shipped .sh {
+    background: var(--paper-2); font-family: var(--mono); font-size: 11px;
+    letter-spacing: .18em; text-transform: uppercase; color: var(--muted); font-weight: 600;
+  }
+  .shipped .sc.status-done { color: var(--accent-2); font-family: var(--mono); font-weight: 600; }
+  .shipped .sc.status-partial { color: #b58900; font-family: var(--mono); font-weight: 600; }
+  .shipped .sc.status-todo { color: var(--warning); font-family: var(--mono); font-weight: 600; }
+  .shipped .sc { line-height: 1.5; }
+  .shipped .sc code { font-family: var(--mono); font-size: 11.5px; background: rgba(0,0,0,.06); padding: 1px 5px; border-radius: 3px; }
+
+  /* Differentiation table */
+  .diff {
+    width: 100%; border-collapse: collapse; background: #fff;
+    border: 1px solid var(--line); border-radius: 6px; overflow: hidden;
+  }
+  .diff th, .diff td {
+    padding: 12px 16px; border-bottom: 1px solid var(--line); text-align: left;
+    font-size: 13px; line-height: 1.5; vertical-align: top;
+  }
+  .diff th {
+    background: var(--paper-2); font-family: var(--mono); font-size: 11px;
+    letter-spacing: .18em; text-transform: uppercase; color: var(--muted); font-weight: 600;
+  }
+  .diff td.dim { font-weight: 600; }
+  .diff code { font-family: var(--mono); font-size: 11.5px; background: rgba(0,0,0,.06); padding: 1px 5px; border-radius: 3px; }
+
+  footer {
+    border-top: 1px solid var(--line); padding-top: 28px; margin-top: 100px;
+    font-family: var(--mono); font-size: 11.5px; color: var(--muted); line-height: 1.7;
+  }
+  footer b { color: var(--ink); font-weight: 600; }
+  footer a { color: var(--accent); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+
+  .principle {
+    background: #1a1a1a; color: #f4ecd8; padding: 30px 36px; margin: 36px 0 24px;
+    border-radius: 6px; font-family: var(--serif); font-size: 20px; line-height: 1.5;
+    position: relative;
+  }
+  .principle::before {
+    content: "§"; font-size: 56px; position: absolute; top: 10px; right: 30px;
+    color: var(--accent); opacity: 0.5;
+  }
+  .principle .ptag {
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: .25em;
+    color: var(--accent); text-transform: uppercase; margin-bottom: 12px;
+    display: block;
+  }
+  .principle em { color: var(--accent); font-style: italic; }
+
+  .close-paragraphs p {
+    font-family: var(--serif); font-size: 18px; line-height: 1.6; max-width: 880px;
+    margin: 16px 0 0;
+  }
+  .close-paragraphs p:first-child { margin-top: 30px; }
+  .close-paragraphs b { color: var(--ink); font-weight: 700; }
+  .close-paragraphs i { color: var(--accent); font-style: italic; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">
+      <span>voc-amazon-reviews · Agent-First GTM</span>
+      <span class="date">2026-05-17 · Hunter</span>
+    </div>
+    <h1>voc-amazon-reviews 抽四张卡：<em>Agent 时代的 Amazon-VoC 分发</em></h1>
+    <p class="lede">Amazon 卖家工具圈正经历换底逻辑 —— <strike>卖家打开 Helium 10</strike> → <b>Agent 调用 voc-amazon-reviews</b>；<strike>SEO 找 review intelligence</strike> → <b>MCP catalog 里被 router 选中</b>；<strike>买 SaaS dashboard</strike> → <b>tool call 计费</b>。MCP server 5/15 已上线（30 分），还差 70 分 — 这 4 张卡就是那 70 分。</p>
+
+    <div class="funnel">
+      <div class="fstage before"><div class="label">旧 · 发现</div><b>App Store / SEO</b></div>
+      <div class="farrow">→</div>
+      <div class="fstage before"><div class="label">旧 · 引流</div><b>落地页 / 广告</b></div>
+      <div class="farrow">→</div>
+      <div class="fstage before"><div class="label">旧 · 内容</div><b>Blog / 视频</b></div>
+      <div class="farrow">→</div>
+      <div class="fstage before"><div class="label">旧 · 分发</div><b>多渠道发帖</b></div>
+    </div>
+    <div class="funnel" style="margin-top:8px">
+      <div class="fstage after"><div class="label">新 · 发现</div><b>MCP catalog</b></div>
+      <div class="farrow">→</div>
+      <div class="fstage after"><div class="label">新 · 引流</div><b>Capability manifest</b></div>
+      <div class="farrow">→</div>
+      <div class="fstage after"><div class="label">新 · 内容</div><b>OpenAPI / Recipe</b></div>
+      <div class="farrow">→</div>
+      <div class="fstage after"><div class="label">新 · 分发</div><b>Tool call & 默认工具箱</b></div>
+    </div>
+
+    <div class="meta-row"><span><b>受众</b>：Amazon-seller Agent &gt; Human seller</span>
+      <span><b>载体</b>：MCP server · Shulex VOC OpenAPI · GitHub Pages</span>
+      <span><b>反馈</b>：MCP install · tool call · listing-edit 引用</span>
+      <span><b>目标</b>：成为 Agent 圈 Amazon-VoC 能力的<i>默认</i></span></div>
+  </header>
+
+  <section style="margin-top:0">
+    <div class="principle">
+      <span class="ptag">PRINCIPLES.md · §06 (Agents Are the New Distribution Channel)</span>
+      External AI Agents 是和 App Store / SEO / 公众号 / TikTok 同量级的新分发通道。Agents <em>don't call your UI, they call your capability</em>。一个只有 UI 没有 API 的产品被绕过；一个有 API 但不 agent-friendly 的产品输给 agent-friendly 的。voc-amazon-reviews 已经把数据层做成 moat，下一步就是<em>让 Agent 知道这个 moat 存在并默认调它</em>。
+    </div>
+  </section>
+
+  
+  <section>
+    <h2>当前状态盘点</h2>
+    <div class="h2-sub">audit: 4 done · 2 partial · 7 todo · 总分 4/13</div>
+    <div class="shipped">
+      <div class="sh">Item</div><div class="sh">Status</div><div class="sh">Note</div>
+      <div class="sc">MCP server (4 tools, 36 offline tests)</div><div class="sc status-done">✅ DONE</div><div class="sc">5/15 上线，<code>mcp_server/</code> 目录，subprocess wraps <code>fetch.sh</code> / <code>analyze.sh</code> / <code>voc.sh</code></div><div class="sc">extract_listing_improvements 差异化工具</div><div class="sc status-done">✅ DONE</div><div class="sc">Claude Opus 4.7 + structured output + prompt caching on rubric — 数据层吃透才能给的工具</div><div class="sc">Top-level README 重新定位 (data layer is the moat)</div><div class="sc status-done">✅ DONE</div><div class="sc">对照 Data Dive 的 8-维度表 + 数据层卖点放头部</div><div class="sc">Hero diagram + 多平台推广 adapt 文案</div><div class="sc status-done">✅ DONE</div><div class="sc"><code>docs/blog/2026-05-15-mcp-launch.md</code> + X/小红书/Reddit/HN 4 个 platform-native draft</div><div class="sc">5 大 MCP catalog 收录</div><div class="sc status-todo">❌ TODO</div><div class="sc">mcp.so / glama.ai / smithery.ai / GitHub <code>modelcontextprotocol/servers</code> PR / PulseMCP — 0/5</div><div class="sc">GitHub topics 配齐</div><div class="sc status-todo">❌ TODO</div><div class="sc">需要 add: <code>mcp</code>, <code>mcp-server</code>, <code>amazon-fba</code>, <code>helium10-alternative</code>, <code>voc</code></div><div class="sc"><code>@voc-amazon-reviews/mcp</code> npm 一键装</div><div class="sc status-todo">❌ TODO</div><div class="sc">现在还得 clone + pip install — 4 行命令，流量杀手</div><div class="sc">OpenAPI 3.1 spec for MCP tool layer</div><div class="sc status-partial">🟡 PARTIAL</div><div class="sc">Shulex 底层有，我们的 4-tool 层没有独立 spec</div><div class="sc">30s cookbook × 5</div><div class="sc status-todo">❌ TODO</div><div class="sc">README 是给人读的；机器读的 cookbook 0 篇</div><div class="sc">Comparison page vs Data Dive / Helium 10 / JungleScout</div><div class="sc status-partial">🟡 PARTIAL</div><div class="sc">README 内嵌对照表；没独立 <code>/compare/</code> 落地页</div><div class="sc">MCP call telemetry (opt-out)</div><div class="sc status-todo">❌ TODO</div><div class="sc">不知道有几个 Agent 在用</div><div class="sc">3 个 OSS reference architecture repo</div><div class="sc status-todo">❌ TODO</div><div class="sc"><code>cursor-amazon-seller</code> / <code>langchain-agent</code> / <code>daily-monitor</code> 全没</div><div class="sc">flatkey ↔ voc cross-link manifest</div><div class="sc status-todo">❌ TODO</div><div class="sc">Hub-spoke 内部分发没串起来</div>
+    </div>
+  </section>
+
+
+  <section>
+    <h2>四张卡</h2>
+    <div class="h2-sub">每张 = 漏斗的一个环节 · 一条 mindset shift · 5 个具体动作 · 本季度交付物 · KPI</div>
+    <div class="deck">
+      
+      <article class="card c1">
+        <div class="card-num">Card 01 / Discovery</div>
+        <h3 class="card-name">发现 — <span class="cn">让 Agent 知道这条 capability 存在</span></h3>
+        <div class="card-shift"><strike>"Amazon 卖家 SEO 找你"</strike> → <b>"Agent 在它的工具索引里看到你"</b>。索引来自 3 处：MCP catalog、LLM 训练数据里抓到的 GitHub repo、Amazon-垂直 Agent 框架的默认配置。垂直产品的分类不能跟 flatkey 抢 "AI / LLM" 赛道，要进 "Ecommerce / Research"。</div>
+        <div class="h-move">五个动作</div>
+        <ol class="move-list">
+          <li><b>5 大 MCP catalog 立刻提交</b> — <code>mcp.so</code> / <code>glama.ai</code> / <code>smithery.ai</code> / <code>modelcontextprotocol/servers</code> GitHub PR / PulseMCP。<b>分类选 Ecommerce / Research</b>，不要选 AI。</li>
+          <li><b>GitHub topics 立刻配齐</b>：<code>mcp</code> <code>mcp-server</code> <code>model-context-protocol</code> <code>amazon-fba</code> <code>amazon-seller-tools</code> <code>voc</code> <code>review-analysis</code> <code>helium10-alternative</code>。Anthropic / GitHub 的 MCP 发现页直接按 topic 检索。</li>
+          <li><b>OpenAPI 3.1 spec for MCP tool layer</b> —— 不是 Shulex 那层，是我们 4 个 tool 的层。放 <code>/api/openapi.json</code> 供 Agent 自动生成 wrapper。</li>
+          <li><b>加 <code>.well-known/ai-plugin.json</code> + <code>.well-known/agent-capabilities.json</code></b> —— 没自有域名，挂 GitHub Pages：<code>mguozhen.github.io/voc-amazon-reviews/.well-known/...</code></li>
+          <li><b>Cline + Open Hands + Cursor 的 "Amazon FBA preset"</b> 提 PR 加 voc-amazon-reviews MCP。**比直接进 default LLM provider 容易得多**，因为这些 framework 已经在收 use-case-specific preset。</li>
+        </ol>
+        <div class="ship-block">
+          <div class="h-ship">本季度交付</div>
+          <div class="ship-content">5 大 MCP catalog 收录 + 自有 OpenAPI spec for MCP layer + 2 个 Agent framework 的 Amazon preset PR merged。</div>
+        </div>
+        <div class="kpi">
+          <span class="kpi-l">North Star KPI</span>
+          <span class="kpi-v">MCP catalog 累计 install 数 ≥ 200 · GitHub stars 从 16 → ≥ 100</span>
+        </div>
+      </article>
+
+      
+      <article class="card c2">
+        <div class="card-num">Card 02 / Traffic</div>
+        <h3 class="card-name">引流 — <span class="cn">让 Agent 路由 Amazon 任务给我们</span></h3>
+        <div class="card-shift"><strike>"广告投放 → 卖家点击"</strike> → <b>"Agent router 决定调谁"</b>。Amazon 评论分析 task，候选有 Data Dive MCP / 自研爬虫 / Helium 10 API。<b>我们要在 description / metadata / cost 三个字段上比对手清晰</b>。垂直产品的 hook 不是 "便宜 30%"（flatkey 那套），而是 "Helium 10 替代品 / 开源 / 免费试用"。</div>
+        <div class="h-move">五个动作</div>
+        <ol class="move-list">
+          <li><b>重写 4 个 tool 的 <code>description</code> 字段</b> 让 LLM router 一眼读懂：从 "Fetch raw Amazon reviews via Shulex VOC API" 改为 "Get verified Amazon reviews (10 marketplaces, up to 1000/ASIN, real OpenAPI not scraper) — Helium 10 alternative, free starter tier"。</li>
+          <li><b>Cost-aware metadata</b>：在 tool schema 加 <code>_meta.credits_per_call</code>（100 条评论 ≈ 60 credits ≈ $0.05）。Agent router 看到便宜的 capability 优先调。</li>
+          <li><b>Error message 当广告位</b>：当 ASIN 无效 / Shulex rate-limit 时，error body 写 "Need a key? Free signup: apps.voc.ai/openapi?utm_source=mcp_error"。别家 5xx 时也跳过来。</li>
+          <li><b>One-shot install 必须 4 秒</b>：发 <code>@voc-amazon-reviews/mcp</code> npm 包，<code>claude mcp add voc-amazon-reviews -- npx -y @voc-amazon-reviews/mcp</code> 一行能用。现在的 clone-repo + pip-install 是流量杀手。</li>
+          <li><b>Cross-link from flatkey & solvea</b>：flatkey 的 capability manifest 列 "Need Amazon review intel? → voc-amazon-reviews"；solvea.cx 同。Hub-and-spoke 集团内部分发。</li>
+        </ol>
+        <div class="ship-block">
+          <div class="h-ship">本季度交付</div>
+          <div class="ship-content"><code>@voc-amazon-reviews/mcp</code> npm 发布 + 4 个 tool description 重写 + flatkey → voc cross-link manifest 上线。</div>
+        </div>
+        <div class="kpi">
+          <span class="kpi-l">North Star KPI</span>
+          <span class="kpi-v">MCP install ≥ 100/周 · 单次 install 后 30 天留存调用率 ≥ 35%</span>
+        </div>
+      </article>
+
+      
+      <article class="card c3">
+        <div class="card-num">Card 03 / Content</div>
+        <h3 class="card-name">内容 — <span class="cn">为 Amazon-seller Agent 写，不为人写</span></h3>
+        <div class="card-shift"><strike>"长 blog / 短视频"</strike> → <b>"机器可读的 cookbook + 结构化的 comparison page"</b>。人读 README 找 "是不是骗子"；Agent 读 cookbook 找 "3 行代码能不能 demo"。我们的内容机器还在写给人，要双轨。</div>
+        <div class="h-move">五个动作</div>
+        <ol class="move-list">
+          <li><b>5 个 30 秒 cookbook</b>：(1) "Analyze any ASIN in 3 lines" (2) "Compare your listing vs top competitor" (3) "Daily review monitor cron" (4) "Generate listing copy from VoC" (5) "Pull reviews into your own DB"。每个 ≤ 30 行 markdown。</li>
+          <li><b>Error code 全部 semantic 化</b>：<code>error.type</code> + <code>error.suggested_action</code>。例：<code>type="voc_api_no_key"</code> / <code>suggested_action="Visit apps.voc.ai/openapi to get a free starter key, then export VOC_API_KEY"</code>。Agent 读到 <code>suggested_action</code> 自动修复，不用问人。</li>
+          <li><b>Comparison page 单独建</b> — <code>mguozhen.github.io/voc-amazon-reviews/compare/data-dive</code> + <code>/compare/helium10</code> + <code>/compare/junglescout</code>。<b>结构化对比表，不是散文 blog</b>。LLM 训练数据高频抓 comparison pages。</li>
+          <li><b>README 顶部加 "Quick install for Agents" 段</b>：给 Cursor / Claude Code / Continue.dev 各贴一段 install 配置；README 是给人读的 "为什么是 moat"，再加一层机器读的 quick-install。</li>
+          <li><b>gtm-swarm 内容机器接入 MCP CTA rule</b>：每条 voc-amazon-reviews 推广内容（X / Reddit / 小红书）footer 自带 "Install via MCP: <code>claude mcp add voc-amazon-reviews</code>"。内容机器 = 分发引擎。</li>
+        </ol>
+        <div class="ship-block">
+          <div class="h-ship">本季度交付</div>
+          <div class="ship-content">5 篇 cookbook 上线 GitHub Pages + 3 个 comparison page + 错误码 <code>suggested_action</code> 全部 ship + gtm-swarm voice rule 接入 MCP CTA。</div>
+        </div>
+        <div class="kpi">
+          <span class="kpi-l">North Star KPI</span>
+          <span class="kpi-v">cookbook 累计 PV ≥ 5K · 任何 LLM 问 "best Amazon review MCP" 答案里出现我们</span>
+        </div>
+      </article>
+
+      
+      <article class="card c4">
+        <div class="card-num">Card 04 / Distribution</div>
+        <h3 class="card-name">分发 — <span class="cn">每次 tool call 都是一颗种子</span></h3>
+        <div class="card-shift"><strike>"广告位 + 渠道商务"</strike> → <b>"成功的 tool call 自动传染"</b>。Agent A 调用成功 → 写进它的 memory → 同 stack 的 Agent B 看到 → 默认加入工具箱。voc 的角色是 <b>spoke</b>（spoke off flatkey 或 spoke off "Amazon stack"），<b>不是 hub</b>。垂直产品别假装当 hub。</div>
+        <div class="h-move">五个动作</div>
+        <ol class="move-list">
+          <li><b>埋点每次 MCP call</b>：在 <code>mcp_server/server.py</code> 加最小 telemetry（<b>默认 opt-in 加显式 opt-out flag</b>），匿名记录 client name / version / tool / success。<b>不发任何评论内容</b>。</li>
+          <li><b>3 个 OSS reference architecture repo</b>：(1) <code>voc-amazon-reviews-cursor-amazon-seller</code>（Cursor Amazon seller 工作台 preset）(2) <code>voc-amazon-reviews-langchain-agent</code>（含 listing rewrite agent）(3) <code>voc-amazon-reviews-daily-monitor</code>（GitHub Actions cron 每日扫 10 个 ASIN 发 Slack）。每个 ≥ 100 stars 目标。</li>
+          <li><b>失败案例也是分发</b>：Shulex API 故障返回的 error 附 fallback <code>https://voc-amazon-reviews.dev/status</code> —— status page 又是 SEO 又是 LLM 训练数据。损失即流量。</li>
+          <li><b>Bundled config 协议</b>：跟 Cursor 的 "Amazon seller pack" 维护者 / Cline 的 system prompt template 仓库谈 —— 用户装他们的 preset 时默认包含 voc-amazon-reviews。</li>
+          <li><b>不当 hub，当 spoke</b>：voc 在 flatkey 的 capability list 里出现；voc 也在 solvea.cx 推荐里出现。<b>集团内部分发是最便宜的引流</b>。</li>
+        </ol>
+        <div class="ship-block">
+          <div class="h-ship">本季度交付</div>
+          <div class="ship-content">3 个 OSS reference repo 上线（至少 1 个达 ≥ 100 stars）+ telemetry ship + 1 个 framework bundled config 协议落定。</div>
+        </div>
+        <div class="kpi">
+          <span class="kpi-l">North Star KPI</span>
+          <span class="kpi-v">第 4 周末 MCP 通道 tool call 累计 ≥ 5K（voc 是 vertical，盘子比 flatkey 小，目标减半）</span>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <section>
+    <h2>8 周 Roadmap</h2>
+    <div class="h2-sub">把四张卡变成时间表 · 每周一个 deliverable · 不动用全公司</div>
+    <div class="roadmap">
+      <div class="rh">Week</div>
+      <div class="rh">Discovery (Card 1)</div>
+      <div class="rh">Traffic (Card 2)</div>
+      <div class="rh">Content (Card 3)</div>
+      <div class="rh">Distribution (Card 4)</div>
+      <div class="rc week">W1</div><div class="rc"><strong>GitHub topics 配齐</strong> + 提交 <code>apis.guru</code></div><div class="rc">重写 4 个 tool <code>description</code></div><div class="rc">OpenAPI 3.1 spec for MCP layer 写完</div><div class="rc">加最小 telemetry (opt-out)</div>
+      <div class="rc week">W2</div><div class="rc"><strong>5 大 MCP catalog 全部提交</strong></div><div class="rc">发布 <code>@voc-amazon-reviews/mcp</code> npm</div><div class="rc">5 篇 cookbook 上线（GitHub Pages）</div><div class="rc">第 1 个 reference repo: <code>cursor-amazon-seller</code></div>
+      <div class="rc week">W3</div><div class="rc"><code>.well-known/ai-plugin.json</code> 挂 GitHub Pages</div><div class="rc">flatkey → voc cross-link manifest</div><div class="rc"><code>/compare/data-dive-vs-voc</code> 上线</div><div class="rc">第 2 个 reference repo: <code>langchain-agent</code></div>
+      <div class="rc week">W4</div><div class="rc">Cline + Open Hands "Amazon FBA preset" PR 提交</div><div class="rc">W1-3 KPI 复盘 — 哪些字段促成调用</div><div class="rc"><code>/compare/helium10</code> + <code>/compare/junglescout</code></div><div class="rc">第 3 个 reference repo: <code>daily-monitor</code></div>
+      <div class="rc week">W5-6</div><div class="rc"><strong><code>modelcontextprotocol/servers</code> PR 合并</strong></div><div class="rc">基于第 1 月数据调 metadata</div><div class="rc">gtm-swarm 内容机器自带 MCP CTA rule</div><div class="rc">与 1 个 framework 谈定 bundled config</div>
+      <div class="rc week">W7-8</div><div class="rc">Cursor / Continue.dev 默认 Amazon preset</div><div class="rc">错误码 <code>suggested_action</code> 全部上线</div><div class="rc">cookbook 自动 sync 进 LLM 训练目录</div><div class="rc"><strong>5K tool call/周 KPI 验收</strong></div>
+    </div>
+  </section>
+
+  
+  <section>
+    <h2>差异化对照</h2>
+    <div class="h2-sub">为什么这个产品的 playbook 跟 reference 不一样</div>
+    <table class="diff">
+      <thead>
+        <tr><th>维度</th><th>Reference 玩法</th><th>本产品玩法</th><th>原因</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="dim">MCP catalog 分类</td><td>AI / LLM Gateway</td><td>Ecommerce / Research</td><td>voc 是垂直，跟 flatkey 抢 AI 赛道会被淹</td></tr><tr><td class="dim">引流 hook</td><td>比 Anthropic 便宜 30-70%</td><td>Helium 10 替代品 / 开源 / 免费试用</td><td>voc 的对手是付费 SaaS 不是 LLM API</td></tr><tr><td class="dim">进 framework 默认</td><td>continue.dev / aider 的 default LLM provider</td><td>Cline / Open Hands 的 <b>Amazon system prompt preset</b></td><td>voc 不是基础设施，是工作流的一环</td></tr><tr><td class="dim">角色定位</td><td>Hub (其他垂直 spoke 过来)</td><td>Spoke (off flatkey + Solvea)</td><td>voc 单点不构成生态，但是顺势成为别家的能力</td></tr><tr><td class="dim">KPI 量级</td><td>10K tool call/周</td><td>5K tool call/周</td><td>垂直 niche，盘子本来小 50%</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+
+  <section>
+    <h2>第一性原理</h2>
+    <div class="h2-sub">为什么这条路对，剩下的只是执行</div>
+    <div class="principle">
+      <span class="ptag">观察 · 三段式</span>
+      <b>1.</b> Amazon 卖家行为正从 "open Helium 10 dashboard" 切到 "ask Cursor / Claude Code for VoC analysis"。<br><b>2.</b> Agent 不读你的 landing page，它读 MCP catalog 里的 <code>description</code> 字段和 <code>_meta.credits_per_call</code>。<br><b>3.</b> <em>谁先成为 Amazon-VoC 这一类能力 Agent 默认调用的源，谁就拿到这波垂直 SaaS 的分发红利。</em>
+    </div>
+    <div class="close-paragraphs"><p>四张卡的核心是同一件事 —— <b>把面向 "Amazon 卖家" 的 marketing 动作，再做一份面向 "Amazon-seller Agent" 的版本</b>。不是替换，是叠加。GitHub stars 不停，但加 MCP catalog；README 不停，但加 cookbook；卖家社群分发不停，但加 framework preset；推广不停，但加 Agent router 字段优化。</p>
+    <p>8 周后我们会有第一批 voc 专属数据：<b>每天有多少个 Amazon-seller Agent 在调我们的 capability，其中多少是它们自己路由过来的（vs 人工配置 MCP install），单次 install 后 30 天留存调用率。</b>这三个数字定义了 voc-amazon-reviews 在 Agent 时代的<i>新版本 PMF</i>。</p></div>
+  </section>
+
+  <footer>Generated <b>2026-05-17</b> · Hunter · agent-gtm skill v1<br>Master playbook: <a href="agent-first-gtm-playbook.html">agent-first-gtm-playbook.html</a> (flatkey reference) · This product: <a href="https://github.com/mguozhen/voc-amazon-reviews">github.com/mguozhen/voc-amazon-reviews</a></footer>
+
+</div>
+</body>
+</html>

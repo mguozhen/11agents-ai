@@ -1,0 +1,82 @@
+.ledger { padding: 20px 28px 40px; }
+.ledger-err { padding: 40px; color: #c33; }
+.ledger-loading { padding: 40px; color: #888; }
+.ledger-header { margin-bottom: 20px; }
+.ledger-title { font-size: 18px; font-weight: 600; color: #1c1c1c; }
+
+/* Metric cards */
+.ldg-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.ldg-card {
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 12px;
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.ldg-card-total { background: #fafafa; }
+.ldg-card-emoji { font-size: 20px; margin-bottom: 4px; }
+.ldg-card-count { font-size: 32px; font-weight: 700; line-height: 1; }
+.ldg-card-label { font-size: 14px; font-weight: 500; color: #333; margin-top: 4px; }
+.ldg-card-sub { font-size: 11px; color: #aaa; }
+
+/* Cost card */
+.ldg-cost-card {
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 12px;
+  padding: 18px 20px;
+  margin-bottom: 24px;
+}
+.ldg-cost-title { font-size: 14px; font-weight: 600; color: #333; margin-bottom: 14px; }
+.ldg-cost-rows { display: flex; flex-direction: column; gap: 8px; }
+.ldg-cost-row {
+  display: grid;
+  grid-template-columns: 1fr 120px 80px;
+  font-size: 13px;
+  color: #555;
+}
+.ldg-cost-calc { color: #999; text-align: right; }
+.ldg-cost-amount { text-align: right; font-weight: 500; color: #333; }
+.ldg-cost-divider { border-top: 1px solid #eee; margin: 4px 0; }
+.ldg-cost-total-row { font-weight: 600; color: #1c1c1c; }
+.ldg-cost-grand { text-align: right; font-size: 16px; color: #16a34a; }
+
+/* Issues table */
+.ldg-section-title {
+  font-size: 13px; font-weight: 600; color: #666;
+  text-transform: uppercase; letter-spacing: 0.4px;
+  margin-bottom: 10px;
+}
+.ledger-table {
+  width: 100%; border-collapse: collapse; font-size: 13px;
+  background: #fff; border: 1px solid #eee; border-radius: 8px; overflow: hidden;
+}
+.ledger-table thead { background: #fafafa; }
+.ledger-table th {
+  padding: 10px 14px; text-align: left; font-weight: 500; color: #666;
+  font-size: 11px; text-transform: uppercase; letter-spacing: 0.4px;
+  border-bottom: 1px solid #eee;
+}
+.ledger-table td { padding: 12px 14px; border-bottom: 1px solid #f4f4f4; vertical-align: middle; }
+.ledger-table tbody tr:last-child td { border-bottom: none; }
+.ldg-issue-title { color: #1c1c1c; max-width: 400px; }
+.ldg-issue-date { color: #aaa; font-size: 12px; white-space: nowrap; }
+
+/* Pagination */
+.ldg-pagination {
+  display: flex; align-items: center; gap: 12px;
+  justify-content: center; margin-top: 16px;
+}
+.ldg-pagination button {
+  padding: 6px 14px; border: 1px solid #ddd; border-radius: 6px;
+  background: #fff; cursor: pointer; font-size: 13px; color: #555;
+}
+.ldg-pagination button:disabled { color: #ccc; cursor: default; }
+.ldg-pagination span { font-size: 13px; color: #888; }

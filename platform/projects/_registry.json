@@ -1,0 +1,45 @@
+{
+  "projects": {
+    "voc": {
+      "slug": "voc",
+      "name": "voc",
+      "url": "",
+      "category": "",
+      "tagline": "",
+      "status": "active"
+    },
+    "voc-ai": {
+      "slug": "voc-ai",
+      "name": "voc-ai",
+      "url": "",
+      "category": "",
+      "tagline": "",
+      "status": "active"
+    },
+    "101pay": {
+      "slug": "101pay",
+      "name": "101pay",
+      "url": "https://101pay.ai",
+      "category": "",
+      "tagline": "",
+      "status": "active"
+    },
+    "smartcrawler": {
+      "slug": "smartcrawler",
+      "name": "smartcrawler",
+      "url": "https://smartcrawler.io",
+      "category": "",
+      "tagline": "",
+      "status": "active"
+    },
+    "multi-platform-publisher": {
+      "slug": "multi-platform-publisher",
+      "name": "Multi-Platform Publisher",
+      "url": "https://github.com/mguozhen/multi-platform-publisher",
+      "category": "Developer tool / Content automation",
+      "tagline": "One command. Every platform. Your content, auto-adapted.",
+      "status": "active"
+    }
+  },
+  "default": "voc"
+}

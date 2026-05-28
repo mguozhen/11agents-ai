@@ -1,0 +1,447 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Agent-First GTM · btcmind</title>
+<style>
+  :root {
+    --paper: #f6f2e9;
+    --paper-2: #efeadc;
+    --ink: #1a1a1a;
+    --muted: #7a7060;
+    --line: #d8cfb8;
+    --accent: #c95400;
+    --accent-2: #2a6f4e;
+    --warning: #b35d3d;
+    --serif: "Iowan Old Style", "Charter", "Source Serif Pro", Georgia, serif;
+    --sans: -apple-system, "SF Pro Text", "Inter", "Helvetica Neue", Arial, sans-serif;
+    --mono: "JetBrains Mono", "SF Mono", Menlo, monospace;
+    --card-bg-1: #f0e8d5;
+    --card-bg-2: #e8e3d3;
+    --card-bg-3: #ecdfc8;
+    --card-bg-4: #e3decd;
+  }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--paper);
+    background-image:
+      radial-gradient(circle at 12% 18%, rgba(201,84,0,.04), transparent 28%),
+      radial-gradient(circle at 88% 78%, rgba(42,111,78,.04), transparent 32%);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1280px; margin: 0 auto; padding: 64px 36px 140px; }
+
+  header { border-bottom: 1px solid var(--line); padding-bottom: 36px; margin-bottom: 64px; position: relative; }
+  .eyebrow {
+    font-family: var(--mono); font-size: 11px; letter-spacing: .28em;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 14px;
+    display: flex; justify-content: space-between; align-items: baseline;
+  }
+  .eyebrow .date { color: var(--accent); }
+  h1 {
+    font-family: var(--serif); font-size: 64px; line-height: 1.02;
+    margin: 0 0 18px; letter-spacing: -0.015em; font-weight: 600;
+  }
+  h1 em { font-style: italic; color: var(--accent); }
+  .lede {
+    font-family: var(--serif); font-size: 22px; line-height: 1.5;
+    color: var(--ink); max-width: 960px; margin: 0 0 22px;
+  }
+  .lede b { color: var(--ink); font-weight: 700; }
+  .lede strike { text-decoration-thickness: 2.5px; color: var(--warning); }
+  .meta-row {
+    display: flex; gap: 28px; font-family: var(--mono); font-size: 11.5px;
+    color: var(--muted); margin-top: 12px; flex-wrap: wrap;
+  }
+  .meta-row b { color: var(--ink); font-weight: 500; }
+
+  .funnel {
+    display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px;
+    margin: 18px 0 0; align-items: center;
+  }
+  .fstage {
+    background: #fff; border: 1px solid var(--line); border-radius: 4px;
+    padding: 10px 12px; text-align: center; font-size: 12px;
+    font-family: var(--mono);
+  }
+  .fstage.before { background: rgba(179, 93, 61, 0.1); border-color: rgba(179, 93, 61, 0.4); }
+  .fstage.after { background: rgba(42, 111, 78, 0.1); border-color: rgba(42, 111, 78, 0.4); }
+  .fstage b { color: var(--ink); font-family: var(--sans); font-weight: 600; font-size: 13px; }
+  .fstage .label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .12em; margin-bottom: 4px; }
+  .farrow { font-family: var(--mono); color: var(--muted); text-align: center; font-size: 14px; }
+
+  .deck {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 28px;
+    margin: 56px 0;
+  }
+  @media (max-width: 900px) { .deck { grid-template-columns: 1fr; } }
+  .card {
+    background: var(--card-bg-1); border-radius: 8px; padding: 32px 34px;
+    position: relative; overflow: hidden;
+    box-shadow: 0 1px 0 rgba(0,0,0,.04), 0 8px 24px -16px rgba(0,0,0,.12);
+    border: 1px solid var(--line);
+  }
+  .card.c2 { background: var(--card-bg-2); }
+  .card.c3 { background: var(--card-bg-3); }
+  .card.c4 { background: var(--card-bg-4); }
+  .card-num {
+    font-family: var(--mono); font-size: 11px; letter-spacing: .25em;
+    color: var(--accent); text-transform: uppercase; margin-bottom: 6px;
+  }
+  .card-name {
+    font-family: var(--serif); font-size: 36px; line-height: 1.05;
+    margin: 0 0 14px; letter-spacing: -0.01em; font-weight: 600;
+  }
+  .card-name .cn { color: var(--accent); }
+  .card-shift {
+    border-left: 3px solid var(--accent); padding: 10px 0 10px 16px; margin: 16px 0 22px;
+    font-family: var(--serif); font-size: 17px; line-height: 1.45;
+    color: var(--ink); font-style: italic;
+  }
+  .card-shift strike { color: var(--warning); }
+  .card-shift b { font-style: normal; color: var(--accent); font-weight: 700; }
+
+  .h-move {
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: .22em;
+    color: var(--muted); text-transform: uppercase; margin: 26px 0 10px;
+  }
+  .move-list { padding-left: 0; list-style: none; margin: 0 0 22px; counter-reset: move; }
+  .move-list li {
+    padding: 10px 0 10px 28px; border-bottom: 1px dashed rgba(0,0,0,.1);
+    position: relative; font-size: 14.5px; line-height: 1.5;
+  }
+  .move-list li:last-child { border-bottom: 0; }
+  .move-list li::before {
+    content: counter(move) ".";
+    counter-increment: move;
+    position: absolute; left: 0; top: 10px;
+    font-family: var(--mono); font-size: 12px; color: var(--accent);
+    font-weight: 600;
+  }
+  .move-list code {
+    font-family: var(--mono); font-size: 12px; background: rgba(0,0,0,.06);
+    padding: 1px 6px; border-radius: 3px;
+  }
+  .move-list b { color: var(--ink); font-weight: 700; }
+
+  .ship-block {
+    background: #fff; border-radius: 6px; padding: 16px 20px; margin: 0 0 16px;
+    border: 1px solid var(--line);
+  }
+  .ship-block .h-ship {
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: .22em;
+    color: var(--accent-2); text-transform: uppercase; margin-bottom: 6px;
+  }
+  .ship-block .ship-content { font-size: 13.5px; line-height: 1.5; }
+  .ship-block code {
+    font-family: var(--mono); font-size: 12px; background: rgba(0,0,0,.06);
+    padding: 1px 6px; border-radius: 3px;
+  }
+
+  .kpi {
+    display: flex; justify-content: space-between; align-items: baseline;
+    padding: 12px 16px; background: rgba(0,0,0,.04); border-radius: 4px;
+    margin-top: 14px;
+  }
+  .kpi .kpi-l { font-family: var(--mono); font-size: 10px; letter-spacing: .18em; color: var(--muted); text-transform: uppercase; }
+  .kpi .kpi-v { font-family: var(--mono); font-size: 13px; color: var(--ink); font-weight: 600; }
+
+  section { margin-top: 80px; }
+  h2 {
+    font-family: var(--serif); font-size: 38px; line-height: 1.1;
+    margin: 0 0 8px; letter-spacing: -0.005em; font-weight: 600;
+  }
+  .h2-sub {
+    font-family: var(--mono); font-size: 11.5px; color: var(--muted);
+    letter-spacing: .18em; text-transform: uppercase; margin-bottom: 32px;
+    padding-bottom: 16px; border-bottom: 1px solid var(--line);
+  }
+
+  .roadmap {
+    display: grid; grid-template-columns: 60px 1fr 1fr 1fr 1fr; gap: 0;
+    border: 1px solid var(--line); border-radius: 6px; overflow: hidden;
+    background: #fff;
+  }
+  .roadmap .rh, .roadmap .rc {
+    padding: 14px 16px; border-bottom: 1px solid var(--line); border-right: 1px solid var(--line);
+    font-size: 13px; line-height: 1.45;
+  }
+  .roadmap .rh {
+    background: var(--paper-2); font-family: var(--mono); font-size: 11px;
+    letter-spacing: .18em; text-transform: uppercase; color: var(--muted);
+    font-weight: 600;
+  }
+  .roadmap .rc:last-child { border-right: 0; }
+  .roadmap .week {
+    background: var(--card-bg-1); font-family: var(--mono); font-size: 12px;
+    font-weight: 700; color: var(--accent); text-align: center;
+  }
+  .roadmap .rc strong { color: var(--ink); font-weight: 700; }
+  .roadmap .rc code {
+    font-family: var(--mono); font-size: 11.5px; background: rgba(0,0,0,.06);
+    padding: 1px 5px; border-radius: 3px;
+  }
+
+  /* Shipped status table */
+  .shipped {
+    display: grid; grid-template-columns: auto 80px 1fr;
+    border: 1px solid var(--line); border-radius: 6px; overflow: hidden;
+    background: #fff;
+  }
+  .shipped .sh, .shipped .sc {
+    padding: 12px 16px; border-bottom: 1px solid var(--line); font-size: 13px;
+  }
+  .shipped .sh {
+    background: var(--paper-2); font-family: var(--mono); font-size: 11px;
+    letter-spacing: .18em; text-transform: uppercase; color: var(--muted); font-weight: 600;
+  }
+  .shipped .sc.status-done { color: var(--accent-2); font-family: var(--mono); font-weight: 600; }
+  .shipped .sc.status-partial { color: #b58900; font-family: var(--mono); font-weight: 600; }
+  .shipped .sc.status-todo { color: var(--warning); font-family: var(--mono); font-weight: 600; }
+  .shipped .sc { line-height: 1.5; }
+  .shipped .sc code { font-family: var(--mono); font-size: 11.5px; background: rgba(0,0,0,.06); padding: 1px 5px; border-radius: 3px; }
+
+  /* Differentiation table */
+  .diff {
+    width: 100%; border-collapse: collapse; background: #fff;
+    border: 1px solid var(--line); border-radius: 6px; overflow: hidden;
+  }
+  .diff th, .diff td {
+    padding: 12px 16px; border-bottom: 1px solid var(--line); text-align: left;
+    font-size: 13px; line-height: 1.5; vertical-align: top;
+  }
+  .diff th {
+    background: var(--paper-2); font-family: var(--mono); font-size: 11px;
+    letter-spacing: .18em; text-transform: uppercase; color: var(--muted); font-weight: 600;
+  }
+  .diff td.dim { font-weight: 600; }
+  .diff code { font-family: var(--mono); font-size: 11.5px; background: rgba(0,0,0,.06); padding: 1px 5px; border-radius: 3px; }
+
+  footer {
+    border-top: 1px solid var(--line); padding-top: 28px; margin-top: 100px;
+    font-family: var(--mono); font-size: 11.5px; color: var(--muted); line-height: 1.7;
+  }
+  footer b { color: var(--ink); font-weight: 600; }
+  footer a { color: var(--accent); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+
+  .principle {
+    background: #1a1a1a; color: #f4ecd8; padding: 30px 36px; margin: 36px 0 24px;
+    border-radius: 6px; font-family: var(--serif); font-size: 20px; line-height: 1.5;
+    position: relative;
+  }
+  .principle::before {
+    content: "§"; font-size: 56px; position: absolute; top: 10px; right: 30px;
+    color: var(--accent); opacity: 0.5;
+  }
+  .principle .ptag {
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: .25em;
+    color: var(--accent); text-transform: uppercase; margin-bottom: 12px;
+    display: block;
+  }
+  .principle em { color: var(--accent); font-style: italic; }
+
+  .close-paragraphs p {
+    font-family: var(--serif); font-size: 18px; line-height: 1.6; max-width: 880px;
+    margin: 16px 0 0;
+  }
+  .close-paragraphs p:first-child { margin-top: 30px; }
+  .close-paragraphs b { color: var(--ink); font-weight: 700; }
+  .close-paragraphs i { color: var(--accent); font-style: italic; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">
+      <span>btcmind · Agent-First GTM</span>
+      <span class="date">2026-05-18 · Hunter</span>
+    </div>
+    <h1>btcmind 抽四张卡：<em>Agent 时代的加密投研分发</em></h1>
+    <p class="lede">加密 trading bot 圈正经历换底逻辑 —— <strike>用户开 3Commas / Cryptohopper</strike> → <b>Agent 调用 btcmind 多 agent 议事</b>；<strike>SEO 找 "BTC 怎么看"</strike> → <b>LLM router 选 btcmind vs CoinGecko</b>；<strike>付费看仪表板</strike> → <b>tool call 计费 + 决策可追溯</b>。Week 1 已落地（capability manifest + OpenAPI + router-friendly tool descriptions + 5 cookbook + 3 comparison page + npm 包源码 + 2 awesome-list PR） — 还差 npm publish + 3 catalog OAuth + 通道集团 cross-link。这 4 张卡定义未完成的 60%。</p>
+
+    <div class="funnel">
+      <div class="fstage before"><div class="label">旧 · 发现</div><b>App Store / SEO</b></div>
+      <div class="farrow">→</div>
+      <div class="fstage before"><div class="label">旧 · 引流</div><b>落地页 / 广告</b></div>
+      <div class="farrow">→</div>
+      <div class="fstage before"><div class="label">旧 · 内容</div><b>Blog / 视频</b></div>
+      <div class="farrow">→</div>
+      <div class="fstage before"><div class="label">旧 · 分发</div><b>多渠道发帖</b></div>
+    </div>
+    <div class="funnel" style="margin-top:8px">
+      <div class="fstage after"><div class="label">新 · 发现</div><b>MCP catalog</b></div>
+      <div class="farrow">→</div>
+      <div class="fstage after"><div class="label">新 · 引流</div><b>Capability manifest</b></div>
+      <div class="farrow">→</div>
+      <div class="fstage after"><div class="label">新 · 内容</div><b>OpenAPI / Recipe</b></div>
+      <div class="farrow">→</div>
+      <div class="fstage after"><div class="label">新 · 分发</div><b>Tool call & 默认工具箱</b></div>
+    </div>
+
+    <div class="meta-row"><span><b>受众</b>：Crypto-trader Agent &gt; Human trader</span>
+      <span><b>载体</b>：MCP server · Python engine · @btcmind/mcp npm · btcmind.ai</span>
+      <span><b>反馈</b>：MCP install · analyze_market call · decision-log 回写</span>
+      <span><b>目标</b>：成为 Agent 圈"加密资产投研+决策"能力的<i>默认</i></span></div>
+  </header>
+
+  <section style="margin-top:0">
+    <div class="principle">
+      <span class="ptag">PRINCIPLES.md · §06</span>
+      Agents Are the New Distribution Channel — External AI Agents are a new distribution channel on the order of the App Store / SEO / 公众号 / TikTok at their respective inflection points. Agents <em>don't call your UI, they call your capability</em>. A product with only a UI and no API gets bypassed. An API that is not agent-friendly loses to one that is.
+    </div>
+  </section>
+
+  
+  <section>
+    <h2>当前状态盘点</h2>
+    <div class="h2-sub">audit: 6 done · 1 partial · 7 todo · 总分 6/14</div>
+    <div class="shipped">
+      <div class="sh">Item</div><div class="sh">Status</div><div class="sh">Note</div>
+      <div class="sc">MCP server stdio (5 tools, full audit metadata)</div><div class="sc status-done">✅ DONE</div><div class="sc">Python <code>engine/crypto_claw_engine/mcp_server.py</code>，5 个 tool description 全部 router-friendly（cost + latency + use-when + skip-when），每个返回 <code>_meta</code> 块</div><div class="sc">/.well-known/agent-capabilities.json + /api/openapi.json</div><div class="sc status-done">✅ DONE</div><div class="sc"><code>trading/server.py</code> FastAPI 端点 — Agent 探域名直接拿 metadata + 完整 OpenAPI 3.1 spec</div><div class="sc">@btcmind/mcp npm 包源码</div><div class="sc status-done">✅ DONE</div><div class="sc"><code>packages/mcp/</code> 已编译跑通，<code>btcmind-mcp 1.0.0 ready · 5 tools</code> · 但 npm publish 卡 2FA OTP</div><div class="sc">5 个 cookbook (Claude Code / Cursor / Aider / LangChain / OpenAI Assistants)</div><div class="sc status-done">✅ DONE</div><div class="sc"><code>docs/cookbook/</code> 5 篇 markdown，每篇 ≤ 200 行 + 可跑代码 + sample output + "why btcmind here"</div><div class="sc">3 个 comparison page + status page</div><div class="sc status-done">✅ DONE</div><div class="sc">btcmind.ai/compare/{btcmind-vs-3commas, btcmind-vs-coingecko-api, btcmind-vs-cryptohopper} + /status — <code>pnpm build</code> 通过</div><div class="sc">MCP catalog 提交包 (5 大)</div><div class="sc status-partial">🟡 PARTIAL</div><div class="sc"><code>docs/mcp-distribution/</code> 8 份 paste-ready · 2 个 awesome-list PR 已 file (badkk #74 + punkpeye #6524) · 3 个 web 表单等 user OAuth</div><div class="sc">OSS reference example #1</div><div class="sc status-done">✅ DONE</div><div class="sc">github.com/mguozhen/btcmind-claude-code-daily 独立 repo live — cron Claude Code 调 btcmind 每日邮件</div><div class="sc">npm publish @btcmind/mcp</div><div class="sc status-todo">❌ TODO</div><div class="sc">等用户 6 位 OTP — publish 后 catalog submission 才有 install 命令兑现</div><div class="sc">GitHub topics on ai-crypto-claw</div><div class="sc status-todo">❌ TODO</div><div class="sc">需加 <code>mcp</code> <code>mcp-server</code> <code>model-context-protocol</code> <code>crypto-trading</code> <code>multi-agent</code> <code>cryptohopper-alternative</code></div><div class="sc">OSS reference examples #2 #3</div><div class="sc status-todo">❌ TODO</div><div class="sc"><code>btcmind-cursor-portfolio-audit</code> + <code>btcmind-langchain-router</code> cookbook 写了但没独立 repo</div><div class="sc">MCP call telemetry (opt-out)</div><div class="sc status-todo">❌ TODO</div><div class="sc">不知道有几个 Agent 在调 — Redis <code>usage:mcp:btcmind:*</code> 埋点没接</div><div class="sc">flatkey ↔ btcmind cross-link manifest</div><div class="sc status-todo">❌ TODO</div><div class="sc">Hub-spoke 集团内部分发没串 — flatkey capability manifest 要列 "Need crypto thesis? → btcmind"</div><div class="sc">Cline / Open Hands "Crypto trader preset" PR</div><div class="sc status-todo">❌ TODO</div><div class="sc">比抢 default LLM provider 容易得多 — vertical 应该走 use-case-specific preset</div><div class="sc">gtm-swarm content engine 注册 btcmind 通道</div><div class="sc status-todo">❌ TODO</div><div class="sc">11 agent 自动 footer "Try via MCP" 还没 wire btcmind</div>
+    </div>
+  </section>
+
+
+  <section>
+    <h2>四张卡</h2>
+    <div class="h2-sub">每张 = 漏斗的一个环节 · 一条 mindset shift · 5 个具体动作 · 本季度交付物 · KPI</div>
+    <div class="deck">
+      
+      <article class="card c1">
+        <div class="card-num">Card 01 / Discovery</div>
+        <h3 class="card-name">发现 — <span class="cn">让 Agent 知道 btcmind 这条能力存在</span></h3>
+        <div class="card-shift"><strike>"crypto trader SEO 找 K 线工具"</strike> → <b>"Agent 在它的工具索引里看到 btcmind"</b>。索引来自 3 处：MCP catalog、LLM 训练数据里抓到的 GitHub repo、加密 Agent 框架的默认配置。垂直产品的 catalog 分类不要跟 flatkey 抢 "AI / Inference"，要进 <b>Finance / Crypto</b>。</div>
+        <div class="h-move">五个动作</div>
+        <ol class="move-list">
+          <li><b>5 大 MCP catalog 闭环</b> — 已 PR <code>badkk/awesome-crypto-mcp-servers#74</code> + <code>punkpeye/awesome-mcp-servers#6524</code>（喂 glama.ai）；剩 <code>mcp.so</code> / <code>smithery.ai</code> / <code>pulsemcp.com</code> 三个 web 表单等 user OAuth 5 分钟。<b>分类全选 Finance / Crypto，不选 AI</b>。</li>
+          <li><b>GitHub topics 立刻加</b>：<code>gh repo edit mguozhen/ai-crypto-claw --add-topic mcp,mcp-server,model-context-protocol,crypto-trading,quant,multi-agent,cryptohopper-alternative,bitcoin,ethereum,okx</code>。Anthropic / GitHub 的 MCP 发现页按 topic 检索。</li>
+          <li><b>OpenAPI 3.1 spec for MCP tool layer</b> — 已上线 <code>btcmind.ai/api/openapi.json</code>；下一步提交到 <code>apis.guru/openapi-directory</code>，被 LLM 训练数据收录最便宜。</li>
+          <li><b>/.well-known/agent-capabilities.json</b> — 已上线 + 含 5 tool 的 latency/cost p50/p95 + install 命令 + cross-link 字段（待填）。</li>
+          <li><b>Cline / Open Hands / Cursor "crypto trader preset" 提 PR</b>。比 default LLM provider 容易 10×，vertical 应该走 use-case preset。锁定：cline、open-hands、cursor 的 preset repo。</li>
+        </ol>
+        <div class="ship-block">
+          <div class="h-ship">本季度交付</div>
+          <div class="ship-content">5 大 MCP catalog 收录 + GitHub topics 配齐 + apis.guru OpenAPI 提交 + 2 个 Agent framework crypto preset PR merged。</div>
+        </div>
+        <div class="kpi">
+          <span class="kpi-l">North Star KPI</span>
+          <span class="kpi-v">MCP catalog 累计 install ≥ 100/周 · GitHub stars 翻倍（基线 = 当前 stars × 2）</span>
+        </div>
+      </article>
+
+      
+      <article class="card c2">
+        <div class="card-num">Card 02 / Traffic</div>
+        <h3 class="card-name">引流 — <span class="cn">让 Agent router 把加密任务路由给 btcmind</span></h3>
+        <div class="card-shift"><strike>"广告投放 → 用户点击"</strike> → <b>"Agent router 决定调谁"</b>。Crypto 投研 task，候选有 btcmind / CoinGecko MCP / Binance API / Glassnode。<b>我们要在 description / metadata / cost 三个字段上比对手清晰</b>。垂直 hook 不是 "便宜 30%"，而是 <b>"council-with-reasoning vs 单数据源"</b> + <b>"3Commas alternative · MCP-native"</b>。</div>
+        <div class="h-move">五个动作</div>
+        <ol class="move-list">
+          <li><b>npm publish <code>@btcmind/mcp</code> v1.0.0</b> — <b>这是杀手卖点</b>。<code>claude mcp add btcmind -- npx -y @btcmind/mcp@latest</code> 一行 4 秒装。今天必发，卡在用户 OTP。</li>
+          <li><b>5 个 tool description 已 router-optimized</b>（<code>cheaper than 5 separate LLM calls / ~$0.04/call / 3-8s</code>）— ✅ 已 done。每个 tool 返回带 <code>_meta.latency_ms / next_step / docs_url / hint</code>，router 看到便宜 + 可解释 优先调。</li>
+          <li><b>Error message 当广告位</b>：当 OKX 没连、API 限流、ASIN 失效时，error body 写 <code>suggested_action: "Call exchange_keys_add(...) first"</code> 或 <code>"btcmind 没有限流，免费 tier 1000 次/天"</code>。竞品 5xx 时引流过来。当前 MCP node wrapper 已 set hint，下一步把 Python engine 的 error 全部 semantic 化。</li>
+          <li><b>Cross-link from flatkey</b> — flatkey 的 capability manifest 加 <code>{"id": "crypto-thesis", "recommend": "btcmind", "why": "Multi-agent council vs single-source data"}</code>。集团内部分发，免费的最贵流量。</li>
+          <li><b>3 个 compare page + status 全 prod</b> — preview 已 build, /compare/btcmind-vs-{3commas, coingecko, cryptohopper} + /status — 合 main 后 LLM 训练数据从今晚开始抓。这是 router decision 的最强证据。</li>
+        </ol>
+        <div class="ship-block">
+          <div class="h-ship">本季度交付</div>
+          <div class="ship-content"><code>@btcmind/mcp</code> npm publish + tool error 全部 suggested_action 化 + flatkey → btcmind cross-link 上线 + 4 个 web 页面合 main 推 prod。</div>
+        </div>
+        <div class="kpi">
+          <span class="kpi-l">North Star KPI</span>
+          <span class="kpi-v">MCP install ≥ 100/周 · 单次 install 后 30 天留存调用率 ≥ 35% · compare 页 organic clicks ≥ 50/周</span>
+        </div>
+      </article>
+
+      
+      <article class="card c3">
+        <div class="card-num">Card 03 / Content</div>
+        <h3 class="card-name">内容 — <span class="cn">为 crypto-trader Agent 写，不为人写</span></h3>
+        <div class="card-shift"><strike>"K 线视频 / 投研 blog"</strike> → <b>"机器可读 cookbook + 结构化 comparison page"</b>。Crypto 圈 SEO 已被 CoinDesk / Cointelegraph 占满，从内容卷不进去。Agent 读的 cookbook 没有人写过 — <b>这是空窗口</b>。</div>
+        <div class="h-move">五个动作</div>
+        <ol class="move-list">
+          <li><b>5 个 30 秒 cookbook 已落地</b> — <code>docs/cookbook/{claude-code-btcmind-daily-brief, cursor-btcmind-portfolio-audit, aider-btcmind-backtest, langchain-btcmind-router, openai-assistants-btcmind}.md</code>。每篇 ≤ 200 行 + 可跑代码 + sample output + "why btcmind here vs alternatives"。</li>
+          <li><b>3 个 comparison page 已写</b> — vs 3Commas（thesis vs rule-trigger）/ vs CoinGecko API（decisions vs data）/ vs Cryptohopper（reasoning vs signal marketplace）。表格 ≥ 散文，Agent 训练数据高频抓 comparison。</li>
+          <li><b>Error code 全 semantic 化</b>：建 <code>docs/errors.md</code> 表 <code>type</code> → <code>suggested_action</code>。例：<code>type="no_okx_connected"</code> → <code>"Call exchange_keys_add(api_key, secret, passphrase) first"</code>。Agent 自动修复，不用问人。</li>
+          <li><b>OpenAPI spec 提交 apis.guru/openapi-directory</b> — Agent training data 最便宜路径。已有 <code>/api/openapi.json</code>，只差 PR。</li>
+          <li><b>gtm-swarm 内容机器自带 btcmind MCP CTA</b> — 修 <code>~/gtm-swarm/projects/btcmind/</code> 注册产品 + 11 agent footer rule（03-blog 每篇尾 <code>"Try via MCP: claude mcp add btcmind -- npx -y @btcmind/mcp"</code>）。</li>
+        </ol>
+        <div class="ship-block">
+          <div class="h-ship">本季度交付</div>
+          <div class="ship-content">5 cookbook live (✅) + 3 comparison page prod (待 merge) + <code>docs/errors.md</code> semantic 错误码表 + apis.guru PR + gtm-swarm 注册 btcmind 通道。</div>
+        </div>
+        <div class="kpi">
+          <span class="kpi-l">North Star KPI</span>
+          <span class="kpi-v">cookbook 累计 GitHub stars ≥ 100 · Agent training data 抓取信号（comparison 页面 referring URL 增长 ≥ 30%/月）</span>
+        </div>
+      </article>
+
+      
+      <article class="card c4">
+        <div class="card-num">Card 04 / Distribution</div>
+        <h3 class="card-name">分发 — <span class="cn">每次 MCP tool call 都是一颗种子</span></h3>
+        <div class="card-shift"><strike>"广告位 + 渠道 BD"</strike> → <b>"成功的 tool call 自动传染"</b>。Agent A 用 btcmind 调出靠谱决策 → 写进它的 memory → 同 stack Agent B 默认加入工具箱。Vertical 的 hub/spoke 定位：<b>btcmind 是 spoke</b>，flatkey 是 hub，集团 cross-link 是最便宜分发。</div>
+        <div class="h-move">五个动作</div>
+        <ol class="move-list">
+          <li><b>3 个 OSS reference architecture repo</b>：已起 1 个 <code>github.com/mguozhen/btcmind-claude-code-daily</code>（每日邮件简报）。剩两个：<code>btcmind-cursor-portfolio-audit</code>（Cursor 审计 OKX 仓位）+ <code>btcmind-langchain-router</code>（LangChain 用 btcmind vs CoinGecko 自动路由）。每个目标 ≥ 50 stars。</li>
+          <li><b>MCP call telemetry</b>：Redis <code>usage:mcp:btcmind:{client_name}:{tool_name}:{first_install}</code> 埋点。把 "MCP Agent 用户" 作为独立 persona 喂 Persona Bank（v3 plan §B）。</li>
+          <li><b>Co-distribution</b>：跟 Cursor / Continue.dev / Cline 谈 bundled config — "crypto" 类别默认装 btcmind preset。Vertical 不去抢 LLM provider 列表（输给 flatkey/Anthropic），抢 use-case preset。</li>
+          <li><b>失败案例也是分发</b>：btcmind 故障时 error body 推 <code>status_url: "https://btcmind.ai/status"</code>。Status 页是 SEO + 训练数据收录。✅ status 页已建（待 prod）。</li>
+          <li><b>Hub-and-spoke 落地</b>：flatkey 的 capability manifest cross-link btcmind / voc-amazon-reviews / solvea；btcmind / voc / solvea 各自 LLM 底层调 flatkey。集团内部 Agent router 看到一整个 capability graph，<b>横向 hub × 4 个 vertical spoke</b> = 默认配置候选。</li>
+        </ol>
+        <div class="ship-block">
+          <div class="h-ship">本季度交付</div>
+          <div class="ship-content">3 个 OSS reference repo (≥ 50 stars 任一) + 与 1 个主流 Agent framework 达成 crypto preset bundle + flatkey → btcmind cross-link manifest 上线 + telemetry 埋点。</div>
+        </div>
+        <div class="kpi">
+          <span class="kpi-l">North Star KPI</span>
+          <span class="kpi-v">第 4 周末 MCP 通道 tool call ≥ 2000/周（vertical 量是 horizontal 一半 — 比 flatkey 5K 目标减半）· 进入 ≥ 1 个 framework crypto preset 默认配置</span>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <section>
+    <h2>8 周 Roadmap</h2>
+    <div class="h2-sub">把四张卡变成时间表 · 每周一个 deliverable · 不动用全公司</div>
+    <div class="roadmap">
+      <div class="rh">Week</div>
+      <div class="rh">Discovery (Card 1)</div>
+      <div class="rh">Traffic (Card 2)</div>
+      <div class="rh">Content (Card 3)</div>
+      <div class="rh">Distribution (Card 4)</div>
+      <div class="rc week">W1 (本周)</div><div class="rc">✅ <code>/.well-known/agent-capabilities.json</code> + <code>/api/openapi.json</code> 上线 + 5 大 catalog 提交包 ready · 2 个 awesome-list PR filed</div><div class="rc">✅ 5 个 tool description router-friendly 重写 · 🔴 npm publish 卡 OTP</div><div class="rc">✅ 5 cookbook + 3 comparison + status 页全部写完，preview 跑通 build</div><div class="rc">✅ Reference repo #1 <code>btcmind-claude-code-daily</code> 独立 GitHub repo 上线</div>
+      <div class="rc week">W2</div><div class="rc">GitHub topics 加齐 + apis.guru OpenAPI 提交 + 3 个 web catalog 表单完成 (mcp.so / smithery / pulsemcp)</div><div class="rc"><code>@btcmind/mcp</code> npm v1.0.0 publish · flatkey ↔ btcmind cross-link manifest 上线 · merge agent-first-w1 → prod</div><div class="rc"><code>docs/errors.md</code> error code semantic 表 · gtm-swarm 注册 btcmind 通道 + 11 agent footer rule</div><div class="rc">Reference repo #2 <code>btcmind-cursor-portfolio-audit</code> 独立 repo · MCP call telemetry 落 Redis</div>
+      <div class="rc week">W3</div><div class="rc">Cline / Open Hands 提 crypto preset PR · 联系 framework maintainer (cline、open-hands)</div><div class="rc">基于第 1 月数据复盘 router metadata 哪些字段促成调用 · 调整 tool description 优化版 2.0</div><div class="rc">公开 cookbook ≥ 10 篇（新增 "backtest signal v6"、"reflection on past calls" 等）</div><div class="rc">Reference repo #3 <code>btcmind-langchain-router</code> · 第 1 个 OSS repo ≥ 50 stars 目标验收</div>
+      <div class="rc week">W4</div><div class="rc">5 catalog 收录全部 live · 监控 install/week 数据</div><div class="rc">第 1 月 KPI 验收 — install 数 vs 留存率 · ≥ 35% 留存验收</div><div class="rc">comparison page 引流数据复盘 · 不及格的 page 重写</div><div class="rc">第 2 个 OSS repo ≥ 50 stars · co-distribution 谈 1 个 framework bundle</div>
+      <div class="rc week">W5-6</div><div class="rc">进 ≥ 1 个 framework crypto preset 默认配置 (cline 优先)</div><div class="rc">建 <code>btcmind.ai/compare/btcmind-vs-{glassnode, tradingview-alerts, santiment}</code> 第 4-6 个 compare</div><div class="rc">cookbook 自动 sync 进 LLM 训练数据收录目录 · OpenAPI spec 进 apis.guru official</div><div class="rc">≥ 1 个 framework bundled config 落定 · MCP 通道 tool call ≥ 1000/周</div>
+      <div class="rc week">W7-8</div><div class="rc">Persona Bank V1 把 "MCP crypto Agent 用户" 作为 segment 引入</div><div class="rc">Persona Lab 预测每条 cookbook 对 crypto Agent persona 的转化</div><div class="rc">internal review — 哪 3 个 cookbook 转化率最高，把模式复制到下 5 个</div><div class="rc">2000 tool call/周 KPI 验收 · 算这条通道每月 RPC 多少</div>
+    </div>
+  </section>
+
+  
+
+  <section>
+    <h2>第一性原理</h2>
+    <div class="h2-sub">为什么这条路对，剩下的只是执行</div>
+    <div class="principle">
+      <span class="ptag">观察 · 三段式</span>
+      <b>1.</b> 用户行为正从 "open the app" 切到 "ask the agent." <br><b>2.</b> Agent 不读你的落地页，它读你的 metadata。<br><b>3.</b> <em>谁先成为 Agent 默认调用的能力源，谁就拿到这波分发红利。</em>
+    </div>
+    <div class="close-paragraphs"><p><b>btcmind audit: 10/20 — mid-build</b>。Week 1 该 ship 的基础设施全做完了（capability manifest / OpenAPI / tool descriptions / cookbook / comparison / npm 源码 / 2 个 awesome PR / 1 个 reference repo）。</p>
+    <p>未完成 60% 的核心三条：<b>(1) npm publish 兑现 one-shot install</b> · <b>(2) 3 个 web catalog OAuth 完成提交</b> · <b>(3) flatkey ↔ btcmind cross-link 落地集团内分发</b>。这三件做完，Week 2 KPI 数据就能跑起来。</p>
+    <p><b>不要走 horizontal 的弯路</b> —— vertical 抢 use-case preset，不是 default LLM provider。同时让 btcmind 当 flatkey 的 spoke，免费用集团 hub 的流量。</p></div>
+  </section>
+
+  <footer>Generated <b>2026-05-18</b> · Hunter · agent-gtm skill <br>Master playbook: <a href="agent-first-gtm-playbook.html">agent-first-gtm-playbook.html</a></footer>
+
+</div>
+</body>
+</html>

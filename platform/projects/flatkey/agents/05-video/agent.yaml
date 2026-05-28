@@ -1,0 +1,56 @@
+id: 05-video
+name: Video Agent
+category: content
+platform: YouTube · TikTok
+builder: 张基琳
+reviewer: 庄可欣
+goal: >-
+  Build Flatkey's presence on YouTube (SEO-ranked tutorials and comparisons) and
+  TikTok (incident-driven discovery content) to reach platform engineers during
+  their tool-evaluation and incident-response moments — the two highest-urgency
+  buying states.
+default_product: voc-ai
+kpi:
+  weekly_target: >-
+    2 TikTok posts per week (target 5,000+ plays each); 1 YouTube video
+    published every 2 weeks (target 500+ views within 4 weeks of publish); 10
+    qualified trial signups per month attributable to video referral
+  measure: >-
+    TikTok native analytics for plays, watch time, and profile link clicks;
+    YouTube analytics for views, click-through rate from thumbnail, and traffic
+    source to flatkey.io; UTM-tagged links in video descriptions track trial
+    signups
+schedule: 'cron: 0 14 * * *'
+budget_monthly_usd: 0
+status: deployable
+reuse:
+  - ~/MKT/MoneyPrinterTurbo
+  - ~/MKT/ShortGPT
+  - ~/MKT/CosyVoice
+  - ~/autopost.video
+activate: true
+topics:
+  - >-
+    TikTok incident content: '8 minutes — that's how long before your leaked
+    OpenAI key gets used' (visual timeline, fast cuts, specific numbers on
+    screen); 'Your .env file is not key management. Here's what is.' (30-second
+    contrast format)
+  - >-
+    TikTok product demos: 'We added a second LLM provider to our stack — here's
+    how our key management changed in 5 minutes' (screen recording with
+    voiceover); 'LiteLLM vs Flatkey: I set up both and here's the actual
+    difference' (honest comparison format)
+  - >-
+    YouTube tutorial: 'How to Set Up LLM API Key Management for a 10-Person
+    Engineering Team — Step by Step' (full 12-minute walkthrough, targets 'llm
+    api key management' YouTube search)
+  - >-
+    YouTube comparison: 'The $18,000 GitHub Push: Anatomy of an API Key Leak and
+    How to Prevent It' (incident narrative + prevention architecture + Flatkey
+    demo, targets 'openai api key security' YouTube search)
+  - >-
+    YouTube deep-dive: 'LiteLLM Virtual Keys vs Flatkey vs Portkey: Which Key
+    Management Layer Does Your Team Actually Need?' (honest 3-way comparison
+    with code examples, targets 'litellm alternative' and 'portkey vs litellm'
+    YouTube search)
+contentos_hydrated_at: '2026-05-11T21:44:14.143Z'

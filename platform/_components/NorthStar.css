@@ -1,0 +1,93 @@
+.ns { padding: 20px 28px 40px; }
+.ns-err { padding: 40px; color: #c33; }
+.ns-loading { padding: 40px; color: #888; }
+
+.ns-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 18px; }
+.ns-title { display: flex; flex-direction: column; gap: 4px; font-size: 18px; font-weight: 600; color: #1c1c1c; }
+.ns-meta { font-size: 12px; font-weight: 400; color: #999; }
+
+.ns-actions { display: flex; gap: 12px; align-items: center; }
+.ns-period-toggle { display: flex; gap: 3px; background: #f4f4f4; padding: 3px; border-radius: 6px; }
+.ns-period-toggle button {
+  border: 0; background: transparent; padding: 6px 12px; border-radius: 4px;
+  font-size: 13px; color: #666; cursor: pointer;
+}
+.ns-period-toggle button.is-active { background: #fff; color: #1c1c1c; box-shadow: 0 1px 2px rgba(0,0,0,.06); }
+.ns-log-btn {
+  border: 1px solid #1c1c1c; background: #1c1c1c; color: #fff;
+  padding: 7px 14px; border-radius: 6px; font-size: 13px; cursor: pointer;
+}
+.ns-log-btn:hover { background: #333; }
+
+.ns-form {
+  background: #f8f9fb; border: 1px solid #e0e4ea; border-radius: 8px;
+  padding: 18px; margin-bottom: 18px;
+}
+.ns-form-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; }
+.ns-form-grid label { display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: #666; }
+.ns-form-grid input {
+  padding: 8px 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 13px;
+}
+.ns-form-grid .ns-note { grid-column: span 2; }
+.ns-submit {
+  margin-top: 12px; padding: 9px 24px;
+  background: #1c1c1c; color: #fff; border: 0; border-radius: 6px;
+  font-size: 13px; cursor: pointer;
+}
+.ns-submit:disabled { opacity: 0.5; cursor: wait; }
+
+.ns-stage-row {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px;
+  margin-bottom: 28px;
+}
+.ns-stage {
+  background: #fff; border: 1px solid #e8e8e8; border-radius: 10px;
+  padding: 16px 18px;
+}
+.ns-stage-head { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+.ns-stage-emoji { font-size: 18px; }
+.ns-stage-label { font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: 0.4px; }
+.ns-stage-value { display: flex; align-items: baseline; gap: 8px; margin-bottom: 10px; }
+.ns-actual { font-size: 26px; font-weight: 600; color: #1c1c1c; font-variant-numeric: tabular-nums; }
+.ns-target { font-size: 14px; color: #999; }
+.ns-bar {
+  height: 6px; background: #f0f0f0; border-radius: 3px; overflow: hidden; margin-bottom: 6px;
+}
+.ns-bar-fill { height: 100%; transition: width 0.3s; }
+.ns-stage-pct { font-size: 12px; font-weight: 500; margin-bottom: 10px; }
+
+.ns-owners { display: flex; flex-wrap: wrap; gap: 4px; align-items: center; }
+.ns-owners-label { font-size: 11px; color: #aaa; margin-right: 4px; }
+.ns-owner-chip {
+  font-size: 11px; padding: 2px 8px; background: #f4f4f4; border-radius: 10px; color: #555;
+}
+
+.ns-people-section, .ns-history { margin-top: 28px; }
+.ns-section-title {
+  font-size: 12px; text-transform: uppercase; letter-spacing: 0.4px;
+  color: #666; margin-bottom: 10px; font-weight: 500;
+}
+.ns-people-table, .ns-history-table {
+  width: 100%; border-collapse: collapse; font-size: 13px;
+  background: #fff; border: 1px solid #eee; border-radius: 8px; overflow: hidden;
+}
+.ns-people-table thead, .ns-history-table thead { background: #fafafa; }
+.ns-people-table th, .ns-history-table th {
+  padding: 9px 12px; text-align: left; font-weight: 500; color: #666;
+  font-size: 11px; text-transform: uppercase; letter-spacing: 0.4px;
+  border-bottom: 1px solid #eee;
+}
+.ns-people-table td, .ns-history-table td {
+  padding: 10px 12px; border-bottom: 1px solid #f4f4f4;
+}
+.ns-person-name { font-weight: 500; color: #1c1c1c; min-width: 100px; }
+.ns-n { text-align: center; font-variant-numeric: tabular-nums; min-width: 60px; }
+.ns-person-agents { display: flex; flex-wrap: wrap; gap: 4px; }
+.ns-agent-chip {
+  font-size: 11px; padding: 2px 8px; border-radius: 10px;
+  background: #f0f0f0; color: #555; cursor: help;
+}
+.ns-agent-chip.reviewer { background: #fef5e7; color: #b35900; }
+.ns-agent-chip.builder { background: #e8f0fa; color: #1a4d7a; }
+.ns-empty { color: #aaa; padding: 16px 0; font-size: 13px; }
+.ns-note-cell { font-size: 11px; color: #999; max-width: 200px; }

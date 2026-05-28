@@ -1,0 +1,418 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Content Engine Discipline — Before / After</title>
+<style>
+  :root {
+    --ink: #1a1a1a;
+    --paper: #f8f6f1;
+    --paper-2: #ece8df;
+    --line: #d6d0c2;
+    --before: #b35d3d;
+    --before-bg: #fbeee6;
+    --after: #2a6f4e;
+    --after-bg: #e7f1ec;
+    --accent: #c95400;
+    --muted: #807868;
+    --serif: "Iowan Old Style", "Charter", Georgia, serif;
+    --sans: -apple-system, "SF Pro Text", "Inter", "Helvetica Neue", Arial, sans-serif;
+    --mono: "JetBrains Mono", "SF Mono", "Menlo", monospace;
+  }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1220px; margin: 0 auto; padding: 60px 36px 120px; }
+  header { border-bottom: 1px solid var(--line); padding-bottom: 32px; margin-bottom: 56px; }
+  .eyebrow {
+    font-family: var(--mono); font-size: 11px; letter-spacing: .25em;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 12px;
+  }
+  h1 {
+    font-family: var(--serif); font-size: 52px; line-height: 1.05;
+    margin: 0 0 14px; letter-spacing: -0.01em; font-weight: 600;
+  }
+  .lede {
+    font-family: var(--serif); font-size: 21px; line-height: 1.45;
+    color: var(--ink); max-width: 920px; margin: 0;
+  }
+  .lede em { color: var(--accent); font-style: italic; }
+  .meta {
+    font-family: var(--mono); font-size: 12px; color: var(--muted);
+    margin-top: 18px;
+  }
+  .meta b { color: var(--ink); font-weight: 500; }
+
+  section { margin-bottom: 80px; }
+  h2 {
+    font-family: var(--serif); font-size: 32px; line-height: 1.15;
+    margin: 0 0 6px; letter-spacing: -0.005em; font-weight: 600;
+  }
+  .h2-sub {
+    font-family: var(--mono); font-size: 12px; color: var(--muted);
+    letter-spacing: .15em; text-transform: uppercase; margin-bottom: 28px;
+  }
+
+  .pair {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
+  }
+  @media (max-width: 880px) { .pair { grid-template-columns: 1fr; } }
+  .card {
+    background: #fff; border: 1px solid var(--line); border-radius: 4px;
+    padding: 26px 30px; position: relative; overflow: hidden;
+  }
+  .card.before { background: var(--before-bg); border-color: #e6c6b3; }
+  .card.after { background: var(--after-bg); border-color: #b9d2c3; }
+  .card-tag {
+    position: absolute; top: 0; left: 0; padding: 4px 14px;
+    font-family: var(--mono); font-size: 10px; letter-spacing: .2em;
+    text-transform: uppercase; color: #fff;
+  }
+  .card.before .card-tag { background: var(--before); }
+  .card.after .card-tag { background: var(--after); }
+  .card h3 {
+    margin: 20px 0 14px; font-family: var(--serif); font-size: 22px;
+    line-height: 1.2; font-weight: 600;
+  }
+  .card pre, .card code {
+    font-family: var(--mono); font-size: 12.5px; line-height: 1.5;
+  }
+  .card pre {
+    background: rgba(0,0,0,.04); padding: 14px 16px; border-radius: 3px;
+    white-space: pre-wrap; word-wrap: break-word; margin: 12px 0;
+    border-left: 3px solid var(--line);
+  }
+  .card.before pre { border-left-color: var(--before); }
+  .card.after pre { border-left-color: var(--after); }
+  .card ul { padding-left: 18px; margin: 8px 0; }
+  .card li { margin-bottom: 4px; }
+  .card .stat { font-family: var(--mono); font-size: 12px; color: var(--muted); margin-top: 10px; }
+
+  .filetree {
+    font-family: var(--mono); font-size: 13px; line-height: 1.7;
+    margin: 8px 0;
+  }
+  .filetree .added { color: var(--after); font-weight: 600; }
+  .filetree .added::before { content: "+ "; }
+  .filetree .same { color: var(--muted); }
+  .filetree .same::before { content: "  "; white-space: pre; }
+
+  .diff-row {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
+    margin: 16px 0;
+  }
+  .diff-row > div { background: #fff; padding: 16px 18px; border-radius: 3px; border: 1px solid var(--line); }
+  .diff-row .before-box { background: var(--before-bg); border-color: #e6c6b3; }
+  .diff-row .after-box { background: var(--after-bg); border-color: #b9d2c3; }
+  .diff-row .label { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: .15em; color: var(--muted); margin-bottom: 8px; }
+
+  .takeaways {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+    margin-top: 32px;
+  }
+  @media (max-width: 880px) { .takeaways { grid-template-columns: 1fr; } }
+  .takeaway {
+    border-top: 3px solid var(--accent); padding: 18px 0 0;
+  }
+  .takeaway .num {
+    font-family: var(--mono); font-size: 11px; letter-spacing: .25em;
+    color: var(--accent); margin-bottom: 8px;
+  }
+  .takeaway h4 {
+    font-family: var(--serif); font-size: 22px; line-height: 1.2;
+    margin: 0 0 10px; font-weight: 600;
+  }
+  .takeaway p { margin: 0; color: var(--ink); }
+
+  footer {
+    border-top: 1px solid var(--line); padding-top: 24px; margin-top: 80px;
+    font-family: var(--mono); font-size: 11px; color: var(--muted);
+    line-height: 1.7;
+  }
+  footer a { color: var(--accent); text-decoration: none; }
+
+  .pill {
+    display: inline-block; padding: 1px 8px; border-radius: 10px;
+    font-family: var(--mono); font-size: 10px; letter-spacing: .12em;
+    text-transform: uppercase;
+  }
+  .pill.before { background: var(--before); color: #fff; }
+  .pill.after { background: var(--after); color: #fff; }
+
+  .ratio {
+    display: flex; align-items: baseline; gap: 8px; font-family: var(--mono);
+    font-size: 12px; color: var(--muted); margin-top: 4px;
+  }
+  .ratio b { color: var(--ink); font-size: 14px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">gtm-swarm · voc-ai engine · 2026-05-16</div>
+    <h1>Content Engine Discipline</h1>
+    <p class="lede">
+      把 Alinea Invest 的 <em>creative-infrastructure moat</em> 翻译进 VOC AI 内容引擎。
+      从"软建议"切到"刚性模板"，从"reviewer 凭手感"切到"reviewer 检合规"。
+    </p>
+    <div class="meta">
+      Source: <a href="https://sigpulse.substack.com/p/how-a-gen-z-fintech-hacked-tiktok" style="color:var(--accent);text-decoration:underline">SigPulse · Alinea TikTok breakdown</a>
+      &nbsp;·&nbsp; Engine: <b>engines/voc-ai/engine/</b>
+      &nbsp;·&nbsp; Diff: <b>+2 files, ~120 lines changed</b>
+    </div>
+  </header>
+
+  <section>
+    <h2>1 · 文件结构</h2>
+    <div class="h2-sub">2 个新增 · 0 个删除 · 1 个升级</div>
+    <div class="pair">
+      <div class="card before">
+        <span class="card-tag">Before</span>
+        <h3>6 个 engine 文件，全是"软建议"</h3>
+        <pre class="filetree">
+<span class="same">engines/voc-ai/engine/</span>
+<span class="same">  hooks.md            ← 分类卡片 + 示例</span>
+<span class="same">  qa-checklist.md     ← 9 类检查（无 format 强制）</span>
+<span class="same">  content-types.md</span>
+<span class="same">  repurpose.md</span>
+<span class="same">  scheduling.md</span>
+<span class="same">  topic-sourcing.md</span>
+        </pre>
+        <p class="stat">Reviewer 凭手感判断 → 输出方差大，wins 无法复制</p>
+      </div>
+      <div class="card after">
+        <span class="card-tag">After</span>
+        <h3>8 个 engine 文件，format 即法律</h3>
+        <pre class="filetree">
+<span class="same">engines/voc-ai/engine/</span>
+<span class="added">  format-templates.md ← 每个 agent 1-2 个锁定模板</span>
+<span class="same">  hooks.md            ← 旧示例库（即将吸收）</span>
+<span class="same">  qa-checklist.md     ← +3 条 HARD 检（§0 / §0.1 / §0.2）</span>
+<span class="added">  winning-hooks.md    ← reviewer-approved 飞轮（TBD）</span>
+<span class="same">  content-types.md</span>
+<span class="same">  repurpose.md</span>
+<span class="same">  scheduling.md</span>
+<span class="same">  topic-sourcing.md</span>
+        </pre>
+        <p class="stat">Reviewer 检查合规 → 输出收敛，wins 跨号复制 5× 快</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>2 · Hook 升级</h2>
+    <div class="h2-sub">分类卡片 → 填空模板</div>
+    <div class="pair">
+      <div class="card before">
+        <span class="card-tag">Before · hooks.md</span>
+        <h3>7 类 hook，几十个 example，没有可复制的填空骨架</h3>
+        <pre>
+### 1. Data Bomb
+A specific number from review analysis
+that makes them stop.
+
+- "we analyzed 47,000 reviews across 200
+  garlic presses. the #1 reason for
+  returns? not what you think"
+- "34% of 3-star reviews contain a
+  specific product feature request..."
+- "2 billion reviews. 500 categories.
+  one pattern shows up everywhere"
+        </pre>
+        <p class="stat">问题：Agent 模仿 example → 输出仍然各异；Reviewer 拒不掉，因为"也算 Data Bomb"</p>
+      </div>
+      <div class="card after">
+        <span class="card-tag">After · format-templates.md</span>
+        <h3>5 个填空模板 × 每个 agent，越界即拒</h3>
+        <pre>
+## Agent 06 — Reddit · hook fill-ins
+(use ONE per draft)
+
+1. `I {analyzed/scraped/pulled} {N} {data-source}.
+    The #{n} thing nobody talks about:`
+
+2. `Hot take: {industry-standard practice} is
+    the most {negative-adj} metric in {category}.
+    Here's why.`
+
+3. `Your {category} {vendor/tool}'s {data-point}
+    is a goldmine. Here's what's inside.`
+
+4. `Spent {N} {hours/dollars/months} testing
+    {claim}. Here's what broke.`
+
+5. `If you're {about to do X}, here are the {N}
+    questions that save you ${$amount}.`
+        </pre>
+        <p class="stat">每个变量明确，Agent 填空、Reviewer 看是否每个 slot 都有具体值</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>3 · 整段 Scaffold</h2>
+    <div class="h2-sub">06-reddit 帖子的结构变化</div>
+    <div class="pair">
+      <div class="card before">
+        <span class="card-tag">Before</span>
+        <h3>"按 hook 类型自由写一篇 Reddit 帖"</h3>
+        <pre>
+prompt: "use a data-bomb hook, target
+r/AmazonSeller, 200-400 words"
+        </pre>
+        <p class="stat">Output 形态：流水账 / 卖货味 / 没有评论钩 / Length 飘忽 200-800</p>
+      </div>
+      <div class="card after">
+        <span class="card-tag">After</span>
+        <h3>Scaffold A · Data Forensics Post — 字段化</h3>
+        <pre>
+{Hook line — single sentence, ends with ":" or "?"}
+
+I {action verb} {N} {data-source}.
+Here's what nobody talks about:
+
+{Finding 1 — 2-3 sentences. One specific number.}
+
+{Finding 2 — 2-3 sentences. One named brand/ASIN.}
+
+{Finding 3 — the counter-intuitive one.
+ 2-3 sentences.}
+
+{Method line — 1 sentence: how I did it / tool used.}
+
+{Open question to community — single line ending with "?"}
+
+· 字数: 220-380
+· 段落节奏: 短/中/中/中/短/短
+· 最后一行 MUST 是问句（comment-rate)
+        </pre>
+        <p class="stat">越界即拒。Wins 复制粒度 = 字段级（"我们换了 finding 3 的句式"），不是整篇重写</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>4 · QA Checklist</h2>
+    <div class="h2-sub">9 条软检查 → 12 条（含 3 条新增 HARD 检）</div>
+    <div class="pair">
+      <div class="card before">
+        <span class="card-tag">Before · §1-§9</span>
+        <h3>逻辑严密但缺"format / 钩 / 趋势"3 个核心</h3>
+        <ul>
+          <li>§1 Proof Point Presence</li>
+          <li>§2 Hook Compliance（只检查 hook category 在 7 种之内）</li>
+          <li>§3 Platform Native Format（长度限制）</li>
+          <li>§4 Voice Lock（禁用词）</li>
+          <li>§5 Niche Lock</li>
+          <li>§6-9 Soft Checks（anti-pattern / repurpose / CTA / trust / a11y）</li>
+        </ul>
+        <p class="stat">问题：没人查"是不是模板内"，没人查"前两行能否独立活"，没人查"挂没挂趋势"</p>
+      </div>
+      <div class="card after">
+        <span class="card-tag">After · +§0 / §0.1 / §0.2</span>
+        <h3>3 条新 HARD 检（auto-reject）</h3>
+        <ul>
+          <li><b>§0 Format Lock</b> — 必须匹配 format-templates 里的 scaffold；所有 required 段都在；hook 是 5 个 fill-ins 之一</li>
+          <li><b>§0.1 First-Two-Lines Stand-Alone</b> — 前 2 行截图独立能否赚到 click；首行必须含具体数字 / 品牌 / 主张；禁用 "In today's fast-paced world" 开头</li>
+          <li><b>§0.2 Trend Hook Required</b> — 必须挂 1 个：aihot 信号 / Reddit hot / trending audio / 14 天内真实新闻事件；否则拒</li>
+        </ul>
+        <p class="stat">Reviewer 拒绝有刚性依据，不用辩论"算不算 contrarian"</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>5 · 同一个 topic，两种产出</h2>
+    <div class="h2-sub">Topic：「无线耳机评论挖矿，发现 80+ ASIN 共有的 1 星抱怨」</div>
+    <div class="pair">
+      <div class="card before">
+        <span class="card-tag">Before · 流水账</span>
+        <h3>"用 data-bomb hook 写一篇 Reddit"</h3>
+        <pre>
+We analyzed 80+ wireless earbud ASINs on Amazon and
+found that the #1 unresolved complaint across all of
+them is the charging case lid. It's a structural defect
+that almost no brand addresses. We see this in our
+data at VOC AI — we have 2B+ reviews indexed and our
+sentiment analysis surfaces these patterns. If you're
+building a product in this category, you should look at
+this data carefully. Helium 10 and Jungle Scout won't
+show you this because they're keyword-first.
+
+Check out voc.ai for the full report.
+        </pre>
+        <p class="stat">❌ 后半段广告味、❌ 无评论钩、❌ 无趋势载体、❌ 末尾纯链接 — auto-reject by §0.2</p>
+      </div>
+      <div class="card after">
+        <span class="card-tag">After · Scaffold A 填空</span>
+        <h3>Hook fill-in #1 + Data Forensics Scaffold</h3>
+        <pre>
+I scraped 80 wireless earbud ASINs (Anker, Soundcore,
+Jabra, Sony + 76 sub-$80 brands). The #1 unresolved
+1-star complaint nobody talks about:
+
+The charging case lid. Across 12,400 1-star reviews,
+the lid hinge appears in 23% of complaints — more than
+"battery life" (18%) or "sound quality" (11%).
+
+What's weirder: the worst offenders aren't no-name
+brands. Anker Soundcore's Liberty 4 NC has it at 31%.
+The hinge breaks at 4-6 months. Out of warranty by
+design? Or just a CAD spec everyone copied?
+
+The contrarian read: this is the cheapest product moat
+in the category right now. Any brand that fixes hinge
+durability + leads with "5-year case warranty" picks up
+share from the top 5 in 18 months. Nobody is.
+
+Method: pulled reviews via VOC AI's free ASIN tool,
+clustered complaints with their schema (no manual
+tagging).
+
+Anyone here actually working on a fix, or are we all
+just shipping the same hinge?
+        </pre>
+        <p class="stat">✓ 模板合规、✓ 末尾问句、✓ 挂 CIA 数据 (aihot/今日 trend 可加 1 句)、✓ 字数 295、✓ 段落节奏短/中/中/中/短/短</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>6 · 三个本质变化</h2>
+    <div class="h2-sub">把 Alinea 的 moat 翻译成 swarm 协同律</div>
+    <div class="takeaways">
+      <div class="takeaway">
+        <div class="num">01 / Format</div>
+        <h4>软建议 → 法律</h4>
+        <p>Builder 不再"建议"hook 类别，直接把 5 个填空模板 + 2 个 scaffold 写进 format-templates.md。Agent 填空、Reviewer 检合规。任何越界自动拒，不留辩论空间。</p>
+      </div>
+      <div class="takeaway">
+        <div class="num">02 / Completion</div>
+        <h4>"长内容" → "前两行能独立活"</h4>
+        <p>Alinea 让视频完播率 &gt;100% 的方法是首末帧无缝。文字内容的对位是<b>前两行的独立性</b>。截图测试：只看前 2 行，能否赚到点击？不能 → 拒。这是 §0.1。</p>
+      </div>
+      <div class="takeaway">
+        <div class="num">03 / Trend Carrier</div>
+        <h4>"长青内容" → 必挂趋势</h4>
+        <p>Alinea 骑 trending audio。我们骑 aihot / Reddit hot / 14 天内真实事件。任何一条 ship 出去的内容必须有<b>当周趋势载体</b>。没有 → 等下一周。这是 §0.2。</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    Files updated: <b>engines/voc-ai/engine/format-templates.md</b> (new) · <b>engines/voc-ai/engine/qa-checklist.md</b> (+§0, §0.1, §0.2)<br>
+    Next steps: (1) winning-hooks.md auto-fed by reviewer approvals · (2) format compliance check integrated into runner.js · (3) DingTalk daily digest surfaces template-drift drafts<br>
+    Generated <b>2026-05-16</b> · gtm-swarm · view source: <a href="https://github.com/SolveaCX/gtm-swarm/blob/main/engines/voc-ai/engine/format-templates.md">format-templates.md</a> · <a href="https://github.com/SolveaCX/gtm-swarm/blob/main/engines/voc-ai/engine/qa-checklist.md">qa-checklist.md</a>
+  </footer>
+
+</div>
+</body>
+</html>

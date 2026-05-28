@@ -1,0 +1,47 @@
+id: 02-kol-koc
+name: KOL / KOC Agent
+category: distribution
+platform: YouTube · TikTok · Instagram
+builder: 张基琳
+reviewer: Ivy
+goal: >-
+  Build genuine peer-engineer relationships with 10–15 practitioners who already
+  create content about LLM infrastructure, earning authentic third-party
+  mentions that no owned channel can manufacture.
+default_product: voc-ai
+kpi:
+  weekly_target: >-
+    3 outreach contacts per week; target 3 third-party creator mentions per
+    month containing a Flatkey link; 50 referred trial signups per month from
+    creator traffic
+  measure: >-
+    UTM-tagged referral traffic from creator links tracked in analytics; trial
+    signups with 'referred by creator' source; creator mention count tracked in
+    a shared log
+schedule: 'cron: 0 10 * * 1-5'
+budget_monthly_usd: 0
+status: deployable
+reuse:
+  - ~/MKT/TiktokAutoUploader
+  - ~/MKT/scripts (CosyVoice / ShortGPT)
+activate: true
+topics:
+  - >-
+    Engineers who have publicly posted about LiteLLM self-hosting pain (target
+    for 'managed alternative' angle) — @pandurijal profile and similar
+    TikTok/YouTube engineers
+  - >-
+    Practitioners who have posted about LLM cost reduction or bill spikes
+    (target for cost attribution angle) — @marcinteodoru profile and similar
+    cost-focused creators
+  - >-
+    Developers who create 'local LLM' content and have mentioned privacy or API
+    key concerns (target for multi-provider and self-hosted angle)
+  - >-
+    Technical co-founder newsletter writers who cover AI infrastructure
+    decisions for early-stage startup audiences
+  - >-
+    Open-source contributors to LiteLLM, Helicone, or Infisical who have public
+    opinions on the tools' limitations — coauthorship on comparison guides as
+    the collaboration offer
+contentos_hydrated_at: '2026-05-11T21:44:14.142Z'

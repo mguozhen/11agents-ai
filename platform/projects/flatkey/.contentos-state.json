@@ -1,0 +1,82 @@
+{
+  "current_step": 4,
+  "steps": {
+    "01-market-insight": {
+      "status": "done",
+      "started_at": "2026-05-11T20:51:52.298Z",
+      "output_file": "projects/flatkey/strategy/01-market-insight.md",
+      "completed_at": "2026-05-11T20:55:37.099Z",
+      "size": 31418,
+      "usage": {
+        "input_tokens": 3,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 15515,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 9656,
+        "service_tier": "standard",
+        "inference_geo": "not_available"
+      }
+    },
+    "02-user-insight": {
+      "status": "done",
+      "started_at": "2026-05-11T21:23:49.758Z",
+      "output_file": "projects/flatkey/strategy/02-user-insight.md",
+      "completed_at": "2026-05-11T21:27:20.751Z",
+      "size": 34226,
+      "usage": {
+        "input_tokens": 3,
+        "cache_creation_input_tokens": 25006,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 25006,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 9513,
+        "service_tier": "standard",
+        "inference_geo": "not_available"
+      }
+    },
+    "03-competitor-analysis": {
+      "status": "done",
+      "started_at": "2026-05-11T21:34:37.641Z",
+      "output_file": "projects/flatkey/strategy/03-competitor-analysis.md",
+      "completed_at": "2026-05-11T21:39:05.658Z",
+      "size": 27536,
+      "usage": {
+        "input_tokens": 3,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 20290,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 6954,
+        "service_tier": "standard",
+        "inference_geo": "not_available"
+      }
+    },
+    "04-content-strategy": {
+      "status": "done",
+      "started_at": "2026-05-11T21:39:05.724Z",
+      "output_file": "projects/flatkey/strategy/04-content-strategy.md",
+      "completed_at": "2026-05-11T21:43:51.057Z",
+      "size": 44943,
+      "usage": {
+        "input_tokens": 3,
+        "cache_creation_input_tokens": 27675,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 27675,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 11414,
+        "service_tier": "standard",
+        "inference_geo": "not_available"
+      }
+    }
+  },
+  "last_updated": "2026-05-11T21:43:51.057Z"
+}

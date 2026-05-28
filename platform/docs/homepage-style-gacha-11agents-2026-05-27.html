@@ -1,0 +1,1332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>11agents.ai · style gacha · 3 alternatives</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,700;1,9..144,400;1,9..144,500&family=Inter:wght@300;400;500;600;700;800;900&family=Geist:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 100%; }
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    line-height: 1.5;
+    overflow-x: hidden;
+  }
+
+  /* ====== shared gacha label ====== */
+  .gacha-card {
+    position: relative;
+  }
+  .gacha-label {
+    padding: 14px 32px;
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    display: flex;
+    justify-content: space-between;
+    font-weight: 600;
+  }
+  .gacha-label .palette {
+    display: inline-flex;
+    gap: 6px;
+    align-items: center;
+  }
+  .gacha-label .sw {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+
+  /* ============================================================
+     ==== STYLE D — CREAM PREMIUM (Literary)
+     bg: warm cream · ink dark · sienna accent · Fraunces serif
+     ============================================================ */
+  .d {
+    --bg: #f4ede1;
+    --bg-2: #ebe2d2;
+    --bg-3: #e0d3bd;
+    --fg: #1a1612;
+    --fg-muted: rgba(26, 22, 18, 0.62);
+    --fg-dim: rgba(26, 22, 18, 0.32);
+    --accent: #8a3a1c;
+    --accent-soft: #c97a4a;
+    --line: rgba(26, 22, 18, 0.14);
+    --line-strong: rgba(26, 22, 18, 0.32);
+    background: var(--bg);
+    color: var(--fg);
+    font-family: 'Inter', sans-serif;
+  }
+  .d .gacha-label {
+    background: var(--fg);
+    color: var(--bg);
+  }
+  .d-chrome {
+    padding: 20px 64px;
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-size: 12px;
+    letter-spacing: 0.06em;
+  }
+  .d-chrome .mark {
+    font-family: 'Fraunces', serif;
+    font-weight: 700;
+    font-size: 22px;
+    letter-spacing: -0.025em;
+  }
+  .d-chrome .mark .dot { color: var(--accent); }
+  .d-chrome .mark .tld { opacity: 0.55; font-weight: 400; }
+  .d-chrome .nav {
+    display: flex; gap: 28px;
+    font-family: 'Inter', sans-serif;
+    color: var(--fg-muted);
+    font-size: 13px;
+  }
+  .d-chrome .buy {
+    background: var(--fg);
+    color: var(--bg);
+    padding: 9px 18px;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 0.05em;
+  }
+
+  .d-hero {
+    padding: 96px 64px 64px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: end;
+  }
+  .d-hero .eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 32px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+  }
+  .d-hero h1 {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(80px, 11vw, 168px);
+    font-weight: 400;
+    line-height: 0.92;
+    letter-spacing: -0.03em;
+    color: var(--fg);
+    margin-bottom: 24px;
+  }
+  .d-hero h1 .italic {
+    font-style: italic;
+    color: var(--accent);
+    font-weight: 400;
+  }
+  .d-hero .cn {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(28px, 3.2vw, 44px);
+    font-weight: 300;
+    line-height: 1.25;
+    color: var(--fg);
+    margin-bottom: 16px;
+    letter-spacing: -0.01em;
+  }
+  .d-hero .cn .gtm { color: var(--accent); font-weight: 500; }
+  .d-hero-side {
+    border-left: 1px solid var(--line-strong);
+    padding-left: 48px;
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding-bottom: 16px;
+  }
+  .d-hero-side .lead {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 26px;
+    line-height: 1.4;
+    color: var(--fg);
+    margin-bottom: 32px;
+    font-weight: 400;
+  }
+  .d-hero-side .price-line {
+    font-family: 'Fraunces', serif;
+    font-size: 14px;
+    color: var(--fg-muted);
+    margin-bottom: 16px;
+    letter-spacing: 0.02em;
+  }
+  .d-hero-side .price-line strong {
+    color: var(--fg);
+    font-size: 24px;
+    font-weight: 700;
+  }
+  .d-hero-side .cta-primary {
+    background: var(--accent);
+    color: var(--bg);
+    border: 0;
+    padding: 18px 32px;
+    border-radius: 999px;
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    cursor: pointer;
+    margin-bottom: 12px;
+    width: fit-content;
+  }
+  .d-hero-side .cta-secondary {
+    background: transparent;
+    color: var(--fg);
+    border: 0;
+    padding: 8px 0;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    letter-spacing: 0.05em;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    cursor: pointer;
+    width: fit-content;
+  }
+
+  .d-divider {
+    height: 1px;
+    background: var(--line);
+    margin: 0 64px;
+  }
+
+  .d-roster {
+    padding: 80px 64px 96px;
+  }
+  .d-roster h2 {
+    font-family: 'Fraunces', serif;
+    font-size: 56px;
+    font-weight: 400;
+    letter-spacing: -0.025em;
+    color: var(--fg);
+    margin-bottom: 8px;
+  }
+  .d-roster h2 .italic { font-style: italic; color: var(--accent); }
+  .d-roster .lead {
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    color: var(--fg-muted);
+    margin-bottom: 48px;
+    max-width: 560px;
+  }
+  .d-grid {
+    display: grid;
+    grid-template-columns: repeat(11, 1fr);
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+  }
+  .d-cell {
+    background: var(--bg);
+    padding: 24px 12px;
+    text-align: center;
+    min-height: 180px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .d-cell .num {
+    font-family: 'Fraunces', serif;
+    font-size: 38px;
+    font-weight: 400;
+    color: var(--accent);
+    line-height: 1;
+    margin-bottom: 4px;
+    font-style: italic;
+  }
+  .d-cell .ch {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: var(--fg);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+  }
+  .d-cell .ships {
+    font-family: 'Fraunces', serif;
+    font-size: 11px;
+    font-style: italic;
+    color: var(--fg-muted);
+    line-height: 1.45;
+  }
+
+  .d-hw {
+    padding: 96px 64px;
+    background: var(--bg-2);
+    text-align: center;
+  }
+  .d-hw .label {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 14px;
+    color: var(--accent);
+    margin-bottom: 32px;
+  }
+  .d-hw h2 {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(48px, 6vw, 84px);
+    font-weight: 400;
+    line-height: 1.05;
+    letter-spacing: -0.025em;
+    color: var(--fg);
+    margin-bottom: 48px;
+  }
+  .d-hw h2 .italic { font-style: italic; color: var(--accent); }
+  .d-hw .box {
+    width: clamp(320px, 42vw, 480px);
+    aspect-ratio: 16/10;
+    margin: 0 auto 48px;
+    background: linear-gradient(160deg, #d4c5a8 0%, #b89a73 50%, #8a6e4a 100%);
+    border-radius: 8px;
+    box-shadow: 0 30px 80px rgba(26, 22, 18, 0.25);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .d-hw .box::before {
+    content: '11.agents.ai';
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 36px;
+    font-weight: 400;
+    color: rgba(26, 22, 18, 0.4);
+  }
+  .d-hw .box::after {
+    content: '';
+    position: absolute;
+    top: 18px;
+    right: 22px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+  .d-hw .price {
+    font-family: 'Fraunces', serif;
+    font-size: 64px;
+    font-weight: 400;
+    color: var(--fg);
+    letter-spacing: -0.03em;
+    margin-bottom: 8px;
+  }
+  .d-hw .price-sub {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 15px;
+    color: var(--fg-muted);
+    margin-bottom: 40px;
+  }
+  .d-hw button {
+    background: var(--fg);
+    color: var(--bg);
+    border: 0;
+    padding: 16px 40px;
+    border-radius: 999px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+
+  /* ============================================================
+     ==== STYLE E — WARM DUSK (Editorial Dark)
+     bg: warm near-black · cream text · amber accent
+     ============================================================ */
+  .e {
+    --bg: #1a1612;
+    --bg-2: #221d17;
+    --bg-3: #2a241b;
+    --fg: #ebe0cc;
+    --fg-muted: rgba(235, 224, 204, 0.6);
+    --fg-dim: rgba(235, 224, 204, 0.3);
+    --accent: #d4a574;
+    --accent-bright: #e8be94;
+    --line: rgba(235, 224, 204, 0.14);
+    --line-strong: rgba(235, 224, 204, 0.32);
+    background: var(--bg);
+    color: var(--fg);
+    font-family: 'Inter', sans-serif;
+  }
+  .e .gacha-label {
+    background: var(--accent);
+    color: var(--bg);
+  }
+
+  .e-chrome {
+    padding: 20px 64px;
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-size: 13px;
+  }
+  .e-chrome .mark {
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    letter-spacing: -0.025em;
+    color: var(--fg);
+  }
+  .e-chrome .mark .dot { color: var(--accent); }
+  .e-chrome .mark .tld { opacity: 0.55; font-weight: 400; }
+  .e-chrome .nav {
+    display: flex; gap: 32px;
+    color: var(--fg-muted);
+    font-size: 13px;
+  }
+  .e-chrome .buy {
+    background: var(--accent);
+    color: var(--bg);
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: 0.02em;
+  }
+
+  .e-hero {
+    padding: 120px 64px 96px;
+    position: relative;
+    overflow: hidden;
+  }
+  .e-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 60% 50% at 80% 30%, rgba(212, 165, 116, 0.12) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .e-hero > * { position: relative; }
+  .e-hero .eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 40px;
+    font-weight: 500;
+  }
+  .e-hero .eyebrow::before {
+    content: '◆ ';
+    color: var(--accent);
+  }
+  .e-hero h1 {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(80px, 12vw, 180px);
+    font-weight: 700;
+    line-height: 0.9;
+    letter-spacing: -0.045em;
+    color: var(--fg);
+    margin-bottom: 24px;
+  }
+  .e-hero h1 .accent { color: var(--accent); }
+  .e-hero h1 .dot { color: var(--accent); }
+  .e-hero h1 .tld { color: var(--fg-muted); font-weight: 400; }
+  .e-hero .cn {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(32px, 4vw, 52px);
+    font-weight: 300;
+    line-height: 1.2;
+    color: var(--fg);
+    margin-bottom: 16px;
+    letter-spacing: -0.012em;
+  }
+  .e-hero .cn .gtm { color: var(--accent); font-weight: 500; }
+  .e-hero .en {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    color: var(--fg-muted);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 64px;
+  }
+  .e-cta-row {
+    display: inline-flex;
+    align-items: center;
+    gap: 20px;
+  }
+  .e-cta-primary {
+    background: var(--accent);
+    color: var(--bg);
+    padding: 18px 36px;
+    border-radius: 4px;
+    border: 0;
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+  }
+  .e-cta-primary .price {
+    color: rgba(26, 22, 18, 0.65);
+    margin-left: 12px;
+    font-weight: 500;
+  }
+  .e-cta-secondary {
+    background: transparent;
+    color: var(--fg);
+    padding: 16px 0;
+    border: 0;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-decoration: underline;
+    text-underline-offset: 6px;
+    text-decoration-color: var(--accent);
+  }
+  .e-meta {
+    margin-top: 80px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 32px;
+    padding-top: 32px;
+    border-top: 1px solid var(--line);
+  }
+  .e-meta .label {
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+  .e-meta .val {
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    color: var(--fg);
+    font-weight: 400;
+  }
+
+  .e-roster {
+    padding: 96px 64px;
+    background: var(--bg-2);
+  }
+  .e-roster-head {
+    margin-bottom: 56px;
+  }
+  .e-roster-head .label {
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+    font-weight: 500;
+  }
+  .e-roster-head h2 {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(40px, 5.5vw, 72px);
+    font-weight: 700;
+    letter-spacing: -0.035em;
+    color: var(--fg);
+    line-height: 1.05;
+  }
+  .e-roster-head h2 .accent { color: var(--accent); }
+  .e-grid {
+    display: grid;
+    grid-template-columns: repeat(11, 1fr);
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+  }
+  .e-cell {
+    background: var(--bg);
+    padding: 28px 12px;
+    text-align: center;
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .e-cell .num {
+    font-family: 'Inter', sans-serif;
+    font-size: 40px;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1;
+    margin-bottom: 6px;
+    letter-spacing: -0.03em;
+  }
+  .e-cell .ch {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: var(--fg);
+    margin-bottom: 14px;
+    text-transform: uppercase;
+  }
+  .e-cell .ships {
+    font-size: 11px;
+    color: var(--fg-muted);
+    line-height: 1.5;
+    font-weight: 400;
+  }
+
+  .e-hw {
+    padding: 120px 64px;
+    text-align: center;
+    background: var(--bg);
+    position: relative;
+    overflow: hidden;
+  }
+  .e-hw::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 50% 50% at 50% 50%, rgba(212, 165, 116, 0.14) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .e-hw > * { position: relative; }
+  .e-hw .label {
+    font-size: 11px;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 48px;
+    font-weight: 600;
+  }
+  .e-hw h2 {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(48px, 6vw, 84px);
+    font-weight: 700;
+    color: var(--fg);
+    line-height: 1.05;
+    letter-spacing: -0.035em;
+    max-width: 1000px;
+    margin: 0 auto 64px;
+  }
+  .e-hw h2 .accent { color: var(--accent); }
+  .e-hw .box {
+    width: clamp(360px, 48vw, 540px);
+    aspect-ratio: 16/10;
+    margin: 0 auto 56px;
+    background: linear-gradient(155deg, #4a3a2a 0%, #2f261c 50%, #1a1410 100%);
+    border-radius: 10px;
+    box-shadow:
+      0 50px 120px rgba(0,0,0,0.5),
+      0 0 120px rgba(212, 165, 116, 0.2),
+      inset 0 1px 0 rgba(212, 165, 116, 0.1);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .e-hw .box::before {
+    content: '11.agents.ai';
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: clamp(28px, 4vw, 48px);
+    letter-spacing: -0.04em;
+    color: var(--accent);
+    opacity: 0.8;
+  }
+  .e-hw .box::after {
+    content: '';
+    position: absolute;
+    top: 20px;
+    right: 24px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 12px var(--accent);
+  }
+  .e-hw .price {
+    font-family: 'Inter', sans-serif;
+    font-size: 80px;
+    font-weight: 700;
+    color: var(--fg);
+    letter-spacing: -0.04em;
+    line-height: 1;
+    margin-bottom: 12px;
+  }
+  .e-hw .price-sub {
+    font-size: 13px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+    margin-bottom: 48px;
+  }
+  .e-hw button {
+    background: var(--accent);
+    color: var(--bg);
+    padding: 20px 48px;
+    border-radius: 4px;
+    border: 0;
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+
+  /* ============================================================
+     ==== STYLE F — PASTEL GRADIENT MODERN (Soft Tech)
+     bg: off-white · soft gradient · indigo accent · Geist sans
+     ============================================================ */
+  .f {
+    --bg: #fafafb;
+    --bg-2: #ffffff;
+    --bg-3: #f3f1ee;
+    --fg: #0a0a14;
+    --fg-muted: rgba(10, 10, 20, 0.6);
+    --fg-dim: rgba(10, 10, 20, 0.32);
+    --accent: #6366f1;
+    --accent-soft: #a5a4f5;
+    --grad-1: #8b7cf6;
+    --grad-2: #ec7195;
+    --grad-3: #f7b267;
+    --line: rgba(10, 10, 20, 0.1);
+    --line-strong: rgba(10, 10, 20, 0.2);
+    background: var(--bg);
+    color: var(--fg);
+    font-family: 'Geist', 'Inter', sans-serif;
+  }
+  .f .gacha-label {
+    background: linear-gradient(90deg, var(--grad-1) 0%, var(--grad-2) 60%, var(--grad-3) 100%);
+    color: #fff;
+  }
+
+  .f-chrome {
+    padding: 20px 64px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    backdrop-filter: blur(20px);
+    background: rgba(255, 255, 255, 0.7);
+    border-bottom: 1px solid var(--line);
+  }
+  .f-chrome .mark {
+    font-family: 'Geist', sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    letter-spacing: -0.025em;
+  }
+  .f-chrome .mark .gradient {
+    background: linear-gradient(90deg, var(--grad-1) 0%, var(--grad-2) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .f-chrome .nav {
+    display: flex; gap: 28px;
+    color: var(--fg-muted);
+    font-size: 14px;
+    font-weight: 500;
+  }
+  .f-chrome .buy {
+    background: linear-gradient(90deg, var(--grad-1) 0%, var(--grad-2) 100%);
+    color: #fff;
+    padding: 10px 22px;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 13px;
+    box-shadow: 0 8px 24px rgba(139, 124, 246, 0.3);
+  }
+
+  .f-hero {
+    padding: 100px 64px 80px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .f-hero::before {
+    content: '';
+    position: absolute;
+    top: -200px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 1200px;
+    height: 800px;
+    background:
+      radial-gradient(circle at 30% 50%, rgba(139, 124, 246, 0.18) 0%, transparent 50%),
+      radial-gradient(circle at 70% 50%, rgba(236, 113, 149, 0.15) 0%, transparent 50%),
+      radial-gradient(circle at 50% 70%, rgba(247, 178, 103, 0.12) 0%, transparent 50%);
+    filter: blur(60px);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .f-hero > * { position: relative; z-index: 1; }
+  .f-hero .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.8);
+    border: 1px solid var(--line);
+    backdrop-filter: blur(20px);
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--fg);
+    margin-bottom: 40px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+  }
+  .f-hero .eyebrow .sparkle {
+    background: linear-gradient(90deg, var(--grad-1), var(--grad-2));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 700;
+  }
+  .f-hero h1 {
+    font-family: 'Geist', 'Inter', sans-serif;
+    font-size: clamp(72px, 11vw, 168px);
+    font-weight: 700;
+    line-height: 0.92;
+    letter-spacing: -0.05em;
+    color: var(--fg);
+    margin-bottom: 24px;
+  }
+  .f-hero h1 .gradient {
+    background: linear-gradient(120deg, var(--grad-1) 0%, var(--grad-2) 50%, var(--grad-3) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .f-hero h1 .tld {
+    color: var(--fg-muted);
+    font-weight: 400;
+  }
+  .f-hero .cn {
+    font-family: 'Geist', 'Inter', sans-serif;
+    font-size: clamp(28px, 3.2vw, 40px);
+    font-weight: 400;
+    line-height: 1.3;
+    color: var(--fg);
+    max-width: 880px;
+    margin: 0 auto 16px;
+    letter-spacing: -0.015em;
+  }
+  .f-hero .cn .gtm {
+    background: linear-gradient(90deg, var(--grad-1), var(--grad-2));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 600;
+  }
+  .f-hero .en {
+    font-size: 14px;
+    color: var(--fg-muted);
+    margin-bottom: 56px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+  }
+  .f-cta {
+    display: inline-flex;
+    gap: 12px;
+  }
+  .f-cta-primary {
+    background: linear-gradient(120deg, var(--grad-1) 0%, var(--grad-2) 100%);
+    color: #fff;
+    padding: 16px 32px;
+    border-radius: 999px;
+    border: 0;
+    font-family: 'Geist', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    box-shadow: 0 12px 32px rgba(139, 124, 246, 0.4);
+  }
+  .f-cta-primary .price {
+    opacity: 0.85;
+    margin-left: 8px;
+    font-weight: 500;
+  }
+  .f-cta-secondary {
+    background: rgba(255, 255, 255, 0.8);
+    color: var(--fg);
+    border: 1px solid var(--line-strong);
+    padding: 16px 26px;
+    border-radius: 999px;
+    font-family: 'Geist', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    backdrop-filter: blur(20px);
+  }
+
+  .f-meta {
+    margin-top: 80px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    max-width: 1100px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .f-meta .card {
+    background: rgba(255, 255, 255, 0.7);
+    border: 1px solid var(--line);
+    backdrop-filter: blur(20px);
+    padding: 24px;
+    border-radius: 16px;
+    text-align: left;
+  }
+  .f-meta .val {
+    font-family: 'Geist', sans-serif;
+    font-size: 36px;
+    font-weight: 700;
+    letter-spacing: -0.035em;
+    margin-bottom: 4px;
+    background: linear-gradient(120deg, var(--grad-1), var(--grad-2));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .f-meta .label {
+    font-size: 12px;
+    color: var(--fg-muted);
+    font-weight: 500;
+  }
+
+  .f-roster {
+    padding: 100px 64px;
+  }
+  .f-roster-head {
+    text-align: center;
+    margin-bottom: 56px;
+  }
+  .f-roster-head .label {
+    font-size: 12px;
+    font-weight: 600;
+    background: linear-gradient(90deg, var(--grad-1), var(--grad-2));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 12px;
+    letter-spacing: 0.04em;
+  }
+  .f-roster-head h2 {
+    font-family: 'Geist', sans-serif;
+    font-size: clamp(48px, 6vw, 80px);
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    color: var(--fg);
+    line-height: 1.05;
+  }
+  .f-grid {
+    display: grid;
+    grid-template-columns: repeat(11, 1fr);
+    gap: 10px;
+  }
+  .f-cell {
+    aspect-ratio: 1;
+    padding: 16px 10px;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.7);
+    border: 1px solid var(--line);
+    backdrop-filter: blur(20px);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+  }
+  .f-cell::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--tile-grad);
+    opacity: 0.10;
+    z-index: 0;
+  }
+  .f-cell > * { position: relative; z-index: 1; }
+  .f-cell .num {
+    font-family: 'Geist', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    color: var(--fg);
+    line-height: 1;
+  }
+  .f-cell .ch {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--fg);
+    margin-top: 6px;
+  }
+  .f-cell .role {
+    font-size: 9px;
+    color: var(--fg-muted);
+    font-weight: 500;
+  }
+  .f-cell:nth-child(1)  { --tile-grad: linear-gradient(135deg, #8b7cf6, #6366f1); }
+  .f-cell:nth-child(2)  { --tile-grad: linear-gradient(135deg, #ec7195, #f43f7d); }
+  .f-cell:nth-child(3)  { --tile-grad: linear-gradient(135deg, #f7b267, #f4845f); }
+  .f-cell:nth-child(4)  { --tile-grad: linear-gradient(135deg, #6ed1ff, #3c82f6); }
+  .f-cell:nth-child(5)  { --tile-grad: linear-gradient(135deg, #5cd6a8, #1ea97c); }
+  .f-cell:nth-child(6)  { --tile-grad: linear-gradient(135deg, #ff6b6b, #d63d3d); }
+  .f-cell:nth-child(7)  { --tile-grad: linear-gradient(135deg, #b388ff, #ec7195); }
+  .f-cell:nth-child(8)  { --tile-grad: linear-gradient(135deg, #f7b267, #ec7195); }
+  .f-cell:nth-child(9)  { --tile-grad: linear-gradient(135deg, #6ed1ff, #8b7cf6); }
+  .f-cell:nth-child(10) { --tile-grad: linear-gradient(135deg, #5cd6a8, #6ed1ff); }
+  .f-cell:nth-child(11) { --tile-grad: linear-gradient(135deg, #ec7195, #f7b267); }
+
+  .f-hw {
+    padding: 100px 64px;
+    background: linear-gradient(180deg, var(--bg) 0%, var(--bg-3) 100%);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .f-hw::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at 30% 50%, rgba(139, 124, 246, 0.12) 0%, transparent 40%),
+      radial-gradient(circle at 70% 50%, rgba(236, 113, 149, 0.12) 0%, transparent 40%);
+    filter: blur(40px);
+  }
+  .f-hw > * { position: relative; }
+  .f-hw .label {
+    font-size: 12px;
+    font-weight: 600;
+    background: linear-gradient(90deg, var(--grad-1), var(--grad-2));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 24px;
+    letter-spacing: 0.05em;
+  }
+  .f-hw h2 {
+    font-family: 'Geist', sans-serif;
+    font-size: clamp(48px, 6.5vw, 88px);
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    color: var(--fg);
+    line-height: 1.05;
+    max-width: 1000px;
+    margin: 0 auto 64px;
+  }
+  .f-hw h2 .gradient {
+    background: linear-gradient(120deg, var(--grad-1) 0%, var(--grad-2) 60%, var(--grad-3) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .f-hw .box {
+    width: clamp(360px, 50vw, 600px);
+    aspect-ratio: 16/10;
+    margin: 0 auto 56px;
+    background:
+      linear-gradient(160deg, #f0eef9 0%, #e5e0f5 40%, #e8d4e3 100%);
+    border-radius: 24px;
+    box-shadow:
+      0 60px 140px rgba(139, 124, 246, 0.2),
+      inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .f-hw .box::before {
+    content: '11.agents.ai';
+    font-family: 'Geist', sans-serif;
+    font-weight: 700;
+    font-size: clamp(28px, 4.5vw, 56px);
+    letter-spacing: -0.04em;
+    background: linear-gradient(120deg, var(--grad-1) 0%, var(--grad-2) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .f-hw .box::after {
+    content: '';
+    position: absolute;
+    top: 22px;
+    right: 26px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--grad-1), var(--grad-2));
+    box-shadow: 0 0 16px rgba(139, 124, 246, 0.6);
+  }
+  .f-hw .price {
+    font-family: 'Geist', sans-serif;
+    font-size: 80px;
+    font-weight: 700;
+    letter-spacing: -0.05em;
+    color: var(--fg);
+    line-height: 1;
+    margin-bottom: 12px;
+  }
+  .f-hw .price-sub {
+    font-size: 13px;
+    color: var(--fg-muted);
+    margin-bottom: 48px;
+    font-weight: 500;
+  }
+  .f-hw button {
+    background: linear-gradient(120deg, var(--grad-1) 0%, var(--grad-2) 100%);
+    color: #fff;
+    padding: 18px 44px;
+    border-radius: 999px;
+    border: 0;
+    font-family: 'Geist', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    box-shadow: 0 16px 40px rgba(139, 124, 246, 0.4);
+  }
+
+  /* ============================================================
+     FOOTER PICK
+     ============================================================ */
+  .pick {
+    padding: 64px 80px;
+    background: #0a0a0a;
+    color: #fff;
+    text-align: center;
+  }
+  .pick .label {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    color: rgba(255, 255, 255, 0.5);
+  }
+  .pick .opts {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    letter-spacing: 0.02em;
+    line-height: 2;
+  }
+  .pick .opts strong {
+    color: #ec7195;
+    font-weight: 700;
+    margin-right: 4px;
+  }
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     ==== STYLE D — CREAM PREMIUM (Literary) ====
+     ============================================================ -->
+<div class="gacha-card d">
+  <div class="gacha-label">
+    <span>STYLE D · CREAM PREMIUM · LITERARY / SERIF</span>
+    <span class="palette">
+      <span class="sw" style="background:#f4ede1; border: 1px solid rgba(0,0,0,0.2)"></span>
+      <span class="sw" style="background:#1a1612"></span>
+      <span class="sw" style="background:#8a3a1c"></span>
+    </span>
+  </div>
+
+  <div class="d-chrome">
+    <span class="mark">11<span class="dot">.</span>agents<span class="tld">.ai</span></span>
+    <span class="nav">
+      <span>The 11</span><span>Pricing</span><span>The Box</span><span>FAQ</span>
+    </span>
+    <span class="buy">Pre-order — $999</span>
+  </div>
+
+  <section class="d-hero">
+    <div>
+      <div class="eyebrow">— Founders' Edition · Shipping Q3 2026</div>
+      <h1>Eleven<br><span class="italic">agents.</span></h1>
+    </div>
+    <div class="d-hero-side">
+      <div class="lead">"GTM was always the bottleneck. Not the product. Not the funding. Not even the founder."</div>
+      <div class="cn">让天下没有难做的<br><span class="gtm">GTM</span>。</div>
+      <div class="price-line">A team of eleven specialists, on your desk, for <strong>$999</strong> a year.</div>
+      <button class="cta-primary">Hire your 11-agent team →</button>
+      <button class="cta-secondary">See how it works</button>
+    </div>
+  </section>
+
+  <div class="d-divider"></div>
+
+  <section class="d-roster">
+    <h2>The <span class="italic">eleven.</span></h2>
+    <p class="lead">Each agent specialises in one growth channel. Each is held in an Iron Triangle — Builder, Reviewer, Cron — so nothing ships without a human-grade review pass.</p>
+    <div class="d-grid">
+      <div class="d-cell"><div class="num">01</div><div class="ch">X</div><div class="ships">30 ICP-aligned posts/mo</div></div>
+      <div class="d-cell"><div class="num">02</div><div class="ch">Reddit</div><div class="ships">8 community threads/mo</div></div>
+      <div class="d-cell"><div class="num">03</div><div class="ch">SEO</div><div class="ships">12 ranked articles/mo</div></div>
+      <div class="d-cell"><div class="num">04</div><div class="ch">GEO</div><div class="ships">AI-search citation pages</div></div>
+      <div class="d-cell"><div class="num">05</div><div class="ch">TikTok</div><div class="ships">15 short videos/mo</div></div>
+      <div class="d-cell"><div class="num">06</div><div class="ch">KOC</div><div class="ships">20 micro-partnerships/mo</div></div>
+      <div class="d-cell"><div class="num">07</div><div class="ch">KOL</div><div class="ships">4 tier-1 deals/qtr</div></div>
+      <div class="d-cell"><div class="num">08</div><div class="ch">MCP</div><div class="ships">tool-catalog listings</div></div>
+      <div class="d-cell"><div class="num">09</div><div class="ch">Ads</div><div class="ships">weekly optimised campaigns</div></div>
+      <div class="d-cell"><div class="num">10</div><div class="ch">Owned</div><div class="ships">8 owned-channel posts/wk</div></div>
+      <div class="d-cell"><div class="num">11</div><div class="ch">EDM</div><div class="ships">weekly newsletter + sequences</div></div>
+    </div>
+  </section>
+
+  <section class="d-hw">
+    <div class="label">— One more thing</div>
+    <h2>Plug in. <span class="italic">Hire eleven.</span> Ship growth.</h2>
+    <div class="box"></div>
+    <div class="price">$999</div>
+    <div class="price-sub">— one-time · first year included · 30-day refund</div>
+    <button>Reserve yours · $99 deposit</button>
+  </section>
+</div>
+
+<!-- ============================================================
+     ==== STYLE E — WARM DUSK (Editorial Dark) ====
+     ============================================================ -->
+<div class="gacha-card e">
+  <div class="gacha-label">
+    <span>STYLE E · WARM DUSK · EDITORIAL DARK / AMBER</span>
+    <span class="palette">
+      <span class="sw" style="background:#1a1612"></span>
+      <span class="sw" style="background:#ebe0cc"></span>
+      <span class="sw" style="background:#d4a574"></span>
+    </span>
+  </div>
+
+  <div class="e-chrome">
+    <span class="mark">11<span class="dot">.</span>agents<span class="tld">.ai</span></span>
+    <span class="nav">
+      <span>The 11</span><span>Pricing</span><span>Hardware</span><span>Open Platform</span>
+    </span>
+    <span class="buy">Pre-order — $999</span>
+  </div>
+
+  <section class="e-hero">
+    <div class="eyebrow">Founders' Edition · Pre-orders open</div>
+    <h1>11<span class="dot">.</span>agents<span class="tld">.ai</span></h1>
+    <div class="cn">让天下没有难做的 <span class="gtm">GTM</span>。</div>
+    <div class="en">ELEVEN SPECIALISTS · ANY VERTICAL · SHIPPED RESULTS</div>
+    <div class="e-cta-row">
+      <button class="e-cta-primary">Hire your 11-agent team<span class="price">$999/yr</span></button>
+      <button class="e-cta-secondary">See how it works</button>
+    </div>
+    <div class="e-meta">
+      <div><div class="label">PRICING</div><div class="val">$999/yr · single SKU</div></div>
+      <div><div class="label">DELIVERY</div><div class="val">shipped GTM artifacts weekly</div></div>
+      <div><div class="label">DOCTRINE</div><div class="val">No Triangle = No Agent</div></div>
+      <div><div class="label">REFUND</div><div class="val">30 days, no questions</div></div>
+    </div>
+  </section>
+
+  <section class="e-roster">
+    <div class="e-roster-head">
+      <div class="label">/ THE TEAM YOU HIRE /</div>
+      <h2>Eleven <span class="accent">specialists</span>.<br>One swarm.</h2>
+    </div>
+    <div class="e-grid">
+      <div class="e-cell"><div class="num">01</div><div class="ch">X</div><div class="ships">30 ICP-aligned posts/mo</div></div>
+      <div class="e-cell"><div class="num">02</div><div class="ch">Reddit</div><div class="ships">8 community threads/mo</div></div>
+      <div class="e-cell"><div class="num">03</div><div class="ch">SEO</div><div class="ships">12 ranked articles/mo</div></div>
+      <div class="e-cell"><div class="num">04</div><div class="ch">GEO</div><div class="ships">AI-search citations</div></div>
+      <div class="e-cell"><div class="num">05</div><div class="ch">TikTok</div><div class="ships">15 short videos/mo</div></div>
+      <div class="e-cell"><div class="num">06</div><div class="ch">KOC</div><div class="ships">20 micro-partners/mo</div></div>
+      <div class="e-cell"><div class="num">07</div><div class="ch">KOL</div><div class="ships">4 tier-1 deals/qtr</div></div>
+      <div class="e-cell"><div class="num">08</div><div class="ch">MCP</div><div class="ships">tool-catalog listing</div></div>
+      <div class="e-cell"><div class="num">09</div><div class="ch">Ads</div><div class="ships">weekly campaigns</div></div>
+      <div class="e-cell"><div class="num">10</div><div class="ch">Owned</div><div class="ships">8 channels self-publishing</div></div>
+      <div class="e-cell"><div class="num">11</div><div class="ch">EDM</div><div class="ships">newsletter + sequences</div></div>
+    </div>
+  </section>
+
+  <section class="e-hw">
+    <div class="label">◆ ONE MORE THING ◆</div>
+    <h2>A device on your desk.<br>An <span class="accent">11-person team</span> in the cloud.</h2>
+    <div class="box"></div>
+    <div class="price">$999</div>
+    <div class="price-sub">ONE-TIME · FIRST YEAR INCLUDED · 30-DAY REFUND</div>
+    <button>Reserve yours — $99 deposit →</button>
+  </section>
+</div>
+
+<!-- ============================================================
+     ==== STYLE F — PASTEL GRADIENT MODERN (Soft Tech) ====
+     ============================================================ -->
+<div class="gacha-card f">
+  <div class="gacha-label">
+    <span>STYLE F · PASTEL GRADIENT · MODERN SAAS</span>
+    <span class="palette">
+      <span class="sw" style="background:#fafafb; border: 1px solid rgba(0,0,0,0.2)"></span>
+      <span class="sw" style="background:linear-gradient(135deg, #8b7cf6, #ec7195)"></span>
+      <span class="sw" style="background:linear-gradient(135deg, #f7b267, #ec7195)"></span>
+    </span>
+  </div>
+
+  <div class="f-chrome">
+    <span class="mark">11<span class="gradient">.agents</span><span style="opacity:.5">.ai</span></span>
+    <span class="nav">
+      <span>Agents</span><span>Pricing</span><span>Hardware</span><span>Platform</span>
+    </span>
+    <span class="buy">Pre-order — $999</span>
+  </div>
+
+  <section class="f-hero">
+    <div class="eyebrow"><span class="sparkle">✦</span> Pre-orders open · Founders' Edition</div>
+    <h1>11<span class="gradient">agents</span><span class="tld">.ai</span></h1>
+    <div class="cn">让天下没有难做的 <span class="gtm">GTM</span>。<br>One team for every channel that matters.</div>
+    <div class="en">eleven specialists · any vertical · shipped results</div>
+    <div class="f-cta">
+      <button class="f-cta-primary">Hire your 11-agent team<span class="price">→ $999/yr</span></button>
+      <button class="f-cta-secondary">See how it works</button>
+    </div>
+    <div class="f-meta">
+      <div class="card"><div class="val">11</div><div class="label">specialised AI agents</div></div>
+      <div class="card"><div class="val">33</div><div class="label">iron triangle roles</div></div>
+      <div class="card"><div class="val">365</div><div class="label">days of shipped GTM</div></div>
+      <div class="card"><div class="val">$999</div><div class="label">one-time · no subscription</div></div>
+    </div>
+  </section>
+
+  <section class="f-roster">
+    <div class="f-roster-head">
+      <div class="label">/ THE TEAM /</div>
+      <h2>Meet your eleven.</h2>
+    </div>
+    <div class="f-grid">
+      <div class="f-cell"><div class="num">01</div><div><div class="ch">X</div><div class="role">growth</div></div></div>
+      <div class="f-cell"><div class="num">02</div><div><div class="ch">Reddit</div><div class="role">community</div></div></div>
+      <div class="f-cell"><div class="num">03</div><div><div class="ch">SEO</div><div class="role">organic</div></div></div>
+      <div class="f-cell"><div class="num">04</div><div><div class="ch">GEO</div><div class="role">AI search</div></div></div>
+      <div class="f-cell"><div class="num">05</div><div><div class="ch">TikTok</div><div class="role">short video</div></div></div>
+      <div class="f-cell"><div class="num">06</div><div><div class="ch">KOC</div><div class="role">micro</div></div></div>
+      <div class="f-cell"><div class="num">07</div><div><div class="ch">KOL</div><div class="role">tier-1</div></div></div>
+      <div class="f-cell"><div class="num">08</div><div><div class="ch">MCP</div><div class="role">tool catalogs</div></div></div>
+      <div class="f-cell"><div class="num">09</div><div><div class="ch">Ads</div><div class="role">paid</div></div></div>
+      <div class="f-cell"><div class="num">10</div><div><div class="ch">Owned</div><div class="role">8 channels</div></div></div>
+      <div class="f-cell"><div class="num">11</div><div><div class="ch">EDM</div><div class="role">email</div></div></div>
+    </div>
+  </section>
+
+  <section class="f-hw">
+    <div class="label">✦ ONE MORE THING</div>
+    <h2>One <span class="gradient">box</span>.<br>Eleven specialists in the cloud.</h2>
+    <div class="box"></div>
+    <div class="price">$999</div>
+    <div class="price-sub">one-time · first year included · 30-day refund</div>
+    <button>Reserve yours — $99 deposit →</button>
+  </section>
+</div>
+
+<!-- ============================================================
+     FOOTER PICK
+     ============================================================ -->
+<div class="pick">
+  <div class="label">/ PICK A STYLE /</div>
+  <div class="opts">
+    <strong>D</strong> Cream Premium &nbsp;·&nbsp; serif, literary, warm cream + sienna · for prestige / FT-magazine feel<br>
+    <strong>E</strong> Warm Dusk &nbsp;·&nbsp; warm dark + cream + amber accent · for editorial confidence, no red<br>
+    <strong>F</strong> Pastel Gradient &nbsp;·&nbsp; off-white + lavender/peach gradients · modern SaaS / Linear vibe<br><br>
+    tell Hunter the letter &nbsp;·&nbsp; or mix-and-match elements
+  </div>
+</div>
+
+</body>
+</html>

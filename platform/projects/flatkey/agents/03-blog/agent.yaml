@@ -1,0 +1,51 @@
+id: 03-blog
+name: Blog Agent
+category: content
+platform: Official Website
+builder: 张基琳
+reviewer: 彭静
+goal: >-
+  Publish technically rigorous, SEO-ranked articles that answer the exact
+  queries platform engineers type after a billing incident, a key leak, or a
+  LiteLLM evaluation — building Flatkey's organic search authority in the LLM
+  API management category.
+default_product: voc-ai
+kpi:
+  weekly_target: >-
+    1 new long-form article published per week (2,000–4,000 words); 3 articles
+    ranking in top 5 organic results for their target keyword by month 3
+  measure: >-
+    Ahrefs keyword rank tracking per article; Google Search Console
+    click-through rate; organic referral sessions to /signup page; time-on-page
+    as a content quality proxy (target: 4+ minutes average)
+schedule: 'cron: 0 9 * * 1,3,5'
+budget_monthly_usd: 0
+status: deployable
+reuse:
+  - engines/voc-ai (Ronin Skill Graph)
+  - engines/solvea
+activate: true
+topics:
+  - >-
+    Incident anatomy posts: 'The 8-Minute Window: What Happens When an LLM API
+    Key Hits GitHub' and 'Anatomy of a $30K OpenAI Bill Spike' — high-intent,
+    emotionally resonant, shareable on HN
+  - >-
+    Competitor comparison posts: 'LiteLLM Virtual Keys vs Flatkey: An Honest
+    Comparison for Teams Who Don't Want to Self-Host', 'Doppler vs Flatkey for
+    AI Teams: When Generic Secrets Management Isn't Enough', 'Portkey vs Flatkey
+    vs Helicone: Which Layer Do You Actually Need?'
+  - >-
+    How-to architecture posts: 'How to Scope LLM API Keys by Model, Environment,
+    and Developer Without Changing Your Application Code', 'Key Rotation Across
+    Microservices: A Step-by-Step Guide for AI-Native Teams', 'How to Attribute
+    LLM Costs by Feature When You're Running 3 Different Models'
+  - >-
+    Compliance-accelerator posts: 'What Your SOC2 Auditor Will Ask About Your
+    LLM API Keys (and How to Answer)', 'EU AI Act Audit Trail Requirements for
+    Teams Using Third-Party Model Providers: A Developer's Checklist'
+  - >-
+    Market-education posts: 'Why OpenAI Projects Doesn't Solve Your Key
+    Management Problem If You Use Anthropic Too', 'The LLM Infrastructure Stack
+    in 2026: What You Need to Own vs. What You Should Delegate'
+contentos_hydrated_at: '2026-05-11T21:44:14.143Z'

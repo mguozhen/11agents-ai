@@ -1,0 +1,670 @@
+{
+  "exported_at": "2026-05-11T07:03:54.110784+00:00",
+  "source": "gtm-swarm",
+  "projects": [
+    {
+      "slug": "btcmind",
+      "name": "BTCMind",
+      "url": "https://btcmind.ai",
+      "category": "AI crypto market intelligence",
+      "tagline": "BTC market mind. AI-driven crypto signals.",
+      "status": "live",
+      "state": "built",
+      "agents": [
+        {
+          "id": "01-foundation",
+          "name": "GTM Foundation",
+          "role": "foundation",
+          "title": "GTM Foundation",
+          "reports_to": "钟石龙",
+          "capabilities": [
+            "Internal Dashboard"
+          ],
+          "metadata": {
+            "platform": "Internal Dashboard",
+            "builder": "钟石龙",
+            "reviewer": "Boyuan",
+            "goal": "Lock the brand voice, ICP definitions, vocabulary audit, and legal positioning so all 10 downstream agents inherit one consistent BTCMind identity — co-pilot not signal, transparent not promotional, perp-trader-native not institutional.",
+            "default_product": "btcmind",
+            "kpi": {
+              "weekly_target": "100% brand-surface coverage by week 2 (homepage, /methodology, /icp, /legal, /vocab-lockfile, /transparency-log); <1 vocab violation/week in downstream agent QA review",
+              "measure": "Audit checklist completion %; downstream agent output sampled weekly for vocab violations against the 5.2 avoid-list (signals, AI-driven, algorithm, guaranteed, moon, etc.)"
+            },
+            "topics": [
+              "Homepage hero copy — Risk Co-pilot positioning, no AI mention, no signal mention",
+              "Vocabulary lockfile — Tier 1/Tier 2 native terms (EN + ZH + KO + VI + TR + PT) + the 5.2 avoid-list with examples",
+              "Public model accuracy log methodology — what we publish, when, how misses are surfaced",
+              "Legal positioning page — 'we push data, you decide' framework + jurisdiction-specific disclaimers",
+              "ICP / Exclusion page — explicit list of who BTCMind is NOT for (HODLers, institutions, memecoin hunters, new traders)"
+            ],
+            "status": "deployable",
+            "activate": true
+          }
+        },
+        {
+          "id": "02-kol-koc",
+          "name": "KOL / KOC Agent",
+          "role": "distribution",
+          "title": "KOL / KOC Agent",
+          "reports_to": "张基琳",
+          "capabilities": [
+            "YouTube · TikTok · Instagram"
+          ],
+          "metadata": {
+            "platform": "YouTube · TikTok · Instagram",
+            "builder": "张基琳",
+            "reviewer": "Ivy",
+            "goal": "Build a vetted bench of 30+ BTC-perp-native KOL/KOC collaborators across English, Korean, Vietnamese, Turkish, and Portuguese Twitter + Telegram so trigger-event content lands inside trader communities through trusted voices, not paid ads.",
+            "default_product": "btcmind",
+            "kpi": {
+              "weekly_target": "4 KOL collaborations published per week (2 paid placements + 2 organic mention-trades); 30+ active partners by Month 6",
+              "measure": "Tracked UTMs from each KOL post → BTCMind signup attribution; partner CSAT (do they want to collaborate again)"
+            },
+            "topics": [
+              "Korean perp X accounts — paid post about funding-anomaly case study from prior week",
+              "Vietnamese Telegram channel collaborations — weekly whale-wallet digest in Vietnamese",
+              "Turkish + Brazilian X micro-KOL mention-trades — they post about BTCMind's transparency log, we feature their analysis",
+              "X Spaces co-hosting — 2/month with English-language perp KOLs (Will Clemente, Checkmate-tier) on cycle-thesis topics",
+              "Vetting framework — public criteria for which KOLs we work with (must have visible track record, no success-fee shilling history)"
+            ],
+            "status": "deployable",
+            "activate": true
+          }
+        },
+        {
+          "id": "03-blog",
+          "name": "Blog Agent",
+          "role": "content",
+          "title": "Blog Agent",
+          "reports_to": "张基琳",
+          "capabilities": [
+            "Official Website"
+          ],
+          "metadata": {
+            "platform": "Official Website",
+            "builder": "张基琳",
+            "reviewer": "彭静",
+            "goal": "Capture trigger-event long-tail search traffic (T1 liquidation + T3 funding-anomaly searches) and competitor-comparison bottom-funnel searches with evergreen educational content that ranks 18+ months without re-promotion.",
+            "default_product": "btcmind",
+            "kpi": {
+              "weekly_target": "3 evergreen posts published per week; 12 in pipeline; 25% of published posts target >500/mo SV keywords from Step 1 §8 list; organic blog → signup conversion rate >2% by Month 6",
+              "measure": "Ahrefs/GSC ranking position for target keywords; published cadence; conversion rate from blog landing pages"
+            },
+            "topics": [
+              "Long-tail liquidation education — 'stop loss vs liquidation distance', 'why did BTC funding go to 0.1%', 'how cascade liquidations work mechanically'",
+              "Competitor comparison bottom-funnel — 'Coinglass vs BTCMind', 'Nansen alternative for BTC traders', 'CryptoQuant alternative for perp traders'",
+              "Whale forensics case studies — 'how to tell decoy whales from real smart money' methodology + named historical examples",
+              "Cycle navigation reference — 'BTC cycle exit checklist (not a prediction)', halving-cycle mechanics, ETF flow interpretation",
+              "Transparency content — 'why BTCMind doesn't auto-trade', 'why we publish our misses', 'the case against using BTCMind'"
+            ],
+            "status": "deployable",
+            "activate": true
+          }
+        },
+        {
+          "id": "04-backlink",
+          "name": "Backlink Agent",
+          "role": "content",
+          "title": "Backlink Agent",
+          "reports_to": "",
+          "capabilities": [
+            "Official Website"
+          ],
+          "metadata": {
+            "platform": "Official Website",
+            "builder": "",
+            "reviewer": "彭静",
+            "goal": "Earn 2 high-authority editorial backlinks per week from DR 60+ crypto media (CoinDesk, Decrypt, The Defiant, Bankless, Crypto Briefing) by being the source of forensic data the press wants to cite — not by guest-posting promotional fluff.",
+            "default_product": "btcmind",
+            "kpi": {
+              "weekly_target": "2 placed backlinks/week from DR 60+ crypto publications; 1 data-asset report/quarter that gets independently cited",
+              "measure": "Ahrefs referring-domains growth; specific high-value placements logged with citation context"
+            },
+            "topics": [
+              "Op-ed pitches on major liquidation cascade events — strip product, keep methodology",
+              "Quarterly 'State of BTC Perp Risk' data report — original research, freely downloadable, becomes the press-citation asset",
+              "Founder quotes for journalists covering BTC cycle / liquidation / whale events — be the go-to source",
+              "Data-collaboration pitches to The Block Pro and Bankless — exchange our perp+on-chain dataset for editorial coverage",
+              "Reactive press outreach within 2 hours of major market events — be the cited analyst, not the unmentioned one"
+            ],
+            "status": "blocked",
+            "activate": true
+          }
+        },
+        {
+          "id": "05-video",
+          "name": "Video Agent",
+          "role": "content",
+          "title": "Video Agent",
+          "reports_to": "张基琳",
+          "capabilities": [
+            "YouTube · TikTok"
+          ],
+          "metadata": {
+            "platform": "YouTube · TikTok",
+            "builder": "张基琳",
+            "reviewer": "庄可欣",
+            "goal": "Build the canonical video archive of BTC perp forensics — long-form post-mortems of cascade events, whale wallet case studies, and cycle-thesis walkthroughs — so YouTube becomes BTCMind's 6-18 month evergreen retention engine.",
+            "default_product": "btcmind",
+            "kpi": {
+              "weekly_target": "1 long-form (15-25 min) per week + 3 shorts repurposed from it; channel subs target 25k by Month 6; avg view duration >50%",
+              "measure": "YouTube channel subs, avg view duration, click-through to BTCMind from end-screens and pinned comments"
+            },
+            "topics": [
+              "Forensic post-mortems of major liquidation cascades — chronology with TradingView + Coinglass + Arkham data overlays",
+              "Whale wallet case studies — pick one wallet per video, show 6-month behavior, classify as smart money vs decoy",
+              "Cycle thesis walkthroughs — quarterly state-of-cycle with on-chain + ETF flow + perp positioning data",
+              "Funding-rate mechanics explainers — short evergreen tutorials with real numbers",
+              "Founder commentary shorts — 60s reactions to major Crypto Twitter narratives, calibrated to weekly news cycle"
+            ],
+            "status": "deployable",
+            "activate": true
+          }
+        },
+        {
+          "id": "06-reddit",
+          "name": "Reddit Agent",
+          "role": "distribution",
+          "title": "Reddit Agent",
+          "reports_to": "Wayne",
+          "capabilities": [
+            "Reddit"
+          ],
+          "metadata": {
+            "platform": "Reddit",
+            "builder": "Wayne",
+            "reviewer": "Ivy Chen",
+            "goal": "Become the most-credible anti-scam transparent voice across r/Bybit, r/binance, r/CryptoMarkets, r/BitcoinMarkets, r/CryptoCurrency — every post earns its place by helpfulness first, with BTCMind mention earned through trust accumulated over months.",
+            "default_product": "btcmind",
+            "kpi": {
+              "weekly_target": "5 high-quality posts/comments per week across target subs; 2 saved-posts/week (community-signal of utility); 0 ban warnings; tracked self-referenced signups >5/week by Month 3",
+              "measure": "Karma in target subs; saved/upvoted ratio; tracked discovery via 'how did you find us' onboarding question"
+            },
+            "topics": [
+              "Weekly 'what got rekt last week' forensic posts in r/Bybit — pure educational chronology, single product mention in tail comment",
+              "Anti-scam takedowns — name specific Telegram signal groups with evidence, position BTCMind by contrast",
+              "AMA-style threads — 'I work on a BTC perp risk tool, ask me anything about funding/OI/cascade mechanics'",
+              "Substantive comment interventions — when someone asks 'is X tool legit' in r/CryptoCurrency, give honest comparative answer including when NOT to use BTCMind",
+              "Public model-miss disclosures — 'here's the trigger we missed last Tuesday and why, posting because transparency'"
+            ],
+            "status": "pilot",
+            "activate": true
+          }
+        },
+        {
+          "id": "07-social-media",
+          "name": "Social Media Agent",
+          "role": "distribution",
+          "title": "Social Media Agent",
+          "reports_to": "Wayne",
+          "capabilities": [
+            "X · GitHub · LinkedIn · All Platforms"
+          ],
+          "metadata": {
+            "platform": "X · GitHub · LinkedIn · All Platforms",
+            "builder": "Wayne",
+            "reviewer": "Ivy Chen",
+            "goal": "Make X the real-time nervous system of BTCMind — every Step 2 trigger event (T1-T5) gets a native-format reactive thread within 30 minutes globally, building the reflex that perp traders open X and see BTCMind before they see Coinglass.",
+            "default_product": "btcmind",
+            "kpi": {
+              "weekly_target": "14 X posts/week (2/day); 1 viral-candidate thread (>10k impressions) per week; 2 X Spaces/month; follower growth >500/week by Month 3",
+              "measure": "Impressions, profile visits, thread saves, X Spaces attendance, follower count, click-through rate to BTCMind"
+            },
+            "topics": [
+              "Reactive trigger threads — funding spikes, large liquidations, whale wallet movements, ETF flow anomalies, posted live as events unfold",
+              "Daily perp morning brief — 6 AM ET post with overnight funding/OI/liquidation summary in tweet-format",
+              "Whale wallet roll-call — twice-weekly thread tagging notable wallet activity with our decoy-vs-real classification",
+              "Founder hot-takes on Crypto Twitter narratives — measured, data-grounded, non-cringe",
+              "X Spaces co-hosting — bi-weekly with KOL collaborators on cycle thesis / risk topics"
+            ],
+            "status": "deployable",
+            "activate": true
+          }
+        },
+        {
+          "id": "08-ads",
+          "name": "Ads Agent",
+          "role": "revenue",
+          "title": "Ads Agent",
+          "reports_to": "高博远",
+          "capabilities": [
+            "Google · iOS · Android"
+          ],
+          "metadata": {
+            "platform": "Google · iOS · Android",
+            "builder": "高博远",
+            "reviewer": "",
+            "goal": "Run only bottom-funnel paid acquisition where unit economics are positive from week 1 — Google search ads on competitor-alternative queries + X retargeting on visitors of /liquidation /funding /whales pages — and pause everything brand/awareness until organic proves the message.",
+            "default_product": "btcmind",
+            "kpi": {
+              "weekly_target": "$3-5k/month total spend, $40-60 CAC on paid signups, 3x ROAS by Month 4, 0 budget on top-funnel awareness until organic Reddit + X channel proves message",
+              "measure": "Google Ads + X Ads CAC, ROAS to paid plan, branded vs non-branded conversion split"
+            },
+            "topics": [
+              "Google Search competitor-alternative — 'coinglass alternative', 'nansen alternative bitcoin', 'cryptoquant alternative'",
+              "Google Search trigger-event long-tail — 'btc liquidation alert tool', 'funding rate alert app', 'whale tracker btc'",
+              "X retargeting — visitors of /liquidation, /funding, /whales pages within 7 days, served Pillar-matched creative",
+              "Twitter event-targeted promoted threads — when a major cascade happens, boost our forensic thread within 2 hours",
+              "Disallowed for now — Google Display, Meta, TikTok, generic 'crypto' targeting; revisit after organic >50% of signups"
+            ],
+            "status": "blocked",
+            "activate": true
+          }
+        },
+        {
+          "id": "09-edm",
+          "name": "EDM Agent",
+          "role": "revenue",
+          "title": "EDM Agent",
+          "reports_to": "",
+          "capabilities": [
+            "Email"
+          ],
+          "metadata": {
+            "platform": "Email",
+            "builder": "",
+            "reviewer": "",
+            "goal": "Build Risk Daily (5-day) + Sunday Brief into the retention spine of BTCMind — Risk Daily turns the morning trigger digest into a habit, Sunday Brief turns cycle-thesis into the conversion-driving long-form moment of the week.",
+            "default_product": "btcmind",
+            "kpi": {
+              "weekly_target": "Risk Daily: 25% open rate, 5% CTR, 200 new subs/week; Sunday Brief: 35% open rate, 8% CTR; >15% of paid conversions touched email at least once",
+              "measure": "Open/CTR/subscriber growth/unsubscribe rate per send; multi-touch attribution of email touch in conversion path"
+            },
+            "topics": [
+              "Risk Daily — Monday: weekend liquidation recap; Tuesday: funding outlook; Wednesday: whale movement digest; Thursday: ETF flow summary; Friday: week-ahead risk calendar",
+              "Sunday Brief — long-form cycle thesis once per week, 6-min read, includes one subscriber-exclusive chart",
+              "Triggered sends — automated email when a user's followed wallet/position-class fires a Step 2 trigger condition",
+              "Onboarding sequence — 5-email welcome that progressively teaches funding/OI/cascade mechanics + Reddit-style transparency",
+              "Win-back sequence — for paused subscribers, 'here's what you missed last 30 days' format with their relevant trigger digest"
+            ],
+            "status": "blocked",
+            "activate": true
+          }
+        },
+        {
+          "id": "10-yelp",
+          "name": "Yelp Agent",
+          "role": "revenue",
+          "title": "Yelp Agent",
+          "reports_to": "",
+          "capabilities": [
+            "Yelp"
+          ],
+          "metadata": {
+            "platform": "Yelp",
+            "builder": "",
+            "reviewer": "",
+            "goal": "Skipped — Yelp / local-business review platforms have zero overlap with crypto SaaS discovery. Step 2 ICP (perp traders in APAC/LATAM) never sources crypto products through local-business directories. Resources reallocated to 06-reddit and 11-poster which serve the same trust-vetting role for our actual ICP.",
+            "default_product": "btcmind",
+            "kpi": {
+              "weekly_target": "N/A — agent inactive",
+              "measure": "N/A"
+            },
+            "topics": [],
+            "status": "deactivated_by_contentos",
+            "activate": false
+          }
+        },
+        {
+          "id": "11-poster",
+          "name": "Poster Agent",
+          "role": "distribution",
+          "title": "Poster Agent",
+          "reports_to": "",
+          "capabilities": [
+            "WeChat"
+          ],
+          "metadata": {
+            "platform": "WeChat",
+            "builder": "",
+            "reviewer": "",
+            "goal": "Serve the mainland China + Xiaohongshu-active perp-trader subsegment of Step 2 ICP through native-format WeChat Official Account articles and Xiaohongshu carousels — they will not click out to X or YouTube, content must live fully inside the platform.",
+            "default_product": "btcmind",
+            "kpi": {
+              "weekly_target": "1 WeChat OA article/week (target: 5k+ reads by Month 3, 'in look' rate >5%); 3 Xiaohongshu posts/week (target: 500+ likes/each by Month 3, save-rate >8%)",
+              "measure": "WeChat OA read count + 'in look' (在看) rate + follower growth; Xiaohongshu likes/saves/follows + click-through to BTCMind landing"
+            },
+            "topics": [
+              "WeChat OA weekly forensic article — Pillar 1 cascade post-mortem fully translated, vocab using 爆仓/插针/资金费率/连环爆仓",
+              "WeChat OA cycle thesis — monthly Pillar 3 long-form for Chinese-speaking BTC traders",
+              "Xiaohongshu liquidation-case storytelling — 8-panel 1080×1080 carousel format, lifestyle-confessional tone ('我朋友那晚爆了 30 万')",
+              "Xiaohongshu whale-tracking visual explainers — Pillar 2 case studies as 6-8 panel carousels",
+              "Xiaohongshu anti-scam content — Pillar 4 transparency manifesto adapted to Chinese-trader cultural framing of 镰刀/老韭菜/小韭菜"
+            ],
+            "status": "active",
+            "activate": true
+          }
+        }
+      ]
+    },
+    {
+      "slug": "voc-ai",
+      "name": "VOC AI",
+      "url": "https://voc.ai",
+      "category": "AI customer review analytics",
+      "tagline": "2B+ Amazon reviews. AI-powered sentiment + opportunity discovery.",
+      "status": "live",
+      "state": "built",
+      "agents": [
+        {
+          "id": "01-foundation",
+          "name": "GTM Foundation",
+          "role": "foundation",
+          "title": "GTM Foundation",
+          "reports_to": "钟石龙",
+          "capabilities": [
+            "Internal Dashboard"
+          ],
+          "metadata": {
+            "platform": "Internal Dashboard",
+            "builder": "钟石龙",
+            "reviewer": "Boyuan",
+            "goal": "Build the website infrastructure that converts brand-side Insights and E-commerce decision-makers — comparison pages against Brandwatch / Profitero, named case studies, and a pricing surface that filters out SMB.",
+            "default_product": "all",
+            "kpi": {
+              "weekly_target": "1 foundation asset shipped (comparison page, case study section, pricing iteration, or onboarding collateral)",
+              "measure": "Pages shipped + organic ranking for at least 2 enterprise-intent comparison keywords within 90 days"
+            },
+            "topics": [
+              "vs Brandwatch — the Amazon review depth gap, side-by-side",
+              "vs Profitero / Stackline — where marketplace intelligence stops and review intelligence begins",
+              "Named case study: how an Anker-class brand uses VOC AI alongside their existing Brandwatch / Profitero stack",
+              "Pricing page rewrite — enterprise-tier framing, SOC2 / SSO / DPA visibility, deliberate filter on SMB inbound",
+              "ROI calculator — analyst hours saved + NPI miss cost avoided, calibrated for $100M+ brand economics"
+            ],
+            "status": "deployable",
+            "activate": true
+          }
+        },
+        {
+          "id": "02-kol-koc",
+          "name": "KOL / KOC Agent",
+          "role": "distribution",
+          "title": "KOL / KOC Agent",
+          "reports_to": "张基琳",
+          "capabilities": [
+            "YouTube · TikTok · Instagram"
+          ],
+          "metadata": {
+            "platform": "YouTube · TikTok · Instagram",
+            "builder": "张基琳",
+            "reviewer": "Ivy",
+            "goal": "Earn third-party validation from the analysts and thought leaders the brand-side buyer already trusts — Forrester / IDC / Marketplace Pulse / Modern Retail — without paying for SMB FBA influencer reach.",
+            "default_product": "voc-ai",
+            "kpi": {
+              "weekly_target": "0.5 analyst or thought-leader touchpoint per week (2 briefings/month + 1 co-published piece/month)",
+              "measure": "Analyst inclusion in next Forrester / IDC marketplace intelligence or social listening report; named mentions in Marketplace Pulse / Modern Retail"
+            },
+            "topics": [
+              "Forrester / IDC / Gartner analyst briefings on review intelligence as a distinct category from social listening",
+              "Co-published essay with a Consumer Insights thought leader on the Brandwatch / Sprinklr e-commerce gap",
+              "Modern Retail or Marketplace Pulse sponsored deep-dive on review-to-NPI attribution",
+              "Insights Association webinar co-hosted with a recognized VOC practitioner",
+              "Targeted LinkedIn thought-leader engagement — 15-20 named Consumer Insights / E-commerce VP voices, not FBA YouTubers"
+            ],
+            "status": "deployable",
+            "activate": true
+          }
+        },
+        {
+          "id": "03-blog",
+          "name": "Blog Agent",
+          "role": "content",
+          "title": "Blog Agent",
+          "reports_to": "张基琳",
+          "capabilities": [
+            "Official Website"
+          ],
+          "metadata": {
+            "platform": "Official Website",
+            "builder": "张基琳",
+            "reviewer": "彭静",
+            "goal": "Rank for the enterprise-intent search queries that brand-side decision-makers type the day before a Brandwatch renewal, an NPI post-mortem, or a Q4 board prep meeting.",
+            "default_product": "voc-ai",
+            "kpi": {
+              "weekly_target": "1 pillar post drafted or shipped per week; 6 pillar posts ranking top 10 per quarter",
+              "measure": "Organic traffic from named enterprise-intent keywords; pillar post → demo-booking conversion rate"
+            },
+            "topics": [
+              "Brandwatch alternative for Amazon — the structural gap and what fills it",
+              "How to build an Amazon brand health dashboard your CMO will actually open",
+              "Review-to-R&D attribution — turning 60K reviews into 3 JIRA tickets your product team will ship",
+              "Prime Day / Q4 post-mortem playbook — the 1-pager that answers the board's questions before they ask",
+              "Marketplace intelligence stack design — where Profitero / Stackline / Brandwatch overlap, and what's missing in the middle"
+            ],
+            "status": "deployable",
+            "activate": true
+          }
+        },
+        {
+          "id": "04-backlink",
+          "name": "Backlink Agent",
+          "role": "content",
+          "title": "Backlink Agent",
+          "reports_to": "",
+          "capabilities": [
+            "Official Website"
+          ],
+          "metadata": {
+            "platform": "Official Website",
+            "builder": "",
+            "reviewer": "彭静",
+            "goal": "Earn editorial backlinks from tier-1 retail intelligence and consumer insights publications — DR60+, named editorial placements, zero PBN or SMB seller blog noise.",
+            "default_product": "voc-ai",
+            "kpi": {
+              "weekly_target": "1 editorial backlink/week from a named publication (4/month target)",
+              "measure": "DR60+ backlinks from Marketplace Pulse, Modern Retail, Digital Commerce 360, Insights Association, Forrester / IDC research citations"
+            },
+            "topics": [
+              "Original research: the Brandwatch / Sprinklr Amazon review coverage benchmark — a quotable industry stat",
+              "Quotable founder commentary for Modern Retail / Marketplace Pulse on the marketplace intelligence stack evolution",
+              "Guest essay in Insights Association publication on review intelligence as a distinct VOC discipline",
+              "Citable data on review-to-NPI cost avoidance — usable as a stat in analyst reports",
+              "HARO / Qwoted founder-quote responses on consumer insights, brand health, marketplace strategy"
+            ],
+            "status": "blocked",
+            "activate": true
+          }
+        },
+        {
+          "id": "05-video",
+          "name": "Video Agent",
+          "role": "content",
+          "title": "Video Agent",
+          "reports_to": "张基琳",
+          "capabilities": [
+            "YouTube · TikTok"
+          ],
+          "metadata": {
+            "platform": "YouTube · TikTok",
+            "builder": "张基琳",
+            "reviewer": "庄可欣",
+            "goal": "Establish the founder as the recognized voice on marketplace review intelligence through long-form YouTube teardowns and podcast guesting on shows brand-side buyers already listen to.",
+            "default_product": "voc-ai",
+            "kpi": {
+              "weekly_target": "Production progress on 1 long-form video/month + 2 podcast guest appearances/quarter",
+              "measure": "YouTube watch time on founder teardowns; podcast download attribution; demo bookings citing video/podcast as source"
+            },
+            "topics": [
+              "Founder-narrated side-by-side teardown — Brandwatch dashboard vs. VOC AI dashboard on the same brand's 30-day data",
+              "Podcast guesting on Modern Retail Podcast, E-commerce Braintrust, Marketplace Pulse Podcast",
+              "12-minute screen-record: how to build a Q4 review post-mortem deck in one Monday morning",
+              "Founder-led video essay: 'Why your social listening platform was supposed to handle Amazon — and why it doesn't'",
+              "Customer-voice mini-doc — Anker-class or Insta360-class Insights team walking through their weekly review review meeting"
+            ],
+            "status": "deployable",
+            "activate": true
+          }
+        },
+        {
+          "id": "06-reddit",
+          "name": "Reddit Agent",
+          "role": "distribution",
+          "title": "Reddit Agent",
+          "reports_to": "Wayne",
+          "capabilities": [
+            "Reddit"
+          ],
+          "metadata": {
+            "platform": "Reddit",
+            "builder": "Wayne",
+            "reviewer": "Ivy Chen",
+            "goal": "Maintain a high-signal, low-volume presence in the subreddits where mid-level Insights and Product practitioners scroll — without ever sounding like an FBA-seller pitch.",
+            "default_product": "voc-ai",
+            "kpi": {
+              "weekly_target": "4 substantive comments/week across r/marketing, r/CustomerSuccess, r/ProductManagement; 1 native post/month",
+              "measure": "Upvote ratio > 80% on comments; referral traffic from Reddit to pillar posts; named demo bookings citing Reddit as origin"
+            },
+            "topics": [
+              "Honest answers in r/marketing on 'Brandwatch alternative for Amazon' type threads",
+              "r/CustomerSuccess threads on building a voice-of-customer practice that R&D actually trusts",
+              "r/ProductManagement threads on review-to-feature attribution methodology",
+              "Long-form native post: 'I work on review intelligence. Here's what I learned from comparing Brandwatch and a marketplace-native tool side-by-side'",
+              "Deliberately NOT posting in r/FulfillmentByAmazon or r/AmazonSeller — wrong ICP, signals SMB positioning"
+            ],
+            "status": "pilot",
+            "activate": true
+          }
+        },
+        {
+          "id": "07-social-media",
+          "name": "Social Media Agent",
+          "role": "distribution",
+          "title": "Social Media Agent",
+          "reports_to": "Wayne",
+          "capabilities": [
+            "X · GitHub · LinkedIn · All Platforms"
+          ],
+          "metadata": {
+            "platform": "X · GitHub · LinkedIn · All Platforms",
+            "builder": "Wayne",
+            "reviewer": "Ivy Chen",
+            "goal": "Make LinkedIn the #1 demand engine — founder POV posts, gap-teardown carousels, named-brand commentary — and use X as a secondary surface for Marketplace Pulse / Modern Retail readers.",
+            "default_product": "voc-ai",
+            "kpi": {
+              "weekly_target": "4 LinkedIn posts/week from founder + 1 carousel/week; 100 ICP-title profile views/week",
+              "measure": "ICP-title profile views; comment quality from named-account contacts; LinkedIn-attributed demo bookings"
+            },
+            "topics": [
+              "Founder POV: weekly observations on the Brandwatch / Profitero / Stackline competitive frontier",
+              "Gap-teardown carousels — side-by-side dashboard screenshots showing what social listening misses on Amazon",
+              "Named-brand commentary (with permission or anonymized) — Q3 review trends at electronics / appliance / wearable brands",
+              "Calendar-anchored posts: Prime Day +14 day post-mortem framework; Q4 board prep one-pager",
+              "X thread companions to LinkedIn carousels — same evidence, different rhythm, links back to LinkedIn not the blog"
+            ],
+            "status": "deployable",
+            "activate": true
+          }
+        },
+        {
+          "id": "08-ads",
+          "name": "Ads Agent",
+          "role": "revenue",
+          "title": "Ads Agent",
+          "reports_to": "高博远",
+          "capabilities": [
+            "Google · iOS · Android"
+          ],
+          "metadata": {
+            "platform": "Google · iOS · Android",
+            "builder": "高博远",
+            "reviewer": "",
+            "goal": "Run tightly-scoped ABM advertising against a named-account list of ~500 brands with > $100M revenue and Amazon as a top-3 channel — no broad SMB-intent search bidding.",
+            "default_product": "solvea",
+            "kpi": {
+              "weekly_target": "$3,500/week ABM spend (≈$15K/month) → 25 SQL meetings/quarter from named account list",
+              "measure": "SQL bookings from named-account list; CAC by account tier; account-engagement-score lift on retargeted accounts"
+            },
+            "topics": [
+              "LinkedIn Sponsored Content targeting Consumer Insights Director / VOC Manager / E-commerce VP at named accounts",
+              "ABM display retargeting on warm accounts that visited comparison pages or pricing",
+              "Conquest campaigns timed to known Brandwatch / Sprinklr / Profitero renewal cycles (Q1 + Q3)",
+              "Webinar registration ads for the Insights Association co-hosted sessions",
+              "Deliberately NOT bidding on 'helium 10 alternative' or 'amazon product research' SMB-intent terms"
+            ],
+            "status": "blocked",
+            "activate": true
+          }
+        },
+        {
+          "id": "09-edm",
+          "name": "EDM Agent",
+          "role": "revenue",
+          "title": "EDM Agent",
+          "reports_to": "",
+          "capabilities": [
+            "Email"
+          ],
+          "metadata": {
+            "platform": "Email",
+            "builder": "",
+            "reviewer": "",
+            "goal": "Run two parallel streams — a thought-leadership newsletter that earns inbox trust like Marketplace Pulse, and a precision cold-outreach engine timed to enterprise renewal windows.",
+            "default_product": "voc-ai",
+            "kpi": {
+              "weekly_target": "200 sequenced cold emails/week (40/day × 5 days) → 8 SQLs/week; Newsletter: 1 issue/month, 35%+ open rate",
+              "measure": "Newsletter subscriber count (target 2,500 in 90 days) + open rate; outbound reply rate + meetings booked from sequenced ABM list"
+            },
+            "topics": [
+              "Monthly newsletter 'The Marketplace Voice Brief' — gap-analysis case study + analyst-grade essay + 3 industry stats",
+              "Cold sequence: Brandwatch / Sprinklr renewal-window outreach (60 days before known renewal)",
+              "Cold sequence: NPI post-mortem outreach to E-commerce VPs at brands with recent product launches",
+              "Cold sequence: Q4 board-prep urgency outreach (mid-September to mid-November)",
+              "Re-engagement sequence: warm-but-stalled named accounts that visited comparison pages but did not book"
+            ],
+            "status": "blocked",
+            "activate": true
+          }
+        },
+        {
+          "id": "10-yelp",
+          "name": "Yelp Agent",
+          "role": "revenue",
+          "title": "Yelp Agent",
+          "reports_to": "",
+          "capabilities": [
+            "Yelp"
+          ],
+          "metadata": {
+            "platform": "Yelp",
+            "builder": "",
+            "reviewer": "",
+            "goal": "n/a — Yelp is local-business review territory; irrelevant to brand-side Consumer Insights and Amazon-marketplace ICP.",
+            "default_product": "solvea",
+            "kpi": {
+              "weekly_target": "n/a",
+              "measure": "n/a"
+            },
+            "topics": [],
+            "status": "deactivated_by_contentos",
+            "activate": false
+          }
+        },
+        {
+          "id": "11-poster",
+          "name": "Poster Agent",
+          "role": "distribution",
+          "title": "Poster Agent",
+          "reports_to": "",
+          "capabilities": [
+            "WeChat"
+          ],
+          "metadata": {
+            "platform": "WeChat",
+            "builder": "",
+            "reviewer": "",
+            "goal": "n/a — WeChat / Xiaohongshu / Chinese-domestic poster GTM does not match the NA/EU HQ Consumer Insights and E-commerce VP buyer. Even Anker / Dreame buy through US/EU subsidiaries. Revisit if an explicit APAC HQ buyer motion opens.",
+            "default_product": "shulex-cn",
+            "kpi": {
+              "weekly_target": "n/a",
+              "measure": "n/a"
+            },
+            "topics": [],
+            "status": "deactivated_by_contentos",
+            "activate": false
+          }
+        }
+      ]
+    }
+  ]
+}

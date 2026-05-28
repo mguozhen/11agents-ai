@@ -1,0 +1,22 @@
+{
+  "channel": "x",
+  "review_checklist": [
+    "Hook sharpness — does line 1 stop the scroll?",
+    "Thread structure — is the 1/7 format clear?",
+    "Trending relevance — tied to current conversation?",
+    "Brand voice — authentic but not cringe"
+  ],
+  "content_template": {
+    "type": "tweet | thread",
+    "structure": "hook → supporting data → insight → CTA or close"
+  },
+  "dashboard_widgets": [
+    { "id": "impressions", "chart": "line" },
+    { "id": "follower_growth", "chart": "bar", "period": "weekly" },
+    { "id": "thread_saves", "chart": "count" }
+  ],
+  "kpi_defaults": {
+    "weekly_target": "14 posts (2/day)",
+    "measure": "impressions, follower growth >500/week, 1 viral thread/week"
+  }
+}

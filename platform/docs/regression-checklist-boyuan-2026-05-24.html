@@ -1,0 +1,571 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>gtm-swarm · 整体功能回归 Checklist · for Boyuan</title>
+<style>
+:root{
+  --ink:#1a2620; --mut:#5c6b62; --faint:#8a978d;
+  --green:#2f6b3f; --green-soft:#e8f1ea; --green-line:#bcd6c3;
+  --paper:#fbfcfb; --card:#ffffff; --line:#e2e7e3;
+  --red:#b4452f; --red-soft:#faf3f1; --red-line:#e8cfc7;
+  --amber:#b67d1e; --amber-soft:#fdf7e9; --amber-line:#ecd9a8;
+  --blue:#2d5b8f; --blue-soft:#e9eff7; --blue-line:#bccde0;
+  --pink:#c43d6e; --pink-soft:#fbe8ee;
+  --mono:'SF Mono',ui-monospace,Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--paper);color:var(--ink);
+  font-family:-apple-system,'Helvetica Neue',Arial,'PingFang SC','Hiragino Sans GB',sans-serif;
+  line-height:1.62;-webkit-font-smoothing:antialiased;padding:0 0 80px}
+.wrap{max-width:1080px;margin:0 auto;padding:0 28px}
+code{font-family:var(--mono);font-size:.86em;background:var(--green-soft);color:var(--green);
+  padding:.1em .4em;border-radius:4px}
+header{padding:54px 0 32px;border-bottom:3px solid var(--ink)}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--green);font-weight:700}
+h1{font-size:42px;line-height:1.14;margin:12px 0 14px;letter-spacing:-.02em;font-weight:800}
+h1 em{font-style:normal;color:var(--green)}
+.thesis{font-size:17.5px;color:var(--mut);max-width:830px;margin-bottom:14px}
+.thesis b{color:var(--ink)}
+.meta-row{font-family:var(--mono);font-size:12.5px;color:var(--faint);
+  padding-top:14px;border-top:1px dashed var(--line);margin-top:18px}
+.meta-row span{margin-right:22px} .meta-row b{color:var(--ink)}
+
+/* Scoreboard */
+.scoreboard{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:24px 0 10px}
+.kpi{border:1px solid var(--line);background:var(--card);border-radius:10px;padding:16px 18px}
+.kpi .n{font-family:var(--mono);font-size:30px;font-weight:800;letter-spacing:-.01em}
+.kpi .l{font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);margin-top:3px}
+.kpi.green .n{color:var(--green)} .kpi.amber .n{color:var(--amber)}
+.kpi.blue .n{color:var(--blue)} .kpi.red .n{color:var(--red)}
+
+section{padding:38px 0;border-bottom:1px solid var(--line)}
+.snum{font-family:var(--mono);font-size:11.5px;color:var(--faint);letter-spacing:.1em}
+h2{font-size:26px;margin:6px 0 8px;letter-spacing:-.01em;font-weight:800}
+h2 em{font-style:normal;color:var(--green)}
+.intro{font-size:14.5px;color:var(--mut);margin-bottom:14px}
+
+/* Test row */
+.tests{margin:14px 0;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--card)}
+.test{display:grid;grid-template-columns:36px 90px 1fr 220px 140px;gap:14px;padding:14px 16px;
+  border-top:1px solid var(--line);align-items:start;font-size:14px}
+.test:first-child{border-top:0}
+.test .chk{width:22px;height:22px;border:2px solid var(--ink);border-radius:5px;background:#fff;
+  cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;
+  font-family:var(--mono);font-size:18px;font-weight:800;color:var(--green);
+  user-select:none;line-height:1}
+.test .chk.checked{background:var(--green);color:#fff;border-color:var(--green)}
+.test .chk.failed{background:var(--red);color:#fff;border-color:var(--red)}
+.test .id{font-family:var(--mono);font-size:11.5px;color:var(--faint);font-weight:700;padding-top:3px;letter-spacing:.05em}
+.test .what b{display:block;font-size:14.5px;margin-bottom:3px}
+.test .what span{color:var(--mut);font-size:13px;line-height:1.5}
+.test .expect{font-size:12.5px;color:var(--mut);font-family:var(--mono);line-height:1.5}
+.test .expect code{font-size:.94em}
+.test .notes{font-size:12px;color:var(--faint);font-family:var(--mono);min-height:36px;
+  border:1px dashed var(--line);border-radius:5px;padding:5px 8px;background:#fafbfa;
+  white-space:pre-wrap;line-height:1.4}
+
+/* Module head */
+.mod-head{display:flex;align-items:center;justify-content:space-between;
+  background:#f4f6f4;border:1px solid var(--line);border-bottom:0;
+  padding:10px 16px;font-family:var(--mono);font-size:12px;
+  text-transform:uppercase;letter-spacing:.08em;color:var(--ink);font-weight:700;
+  border-radius:10px 10px 0 0;margin-bottom:-1px}
+.mod-head .who{font-family:var(--mono);font-size:11px;color:var(--mut);text-transform:none;letter-spacing:0}
+.tests.attached{border-top-left-radius:0;border-top-right-radius:0}
+
+/* Priority pill */
+.pill{display:inline-block;font-family:var(--mono);font-size:10.5px;padding:2px 7px;
+  border-radius:999px;font-weight:700;letter-spacing:.04em;margin-left:6px;vertical-align:middle}
+.pill.p0{background:var(--red-soft);color:var(--red);border:1px solid var(--red-line)}
+.pill.p1{background:var(--amber-soft);color:var(--amber);border:1px solid var(--amber-line)}
+.pill.p2{background:var(--blue-soft);color:var(--blue);border:1px solid var(--blue-line)}
+
+/* Final box */
+.signoff{background:var(--ink);color:#fff;border-radius:14px;padding:30px;margin:24px 0}
+.signoff h3{color:#fff;margin:0 0 14px;font-size:18px;font-family:var(--mono);
+  text-transform:uppercase;letter-spacing:.08em}
+.signoff .grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:18px}
+.signoff .blk{border:1px solid #2e3934;border-radius:8px;padding:18px}
+.signoff .blk h4{color:#f6d36a;margin:0 0 10px;font-size:14px;font-family:var(--mono);
+  text-transform:uppercase;letter-spacing:.08em}
+.signoff input,.signoff textarea{width:100%;background:#0e1815;border:1px solid #2e3934;
+  color:#fff;padding:8px 10px;border-radius:6px;font-family:inherit;font-size:14px}
+.signoff textarea{min-height:60px;resize:vertical}
+.signoff .gate{font-size:14.5px;color:#cfd6d2;line-height:1.6}
+.signoff .gate b{color:#f6d36a}
+
+footer{font-family:var(--mono);font-size:11.5px;color:var(--faint);padding:36px 0 0;text-align:center}
+
+@media print{
+  body{background:#fff}
+  .test .chk{print-color-adjust:exact;-webkit-print-color-adjust:exact}
+  section{break-inside:avoid}
+  .tests{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+
+<header class="wrap">
+  <div class="eyebrow">Regression Checklist · 2026-05-24 · for Boyuan</div>
+  <h1>gtm-swarm <em>整体功能回归</em> 验收单</h1>
+  <p class="thesis">
+    <b>背景</b>:把 <code>SolveaCX/gtm-swarm</code> 正式定为 Solvea 主线,要走 域名 → <code>gtm.solvea.cx</code> 的搬迁。
+    搬迁之前 <b>Boyuan 把整体功能跑一遍</b>(回归测试),全部 ✅ 才放行域名切换。
+  </p>
+  <p class="thesis">
+    <b>怎么用</b>:从上到下点 / 跑每一项,通过点绿框、不通过点红框、备注栏写关键现象(报错截图、网络面板状态码、用户路径)。打印或截图给我。
+  </p>
+  <div class="meta-row">
+    <span>Production: <b>gtm-swarm-production-b9ff.up.railway.app</b></span>
+    <span>Repo: <b>SolveaCX/gtm-swarm</b></span>
+    <span>HEAD: <b>792c415</b></span>
+    <span>验收人: <b>Boyuan</b></span>
+  </div>
+
+  <div class="scoreboard">
+    <div class="kpi green"><div class="n">38</div><div class="l">test items</div></div>
+    <div class="kpi blue"><div class="n">8</div><div class="l">modules</div></div>
+    <div class="kpi amber"><div class="n">~45 min</div><div class="l">est. duration</div></div>
+    <div class="kpi red"><div class="n">P0</div><div class="l">blocking gate</div></div>
+  </div>
+</header>
+
+<!-- ============= MODULE 1: SMOKE ============= -->
+<section class="wrap">
+  <div class="snum">§ M1 · SMOKE</div>
+  <h2>① <em>启动健康度</em> · 整个 app 能不能跑起来</h2>
+  <p class="intro">最先跑 —— 5 分钟。任何一项 fail 都阻塞后面所有 module。</p>
+
+  <div class="mod-head">
+    <span>M1 · Smoke (3 项)</span>
+    <span class="who">prerequisite: 浏览器打开 production URL</span>
+  </div>
+  <div class="tests attached">
+    <div class="test">
+      <div class="chk" onclick="this.classList.toggle('checked')">✓</div>
+      <div class="id">M1-01<span class="pill p0">P0</span></div>
+      <div class="what"><b>Production URL 可访问</b><span>打开 https://gtm-swarm-production-b9ff.up.railway.app —— 不应 500/502/超时</span></div>
+      <div class="expect">期望:<br>· HTTP 200<br>· 渲染出首页(项目列表或 dashboard)</div>
+      <div class="notes" contenteditable="true">备注…</div>
+    </div>
+    <div class="test">
+      <div class="chk" onclick="this.classList.toggle('checked')">✓</div>
+      <div class="id">M1-02<span class="pill p0">P0</span></div>
+      <div class="what"><b>/api/health 返回 OK</b><span>访问 .../api/health</span></div>
+      <div class="expect">期望:<br>· status 200<br>· JSON:<code>{ ok: true, ... }</code></div>
+      <div class="notes" contenteditable="true">备注…</div>
+    </div>
+    <div class="test">
+      <div class="chk" onclick="this.classList.toggle('checked')">✓</div>
+      <div class="id">M1-03<span class="pill p0">P0</span></div>
+      <div class="what"><b>两个 DB 都连上</b><span>GTM_DATABASE 和 MULTICA_DATABASE_URL 都在线</span></div>
+      <div class="expect">期望:<br>· 进任何项目页不弹 503 ("MULTICA required")<br>· network 面板看 /api/projects 返回数据</div>
+      <div class="notes" contenteditable="true">备注…</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============= MODULE 2: PROJECT LIST ============= -->
+<section class="wrap">
+  <div class="snum">§ M2 · PROJECT LIST</div>
+  <h2>② <em>项目列表 + 路由</em> · 6 个 product 能列出来 + 能进</h2>
+
+  <div class="mod-head">
+    <span>M2 · Project List (3 项)</span>
+    <span class="who">页面:/dashboard</span>
+  </div>
+  <div class="tests attached">
+    <div class="test">
+      <div class="chk" onclick="this.classList.toggle('checked')">✓</div>
+      <div class="id">M2-01<span class="pill p0">P0</span></div>
+      <div class="what"><b>6 个 product workspace 全部列出</b><span>101pay · flatkey · multi-platform-publisher · smartcrawler · voc · voc-ai</span></div>
+      <div class="expect">期望:<br>· 6 张卡片<br>· 顺序稳定<br>· 缺一即 fail</div>
+      <div class="notes" contenteditable="true">备注…</div>
+    </div>
+    <div class="test">
+      <div class="chk" onclick="this.classList.toggle('checked')">✓</div>
+      <div class="id">M2-02<span class="pill p0">P0</span></div>
+      <div class="what"><b>每张卡能跳进 /dashboard/[slug]</b><span>点击不报 404 / 500</span></div>
+      <div class="expect">期望:<br>· URL 变成 /dashboard/voc-ai 等<br>· 项目详情页渲染</div>
+      <div class="notes" contenteditable="true">备注…</div>
+    </div>
+    <div class="test">
+      <div class="chk" onclick="this.classList.toggle('checked')">✓</div>
+      <div class="id">M2-03<span class="pill p1">P1</span></div>
+      <div class="what"><b>Founder / Reviewer / GitHub 视图切换</b><span>右上角 view 切换按钮工作</span></div>
+      <div class="expect">期望:<br>· 三个 view 都能切<br>· Reviewer 视图 UI 与 Founder 不同(更聚焦审核)</div>
+      <div class="notes" contenteditable="true">备注…</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============= MODULE 3: PROJECT DASHBOARD (6 TABS) ============= -->
+<section class="wrap">
+  <div class="snum">§ M3 · PROJECT DASHBOARD</div>
+  <h2>③ <em>项目详情页 6 个 tab</em> · 截图里的 VOC AI 看板</h2>
+  <p class="intro">用 <b>voc-ai</b> 作为黄金路径 product 跑这一节(因为它 9/11 active agent · 4/4 strategy brief)。</p>
+
+  <div class="mod-head">
+    <span>M3 · Dashboard tabs (8 项)</span>
+    <span class="who">页面:/dashboard/voc-ai</span>
+  </div>
+  <div class="tests attached">
+    <div class="test">
+      <div class="chk" onclick="this.classList.toggle('checked')">✓</div>
+      <div class="id">M3-01<span class="pill p0">P0</span></div>
+      <div class="what"><b>Overview tab · 4 KPI 数字正确</b><span>Strategy Briefs / Active Agents / Drafted (30D) / Built At</span></div>
+      <div class="expect">期望(voc-ai):<br>· Strategy Briefs: 4/4<br>· Active Agents: 9/11<br>· Drafted (30D): ≥ 5<br>· Built At: 真实时间戳</div>
+      <div class="notes" contenteditable="true">备注…</div>
+    </div>
+    <div class="test">
+      <div class="chk" onclick="this.classList.toggle('checked')">✓</div>
+      <div class="id">M3-02<span class="pill p0">P0</span></div>
+      <div class="what"><b>Strategy Briefs 4 步可展开 + 内容真实</b><span>Step 1 Market Insight / Step 2 User Insight / Step 3 Competitor / Step 4 Content Strategy</span></div>
+      <div class="expect">期望:<br>· 4 张卡都能 expand<br>· 内容不是 "loading" / 空白<br>· 文件大小标签合理(KB 数)</div>
+      <div class="notes" contenteditable="true">备注…</div>
+    </div>
+    <div class="test">
+      <div class="chk" onclick="this.classList.toggle('checked')">✓</div>
+      <div class="id">M3-03<span class="pill p1">P1</span></div>
+      <div class="what"><b>Agents 区块 · N hydrated 列出来</b><span>页面底部 11 GTM agents</span></div>
+      <div class="expect">期望:<br>· 9–11 个 agent card<br>· 点 reddit / blog tab 能看到 output<br>· TBD agent 不应崩</div>
+      <div class="notes" contenteditable="true">备注…</div>
+    </div>
+    <div class="test">
+      <div class="chk" onclick="this.classList.toggle('checked')">✓</div>
+      <div class="id">M3-04<span class="pill p0">P0</span></div>
+      <div class="what"><b>Ideas tab · 列出 backlog ideas</b><span>从 Multica 拉 issue list,状态 = backlog</span></div>
+      <div class="expect">期望:<br>· 至少看到 1 条 (Ideas: 1)<br>· 显示 topic / angle / hook</div>
+      <div class="notes" contenteditable="true">备注…</div>
+    </div>
+    <div class="test">
+      <div class="chk" onclick="this.classList.toggle('checked')">✓</div>
+      <div class="id">M3-05<span class="pill p0">P0</span></div>
+      <div class="what"><b>Drafts tab · 列出 draft 内容</b><span>state=draft 的 content_items</span></div>
+      <div class="expect">期望:<br>· 0 或 N 条都可以<br>· 点开能看到正文 markdown preview</div>
+      <div class="notes" contenteditable="true">备注…</div>
+    </div>
+    <div class="test">
+      <div class="chk" onclick="this.classList.toggle('checked')">✓</div>
+      <div class="id">M3-06<span class="pill p0">P0</span></div>
+      <div class="what"><b>Review tab(Reviewer 视图)</b><span>切到 Reviewer 视图,看待审 draft 列表</span></div>
+      <div class="expect">期望:<br>· 列出等审的 content<br>· 能 Approve / Reject<br>· 点 Approve 后 state 进 bank</div>
+      <div class="notes" contenteditable="true">备注…</div>
+    </div>
+    <div class="test">
+      <div class="chk" onclick="this.classList.toggle('checked')">✓</div>
+      <div class="id">M3-07<span class="pill p1">P1</span></div>
+      <div class="what"><b>Bank tab · 7 条已审通过</b><span>state=bank,准备发布</span></div>
+      <div class="expect">期望:<br>· 截图里 Bank: 7<br>· 列表至少 7 条<br>· 每条能 expand 看 content</div>
+      <div class="notes" contenteditable="true">备注…</div>
+    </div>
+    <div class="test">
+      <div class="chk" onclick="this.classList.toggle('checked')">✓</div>
+      <div class="id">M3-08<span class="pill p1">P1</span></div>
+      <div class="what"><b>Published tab</b><span>state=published 的历史</span></div>
+      <div class="expect">期望:<br>· 0 条也算 pass<br>· 不应 500</div>
+      <div class="notes" contenteditable="true">备注…</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============= MODULE 4: IDEA → PROMOTE ============= -->
+<section class="wrap">
+  <div class="snum">§ M4 · IDEA → PROMOTE</div>
+  <h2>④ <em>Idea 落地全链路</em> · 创建 → Promote → sub-issue 分发</h2>
+  <p class="intro">这是 GTM Swarm 的<b>核心生产链路</b>,CLAUDE.md §58 定义。任一环断 = 全平台报废。</p>
+
+  <div class="mod-head">
+    <span>M4 · Idea pipeline (5 项)</span>
+    <span class="who">API:/api/create-idea · /api/promote-idea</span>
+  </div>
+  <div class="tests attached">
+    <div class="test">
+      <div class="chk" onclick="this.classList.toggle('checked')">✓</div>
+      <div class="id">M4-01<span class="pill p0">P0</span></div>
+      <div class="what"><b>Ideas tab 能创建新 idea</b><span>填 topic / angle / hook → 提交</span></div>
+      <div class="expect">期望:<br>· POST /api/create-idea 返回 200<br>· Multica 多出一条 issue (status=backlog)<br>· 列表实时刷新</div>
+      <div class="notes" contenteditable="true">备注…</div>
+    </div>
+    <div class="test">
+      <div class="chk" onclick="this.classList.toggle('checked')">✓</div>
+      <div class="id">M4-02<span class="pill p0">P0</span></div>
+      <div class="what"><b>Promote 按钮分发到所有 agent</b><span>点 Promote → 应该为每个 agent 创建子 issue</span></div>
+      <div class="expect">期望:<br>· POST /api/promote-idea 返回 agents_notified 数组<br>· 数组长度 = workspace 的 active agent 数<br>· 原 idea 状态变 in_progress</div>
+      <div class="notes" contenteditable="true">备注…</div>
+    </div>
+    <div class="test">
+      <div class="chk" onclick="this.classList.toggle('checked')">✓</div>
+      <div class="id">M4-03<span class="pill p1">P1</span></div>
+      <div class="what"><b>Reject idea 工作</b><span>点 Reject → 状态变更</span></div>
+      <div class="expect">期望:<br>· POST /api/reject-idea 200<br>· idea 状态变 cancelled<br>· 不再出现在 backlog 列表</div>
+      <div class="notes" contenteditable="true">备注…</div>
+    </div>
+    <div class="test">
+      <div class="chk" onclick="this.classList.toggle('checked')">✓</div>
+      <div class="id">M4-04<span class="pill p1">P1</span></div>
+      <div class="what"><b>Source Ideas(LLM 推荐题目)</b><span>/api/source-ideas 调 Claude 推荐 N 条候选</span></div>
+      <div class="expect">期望:<br>· 返回 5–10 条候选<br>· 内容贴合 product 定位<br>· 调用时间 &lt; 30s</div>
+      <div class="notes" contenteditable="true">备注…</div>
+    </div>
+    <div class="test">
+      <div class="chk" onclick="this.classList.toggle('checked')">✓</div>
+      <div class="id">M4-05<span class="pill p1">P1</span></div>
+      <div class="what"><b>子 issue parentId 链路正确</b><span>Promote 后子 issue 通过 parentId 挂在原 idea 下</span></div>
+      <div class="expect">期望:<br>· 在 Multica 后台能看到子 issue 的 parentId 字段<br>· 子 issue assignee = 对应 agent</div>
+      <div class="notes" contenteditable="true">备注…</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============= MODULE 5: CONTENTOS 4-STEP ============= -->
+<section class="wrap">
+  <div class="snum">§ M5 · CONTENTOS WIZARD</div>
+  <h2>⑤ <em>4-step ContentOS wizard</em> · 新建 product 的 onboarding</h2>
+
+  <div class="mod-head">
+    <span>M5 · Wizard (5 项)</span>
+    <span class="who">页面:/wizard/[slug] · /onboard</span>
+  </div>
+  <div class="tests attached">
+    <div class="test">
+      <div class="chk" onclick="this.classList.toggle('checked')">✓</div>
+      <div class="id">M5-01<span class="pill p1">P1</span></div>
+      <div class="what"><b>/onboard 页能进</b><span>新建产品入口</span></div>
+      <div class="expect">期望:<br>· 输入框接受 URL / 描述<br>· 不强制 manual entry 路径丢失(已修复过)</div>
+      <div class="notes" contenteditable="true">备注…</div>
+    </div>
+    <div class="test">
+      <div class="chk" onclick="this.classList.toggle('checked')">✓</div>
+      <div class="id">M5-02<span class="pill p1">P1</span></div>
+      <div class="what"><b>POST /api/onboarding/analyze 工作</b><span>提交 URL 后 LLM 分析返回 name / slug / tagline / category</span></div>
+      <div class="expect">期望:<br>· &lt; 60s 返回<br>· 返回 4 个字段都填上</div>
+      <div class="notes" contenteditable="true">备注…</div>
+    </div>
+    <div class="test">
+      <div class="chk" onclick="this.classList.toggle('checked')">✓</div>
+      <div class="id">M5-03<span class="pill p0">P0</span></div>
+      <div class="what"><b>Wizard 4 步全部可跑</b><span>Build → Run Step 1–4 → Save Edit → State 持久化</span></div>
+      <div class="expect">期望:<br>· Step 1 (Market Insight) 跑出 28KB 量级 markdown<br>· Step 2/3/4 顺序解锁<br>· 中间刷新页面 state 还在</div>
+      <div class="notes" contenteditable="true">备注…</div>
+    </div>
+    <div class="test">
+      <div class="chk" onclick="this.classList.toggle('checked')">✓</div>
+      <div class="id">M5-04<span class="pill p2">P2</span></div>
+      <div class="what"><b>Regenerate 按钮</b><span>对单步重新生成</span></div>
+      <div class="expect">期望:<br>· 点 Regenerate 后 LLM 重跑<br>· 旧版本保留 history(或覆盖,以实际为准)</div>
+      <div class="notes" contenteditable="true">备注…</div>
+    </div>
+    <div class="test">
+      <div class="chk" onclick="this.classList.toggle('checked')">✓</div>
+      <div class="id">M5-05<span class="pill p2">P2</span></div>
+      <div class="what"><b>Run with CIA(竞争情报增强)</b><span>/api/contentos/[slug]/run-with-cia 拉 CIA 数据后再跑</span></div>
+      <div class="expect">期望:<br>· 返回的 brief 包含 competitor 真实信息<br>· 不会因 CIA 服务 down 而全栈崩</div>
+      <div class="notes" contenteditable="true">备注…</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============= MODULE 6: MULTICA BINDING ============= -->
+<section class="wrap">
+  <div class="snum">§ M6 · MULTICA BINDING</div>
+  <h2>⑥ <em>Multica workspace 绑定</em> · CLAUDE.md 双 DB 立法</h2>
+
+  <div class="mod-head">
+    <span>M6 · Binding (4 项)</span>
+    <span class="who">API:/api/workspaces/[slug] · /api/multica/workspaces</span>
+  </div>
+  <div class="tests attached">
+    <div class="test">
+      <div class="chk" onclick="this.classList.toggle('checked')">✓</div>
+      <div class="id">M6-01<span class="pill p0">P0</span></div>
+      <div class="what"><b>6 个 product 都已绑定 Multica workspace</b><span>不应弹 BindWorkspaceModal</span></div>
+      <div class="expect">期望:<br>· 进任何 dashboard slug 不弹模态框<br>· 后端 workspaces 表 multica_workspace_slug 非 NULL</div>
+      <div class="notes" contenteditable="true">备注…</div>
+    </div>
+    <div class="test">
+      <div class="chk" onclick="this.classList.toggle('checked')">✓</div>
+      <div class="id">M6-02<span class="pill p1">P1</span></div>
+      <div class="what"><b>未绑定项目弹模态框</b><span>故意造一个未绑定 workspace,进 dashboard 应阻塞</span></div>
+      <div class="expect">期望:<br>· 弹 &lt;BindWorkspaceModal&gt;<br>· 模态框列出可选 Multica workspace</div>
+      <div class="notes" contenteditable="true">备注…</div>
+    </div>
+    <div class="test">
+      <div class="chk" onclick="this.classList.toggle('checked')">✓</div>
+      <div class="id">M6-03<span class="pill p1">P1</span></div>
+      <div class="what"><b>绑定是一次性的</b><span>已绑定的 workspace 再 PATCH 应返回 409</span></div>
+      <div class="expect">期望:<br>· 二次 PATCH /api/workspaces/[slug] → 409 conflict<br>· 防止误改</div>
+      <div class="notes" contenteditable="true">备注…</div>
+    </div>
+    <div class="test">
+      <div class="chk" onclick="this.classList.toggle('checked')">✓</div>
+      <div class="id">M6-04<span class="pill p0">P0</span></div>
+      <div class="what"><b>Multica 断开时 503</b><span>临时取消 MULTICA_DATABASE_URL,/api/agents 应 503,不应 fall-through 到 fs</span></div>
+      <div class="expect">期望:<br>· GET /api/agents → 503<br>· 错误信息明示需要 MULTICA_DATABASE_URL<br>· 没有任何文件系统读取</div>
+      <div class="notes" contenteditable="true">备注…</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============= MODULE 7: PEOPLE POOL ============= -->
+<section class="wrap">
+  <div class="snum">§ M7 · POOL · PEOPLE</div>
+  <h2>⑦ <em>人员池(Builder / Reviewer)</em> · Iron Triangle 三角配置</h2>
+
+  <div class="mod-head">
+    <span>M7 · Pool (4 项)</span>
+    <span class="who">页面:/pool</span>
+  </div>
+  <div class="tests attached">
+    <div class="test">
+      <div class="chk" onclick="this.classList.toggle('checked')">✓</div>
+      <div class="id">M7-01<span class="pill p1">P1</span></div>
+      <div class="what"><b>/pool 页能进 + 列出现有人</b><span>builder / reviewer 角色都展示</span></div>
+      <div class="expect">期望:<br>· 看到 Boyuan / 张基琳 / Wayne / Ivy 等 named slot<br>· 5 个 TBD slot 显示</div>
+      <div class="notes" contenteditable="true">备注…</div>
+    </div>
+    <div class="test">
+      <div class="chk" onclick="this.classList.toggle('checked')">✓</div>
+      <div class="id">M7-02<span class="pill p1">P1</span></div>
+      <div class="what"><b>Assignment(指派 agent 给人)</b><span>/api/assignments 工作</span></div>
+      <div class="expect">期望:<br>· GET /api/assignments 列出当前指派<br>· 每个 agent 显示 builder 和 reviewer</div>
+      <div class="notes" contenteditable="true">备注…</div>
+    </div>
+    <div class="test">
+      <div class="chk" onclick="this.classList.toggle('checked')">✓</div>
+      <div class="id">M7-03<span class="pill p2">P2</span></div>
+      <div class="what"><b>5 个 TBD agent 不爆栈</b><span>访问 04 Backlink / 08 Ads / 09 EDM / 10 Yelp / 11 Poster 的 detail</span></div>
+      <div class="expect">期望:<br>· UI 提示 "Reviewer/Builder 未配置"<br>· 不应 500 / 不应渲染崩溃</div>
+      <div class="notes" contenteditable="true">备注…</div>
+    </div>
+    <div class="test">
+      <div class="chk" onclick="this.classList.toggle('checked')">✓</div>
+      <div class="id">M7-04<span class="pill p2">P2</span></div>
+      <div class="what"><b>Iron Triangle 立法:无 Triangle 不 ship</b><span>对 TBD agent 触发 promote-idea 应被拒</span></div>
+      <div class="expect">期望:<br>· promote-idea 跳过 TBD agent(不创建子 issue)<br>· 返回 agents_notified 不包含 TBD agent</div>
+      <div class="notes" contenteditable="true">备注…</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============= MODULE 8: API HEALTH SAMPLES ============= -->
+<section class="wrap">
+  <div class="snum">§ M8 · API SAMPLES</div>
+  <h2>⑧ <em>关键 API 抽检</em> · 后端表面有没有 500 / 503</h2>
+  <p class="intro">用 curl 或 Postman 跑一遍(每个都加 ?project=voc-ai 参数,如适用)。</p>
+
+  <div class="mod-head">
+    <span>M8 · API samples (6 项)</span>
+    <span class="who">直接 curl,看 status 码 + 响应结构</span>
+  </div>
+  <div class="tests attached">
+    <div class="test">
+      <div class="chk" onclick="this.classList.toggle('checked')">✓</div>
+      <div class="id">M8-01<span class="pill p0">P0</span></div>
+      <div class="what"><b>GET /api/projects</b><span>项目列表</span></div>
+      <div class="expect">期望:200 · 6 条数据 · 字段含 slug / name / category</div>
+      <div class="notes" contenteditable="true">备注…</div>
+    </div>
+    <div class="test">
+      <div class="chk" onclick="this.classList.toggle('checked')">✓</div>
+      <div class="id">M8-02<span class="pill p0">P0</span></div>
+      <div class="what"><b>GET /api/content?project=voc-ai&state=bank</b><span>Bank 内容列表</span></div>
+      <div class="expect">期望:200 · 数组 · 与 dashboard Bank tab 一致</div>
+      <div class="notes" contenteditable="true">备注…</div>
+    </div>
+    <div class="test">
+      <div class="chk" onclick="this.classList.toggle('checked')">✓</div>
+      <div class="id">M8-03<span class="pill p0">P0</span></div>
+      <div class="what"><b>GET /api/agents?project=voc-ai</b><span>Agent 列表</span></div>
+      <div class="expect">期望:200 · 11 个 agent · 9 个 active · 全部来自 Multica(无 fs)</div>
+      <div class="notes" contenteditable="true">备注…</div>
+    </div>
+    <div class="test">
+      <div class="chk" onclick="this.classList.toggle('checked')">✓</div>
+      <div class="id">M8-04<span class="pill p1">P1</span></div>
+      <div class="what"><b>GET /api/contentos/voc-ai/state</b><span>Wizard 持久化状态</span></div>
+      <div class="expect">期望:200 · 4 步状态(built/pending/error)</div>
+      <div class="notes" contenteditable="true">备注…</div>
+    </div>
+    <div class="test">
+      <div class="chk" onclick="this.classList.toggle('checked')">✓</div>
+      <div class="id">M8-05<span class="pill p1">P1</span></div>
+      <div class="what"><b>GET /api/ledger?project=voc-ai</b><span>成本/使用账本</span></div>
+      <div class="expect">期望:200 · 列出 LLM 调用记录(可空数组)</div>
+      <div class="notes" contenteditable="true">备注…</div>
+    </div>
+    <div class="test">
+      <div class="chk" onclick="this.classList.toggle('checked')">✓</div>
+      <div class="id">M8-06<span class="pill p2">P2</span></div>
+      <div class="what"><b>GET /api/debug</b><span>系统状态自检</span></div>
+      <div class="expect">期望:200 · 列出版本 / DB 连通 / Multica 状态</div>
+      <div class="notes" contenteditable="true">备注…</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============= SIGN-OFF ============= -->
+<section class="wrap">
+  <div class="snum">§ SIGN-OFF</div>
+  <h2>验收签字 —— <em>全部 P0 ✅ 才能放行域名搬迁</em></h2>
+
+  <div class="signoff">
+    <h3>Boyuan · 验收结论</h3>
+    <p class="gate">
+      <b>放行门:</b><br>
+      · <b>P0 全部 ✅</b>:可以推进域名搬迁(gtm.solvea.cx CNAME) + 叙事更新<br>
+      · <b>有 P0 ✗</b>:卡住 · 出 bug 报告 · 修完重跑该 module<br>
+      · <b>P1/P2 部分 ✗</b>:可放行,但开 follow-up ticket
+    </p>
+    <div class="grid">
+      <div class="blk">
+        <h4>结论</h4>
+        <select style="width:100%;background:#0e1815;color:#fff;border:1px solid #2e3934;padding:8px 10px;border-radius:6px">
+          <option>—— 选择 ——</option>
+          <option>✅ PASS · 放行域名搬迁</option>
+          <option>⚠ PARTIAL · 有 P1/P2 问题但放行</option>
+          <option>✗ FAIL · 阻塞</option>
+        </select>
+      </div>
+      <div class="blk">
+        <h4>关键观察 / Bug 列表</h4>
+        <textarea placeholder="例:M3-05 失败,draft tab 500 错误…"></textarea>
+      </div>
+      <div class="blk">
+        <h4>验收人 / 时间</h4>
+        <input placeholder="Boyuan · 2026-05-__">
+      </div>
+      <div class="blk">
+        <h4>下一步</h4>
+        <textarea placeholder="例:Hunter 修 M3-05 后重跑;或开 Linear ticket BUG-001…"></textarea>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="wrap">
+  <p>gtm-swarm · regression checklist · 2026-05-24 · 38 tests · for Boyuan</p>
+  <p style="margin-top:6px">P0 = 阻塞 · P1 = 重要但不阻塞 · P2 = 边缘 · 浏览器里 click 框可标记 ✅</p>
+</footer>
+
+<script>
+// Click-to-toggle: green → red → unchecked → ...
+document.querySelectorAll('.chk').forEach(el => {
+  el.addEventListener('click', e => {
+    if (el.classList.contains('failed')) {
+      el.classList.remove('failed'); el.textContent = '✓';
+    } else if (el.classList.contains('checked')) {
+      el.classList.remove('checked'); el.classList.add('failed'); el.textContent = '✗';
+    } else {
+      el.classList.add('checked'); el.textContent = '✓';
+    }
+    e.stopPropagation();
+  });
+});
+</script>
+</body>
+</html>

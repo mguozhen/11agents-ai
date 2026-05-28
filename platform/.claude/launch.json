@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json.schemastore.org/launch",
+  "version": "0.1",
+  "previews": [
+    {
+      "name": "DaoJie ContentOS Dashboard",
+      "command": "pnpm dev",
+      "cwd": "${workspaceFolder}/dashboard",
+      "url": "http://127.0.0.1:8082",
+      "port": 8082,
+      "readyPattern": "Local:.*8082"
+    }
+  ]
+}

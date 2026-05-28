@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>11agents.ai · brand gacha · 2026-05-27</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;700&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,700;1,9..144,400;1,9..144,700&family=Inter:wght@300;400;500;600;700;800;900&family=Geist:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 100%; }
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: #000;
+    color: #fff;
+  }
+  .scene {
+    min-height: 100vh;
+    width: 100%;
+    padding: 64px 80px;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid rgba(255,255,255,.08);
+  }
+  .scene-tag {
+    position: absolute;
+    top: 24px;
+    right: 32px;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-family: 'IBM Plex Mono', monospace;
+    opacity: 0.5;
+  }
+  .card-num {
+    position: absolute;
+    top: 24px;
+    left: 32px;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-family: 'IBM Plex Mono', monospace;
+    opacity: 0.5;
+  }
+  .agents-grid {
+    display: grid;
+    grid-template-columns: repeat(11, 1fr);
+    gap: 8px;
+    margin-top: 48px;
+  }
+  .footer-pick {
+    padding: 48px 80px;
+    background: #000;
+    color: #d4d4cb;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    text-align: center;
+    letter-spacing: 0.1em;
+  }
+  .footer-pick strong { color: #fff; }
+
+  /* ============================================================
+     SCENE A — TERMINAL BRUTALIST
+     ============================================================ */
+  .scene-a {
+    background: #0e0f0e;
+    color: #d4d4cb;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+  .scene-a::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(0deg, transparent 0, transparent 2px, rgba(255,255,255,.025) 2px, rgba(255,255,255,.025) 3px);
+    pointer-events: none;
+    z-index: 1;
+  }
+  .scene-a > * { position: relative; z-index: 2; }
+  .a-header {
+    border-top: 2px solid #d4d4cb;
+    border-bottom: 1px solid #d4d4cb;
+    padding: 12px 0;
+    margin-bottom: 60px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+  }
+  .a-header .red { color: #c33; }
+  .a-brand {
+    font-size: 140px;
+    font-weight: 700;
+    line-height: 0.9;
+    letter-spacing: -0.04em;
+    margin-bottom: 8px;
+  }
+  .a-brand .dot { color: #c33; }
+  .a-brand .tld { opacity: 0.5; font-weight: 400; }
+  .a-slogan-cn {
+    font-family: 'Inter', sans-serif;
+    font-size: 32px;
+    font-weight: 300;
+    margin-top: 32px;
+    margin-bottom: 8px;
+    letter-spacing: 0.02em;
+  }
+  .a-slogan-en {
+    font-size: 13px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    opacity: 0.6;
+    margin-bottom: 56px;
+  }
+  .a-slogan-en .red { color: #c33; }
+  .a-grid {
+    display: grid;
+    grid-template-columns: repeat(11, 1fr);
+    gap: 0;
+    border: 1px solid #d4d4cb;
+  }
+  .a-cell {
+    border-right: 1px solid #d4d4cb;
+    padding: 16px 8px;
+    text-align: center;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+  .a-cell:last-child { border-right: 0; }
+  .a-cell .num {
+    display: block;
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    letter-spacing: 0;
+  }
+  .a-cell .role { opacity: 0.6; font-size: 9px; }
+  .a-cell.live .num { color: #c33; }
+  .a-meta {
+    margin-top: 56px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+  .a-meta .label { opacity: 0.5; display: block; margin-bottom: 4px; }
+  .a-meta .val { color: #fff; font-size: 16px; letter-spacing: 0; text-transform: none; font-family: 'IBM Plex Mono', monospace; }
+
+  /* ============================================================
+     SCENE B — EDITORIAL MAGAZINE
+     ============================================================ */
+  .scene-b {
+    background: #f5f0e8;
+    color: #111;
+  }
+  .b-masthead {
+    border-bottom: 3px double #111;
+    padding-bottom: 16px;
+    margin-bottom: 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+  }
+  .b-masthead .vol { font-style: italic; opacity: 0.7; }
+  .b-hero {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 48px;
+    align-items: start;
+    margin-bottom: 64px;
+  }
+  .b-drop {
+    font-family: 'Fraunces', serif;
+    font-size: 280px;
+    line-height: 0.82;
+    font-weight: 700;
+    letter-spacing: -0.06em;
+  }
+  .b-headline {
+    font-family: 'Fraunces', serif;
+    font-size: 92px;
+    line-height: 1.0;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    margin-bottom: 16px;
+  }
+  .b-headline .italic {
+    font-style: italic;
+    font-weight: 400;
+    color: #b8261c;
+  }
+  .b-headline .strike {
+    text-decoration: line-through;
+    text-decoration-thickness: 6px;
+    opacity: 0.4;
+  }
+  .b-dek {
+    font-family: 'Fraunces', serif;
+    font-size: 22px;
+    line-height: 1.4;
+    font-weight: 400;
+    font-style: italic;
+    color: #444;
+    max-width: 580px;
+    margin-top: 24px;
+  }
+  .b-divider {
+    border-top: 1px solid #111;
+    margin: 48px 0 32px;
+    display: flex;
+    justify-content: space-between;
+    padding-top: 8px;
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+  }
+  .b-roster {
+    display: grid;
+    grid-template-columns: repeat(11, 1fr);
+    gap: 12px;
+  }
+  .b-portrait {
+    text-align: center;
+  }
+  .b-portrait .frame {
+    aspect-ratio: 3 / 4;
+    background: #e5dccb;
+    border: 1px solid #111;
+    position: relative;
+    margin-bottom: 8px;
+    overflow: hidden;
+  }
+  .b-portrait .frame::before {
+    content: attr(data-num);
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Fraunces', serif;
+    font-size: 54px;
+    font-weight: 700;
+    color: #111;
+    opacity: 0.85;
+  }
+  .b-portrait .name {
+    font-family: 'Inter', sans-serif;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+  .b-portrait .role {
+    font-family: 'Fraunces', serif;
+    font-size: 10px;
+    font-style: italic;
+    color: #666;
+    margin-top: 2px;
+  }
+  .b-pullquote {
+    margin-top: 64px;
+    border-top: 3px double #111;
+    border-bottom: 3px double #111;
+    padding: 32px 0;
+    text-align: center;
+    font-family: 'Fraunces', serif;
+    font-size: 28px;
+    font-style: italic;
+    font-weight: 400;
+    line-height: 1.5;
+  }
+  .b-pullquote .author {
+    display: block;
+    margin-top: 16px;
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    opacity: 0.6;
+  }
+
+  /* ============================================================
+     SCENE C — SOFT TECH GRADIENT
+     ============================================================ */
+  .scene-c {
+    background:
+      radial-gradient(ellipse 80% 60% at 20% 10%, rgba(122, 65, 213, 0.35) 0%, transparent 50%),
+      radial-gradient(ellipse 80% 60% at 80% 90%, rgba(232, 92, 165, 0.25) 0%, transparent 50%),
+      radial-gradient(ellipse 80% 60% at 90% 30%, rgba(60, 130, 246, 0.20) 0%, transparent 50%),
+      #07060f;
+    color: #fff;
+    font-family: 'Geist', 'Inter', sans-serif;
+  }
+  .c-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 80px;
+    font-size: 13px;
+    font-weight: 500;
+    opacity: 0.85;
+  }
+  .c-nav .pill {
+    border: 1px solid rgba(255,255,255,.15);
+    background: rgba(255,255,255,.04);
+    padding: 8px 14px;
+    border-radius: 999px;
+    backdrop-filter: blur(20px);
+    font-size: 11px;
+    letter-spacing: 0.05em;
+  }
+  .c-nav .pill .dot {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #5cd672;
+    margin-right: 6px;
+    box-shadow: 0 0 8px #5cd672;
+  }
+  .c-hero {
+    text-align: center;
+    margin-bottom: 80px;
+  }
+  .c-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 14px;
+    border-radius: 999px;
+    border: 1px solid rgba(255,255,255,.15);
+    background: rgba(255,255,255,.04);
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    margin-bottom: 32px;
+    backdrop-filter: blur(20px);
+  }
+  .c-eyebrow .sparkle { color: #e85ca5; }
+  .c-brand {
+    font-size: 168px;
+    line-height: 0.9;
+    font-weight: 800;
+    letter-spacing: -0.05em;
+    margin-bottom: 24px;
+    background: linear-gradient(135deg, #ffffff 0%, #d8c0ff 40%, #ffafcb 70%, #ffd9a0 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .c-brand .tld { font-weight: 400; opacity: 0.5; }
+  .c-slogan {
+    font-size: 38px;
+    font-weight: 300;
+    line-height: 1.3;
+    margin-bottom: 12px;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+    letter-spacing: -0.01em;
+  }
+  .c-slogan-en {
+    font-size: 15px;
+    font-weight: 400;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    opacity: 0.55;
+    margin-bottom: 48px;
+  }
+  .c-cta {
+    display: inline-flex;
+    gap: 12px;
+  }
+  .c-cta .primary {
+    background: linear-gradient(135deg, #b388ff 0%, #ff7cb5 100%);
+    color: #07060f;
+    padding: 14px 28px;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 14px;
+    box-shadow: 0 8px 32px rgba(179, 136, 255, 0.4);
+  }
+  .c-cta .secondary {
+    border: 1px solid rgba(255,255,255,.2);
+    background: rgba(255,255,255,.04);
+    color: #fff;
+    padding: 14px 28px;
+    border-radius: 999px;
+    font-weight: 500;
+    font-size: 14px;
+    backdrop-filter: blur(20px);
+  }
+  .c-grid {
+    display: grid;
+    grid-template-columns: repeat(11, 1fr);
+    gap: 10px;
+    margin-top: 32px;
+  }
+  .c-tile {
+    aspect-ratio: 1;
+    border: 1px solid rgba(255,255,255,.1);
+    background: rgba(255,255,255,.03);
+    backdrop-filter: blur(20px);
+    border-radius: 16px;
+    padding: 12px 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform .3s, background .3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .c-tile::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--tile-grad);
+    opacity: 0.18;
+    z-index: 0;
+  }
+  .c-tile > * { position: relative; z-index: 1; }
+  .c-tile .num {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+  }
+  .c-tile .name {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    opacity: 0.95;
+  }
+  .c-tile .role {
+    font-size: 9px;
+    opacity: 0.55;
+    margin-top: 2px;
+  }
+  .c-tile:nth-child(1)  { --tile-grad: linear-gradient(135deg, #b388ff, #7c4dff); }
+  .c-tile:nth-child(2)  { --tile-grad: linear-gradient(135deg, #ff7cb5, #ff4090); }
+  .c-tile:nth-child(3)  { --tile-grad: linear-gradient(135deg, #ffd9a0, #ff9a3c); }
+  .c-tile:nth-child(4)  { --tile-grad: linear-gradient(135deg, #6ed1ff, #3c82f6); }
+  .c-tile:nth-child(5)  { --tile-grad: linear-gradient(135deg, #5cd6a8, #1ea97c); }
+  .c-tile:nth-child(6)  { --tile-grad: linear-gradient(135deg, #ff6b6b, #d63d3d); }
+  .c-tile:nth-child(7)  { --tile-grad: linear-gradient(135deg, #b388ff, #ff7cb5); }
+  .c-tile:nth-child(8)  { --tile-grad: linear-gradient(135deg, #ffd9a0, #e85ca5); }
+  .c-tile:nth-child(9)  { --tile-grad: linear-gradient(135deg, #6ed1ff, #b388ff); }
+  .c-tile:nth-child(10) { --tile-grad: linear-gradient(135deg, #5cd6a8, #6ed1ff); }
+  .c-tile:nth-child(11) { --tile-grad: linear-gradient(135deg, #ff7cb5, #ffd9a0); }
+
+  .c-meta {
+    margin-top: 56px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+  }
+  .c-meta .card {
+    border: 1px solid rgba(255,255,255,.1);
+    background: rgba(255,255,255,.04);
+    backdrop-filter: blur(20px);
+    border-radius: 16px;
+    padding: 20px;
+  }
+  .c-meta .num {
+    font-size: 36px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    margin-bottom: 4px;
+    background: linear-gradient(135deg, #b388ff, #ff7cb5);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .c-meta .label {
+    font-size: 12px;
+    opacity: 0.7;
+    letter-spacing: 0.02em;
+  }
+</style>
+</head>
+<body>
+
+<!-- ============================ SCENE A — TERMINAL BRUTALIST ============================ -->
+<section class="scene scene-a">
+  <span class="card-num">CARD · 01 / 03</span>
+  <span class="scene-tag">A · TERMINAL BRUTALIST</span>
+
+  <div class="a-header">
+    <span>11AGENTS.AI <span class="red">●</span> LIVE</span>
+    <span>BUILD · 2026.05.27</span>
+    <span>GTM SWARM · IRON TRIANGLE</span>
+    <span class="red">PROD READY: 06 / 11</span>
+  </div>
+
+  <div class="a-brand">11<span class="dot">.</span>agents<span class="tld">.ai</span></div>
+  <div class="a-slogan-cn">让天下没有难做的 GTM。</div>
+  <div class="a-slogan-en">MAKE GTM EASY <span class="red">/</span> ANYWHERE <span class="red">/</span> ANY BUSINESS</div>
+
+  <div class="a-grid">
+    <div class="a-cell live"><span class="num">01</span><span>FOUND</span><br><span class="role">Builder+Rev</span></div>
+    <div class="a-cell live"><span class="num">02</span><span>KOL</span><br><span class="role">Builder+Rev</span></div>
+    <div class="a-cell live"><span class="num">03</span><span>BLOG</span><br><span class="role">Builder+Rev</span></div>
+    <div class="a-cell"><span class="num">04</span><span>LINK</span><br><span class="role">Pending</span></div>
+    <div class="a-cell live"><span class="num">05</span><span>VIDEO</span><br><span class="role">Builder+Rev</span></div>
+    <div class="a-cell live"><span class="num">06</span><span>REDDIT</span><br><span class="role">Pilot</span></div>
+    <div class="a-cell live"><span class="num">07</span><span>SOCIAL</span><br><span class="role">Builder+Rev</span></div>
+    <div class="a-cell"><span class="num">08</span><span>ADS</span><br><span class="role">Pending</span></div>
+    <div class="a-cell"><span class="num">09</span><span>EDM</span><br><span class="role">Pending</span></div>
+    <div class="a-cell"><span class="num">10</span><span>YELP</span><br><span class="role">Pending</span></div>
+    <div class="a-cell"><span class="num">11</span><span>POSTER</span><br><span class="role">Pending</span></div>
+  </div>
+
+  <div class="a-meta">
+    <div><span class="label">[ Doctrine ]</span><span class="val">No Triangle = No Agent</span></div>
+    <div><span class="label">[ Source of Truth ]</span><span class="val">Multica DB</span></div>
+    <div><span class="label">[ Runtime ]</span><span class="val">Next 15 + PG</span></div>
+    <div><span class="label">[ Mode ]</span><span class="val">Universal-GTM</span></div>
+  </div>
+</section>
+
+<!-- ============================ SCENE B — EDITORIAL ============================ -->
+<section class="scene scene-b">
+  <span class="card-num" style="color:#111;opacity:.5">CARD · 02 / 03</span>
+  <span class="scene-tag" style="color:#111;opacity:.5">B · EDITORIAL</span>
+
+  <div class="b-masthead">
+    <span>11agents.ai</span>
+    <span class="vol">Vol. I · A founder's atlas of go-to-market</span>
+    <span>May XXVII · MMXXVI</span>
+  </div>
+
+  <div class="b-hero">
+    <div class="b-drop">11</div>
+    <div>
+      <h1 class="b-headline">Eleven agents.<br>One <span class="strike">team</span> <span class="italic">swarm</span>.<br>Any GTM.</h1>
+      <p class="b-dek">让天下没有难做的 GTM — eleven specialised GTM agents arranged in an Iron Triangle, the missing org chart for any founder who would rather ship than hire.</p>
+    </div>
+  </div>
+
+  <div class="b-divider"><span>The Roster</span><span>· Eleven ·</span></div>
+
+  <div class="b-roster">
+    <div class="b-portrait"><div class="frame" data-num="01"></div><div class="name">Foundation</div><div class="role">the cartographer</div></div>
+    <div class="b-portrait"><div class="frame" data-num="02"></div><div class="name">KOL · KOC</div><div class="role">the talent scout</div></div>
+    <div class="b-portrait"><div class="frame" data-num="03"></div><div class="name">Blog</div><div class="role">the essayist</div></div>
+    <div class="b-portrait"><div class="frame" data-num="04"></div><div class="name">Backlink</div><div class="role">the diplomat</div></div>
+    <div class="b-portrait"><div class="frame" data-num="05"></div><div class="name">Video</div><div class="role">the director</div></div>
+    <div class="b-portrait"><div class="frame" data-num="06"></div><div class="name">Reddit</div><div class="role">the lurker</div></div>
+    <div class="b-portrait"><div class="frame" data-num="07"></div><div class="name">Social</div><div class="role">the host</div></div>
+    <div class="b-portrait"><div class="frame" data-num="08"></div><div class="name">Ads</div><div class="role">the closer</div></div>
+    <div class="b-portrait"><div class="frame" data-num="09"></div><div class="name">EDM</div><div class="role">the courier</div></div>
+    <div class="b-portrait"><div class="frame" data-num="10"></div><div class="name">Yelp</div><div class="role">the local</div></div>
+    <div class="b-portrait"><div class="frame" data-num="11"></div><div class="name">Poster</div><div class="role">the herald</div></div>
+  </div>
+
+  <div class="b-pullquote">
+    "An <em>Iron Triangle</em> is three roles that must hold for one agent to ship.<br>Eleven triangles, thirty-three roles, one founder asleep."
+    <span class="author">— 11agents.ai · doctrine</span>
+  </div>
+</section>
+
+<!-- ============================ SCENE C — SOFT TECH ============================ -->
+<section class="scene scene-c">
+  <span class="card-num">CARD · 03 / 03</span>
+  <span class="scene-tag">C · SOFT TECH</span>
+
+  <div class="c-nav">
+    <span style="font-weight:700;font-size:16px;letter-spacing:-0.02em">11agents<span style="opacity:.5">.ai</span></span>
+    <span class="pill"><span class="dot"></span>6 of 11 agents live · platform v0.7</span>
+  </div>
+
+  <div class="c-hero">
+    <div class="c-eyebrow"><span class="sparkle">✦</span> The swarm that makes GTM easy</div>
+    <h1 class="c-brand">11agents<span class="tld">.ai</span></h1>
+    <div class="c-slogan">让天下没有难做的 GTM。</div>
+    <div class="c-slogan-en">make GTM easy · anywhere · any business</div>
+    <div class="c-cta">
+      <span class="primary">Onboard your business →</span>
+      <span class="secondary">See the 11 agents</span>
+    </div>
+  </div>
+
+  <div class="c-grid">
+    <div class="c-tile"><div class="num">01</div><div><div class="name">Foundation</div><div class="role">positioning</div></div></div>
+    <div class="c-tile"><div class="num">02</div><div><div class="name">KOL · KOC</div><div class="role">influencer</div></div></div>
+    <div class="c-tile"><div class="num">03</div><div><div class="name">Blog</div><div class="role">SEO</div></div></div>
+    <div class="c-tile"><div class="num">04</div><div><div class="name">Backlink</div><div class="role">authority</div></div></div>
+    <div class="c-tile"><div class="num">05</div><div><div class="name">Video</div><div class="role">short-form</div></div></div>
+    <div class="c-tile"><div class="num">06</div><div><div class="name">Reddit</div><div class="role">community</div></div></div>
+    <div class="c-tile"><div class="num">07</div><div><div class="name">Social</div><div class="role">X · LinkedIn</div></div></div>
+    <div class="c-tile"><div class="num">08</div><div><div class="name">Ads</div><div class="role">paid</div></div></div>
+    <div class="c-tile"><div class="num">09</div><div><div class="name">EDM</div><div class="role">email</div></div></div>
+    <div class="c-tile"><div class="num">10</div><div><div class="name">Yelp</div><div class="role">local</div></div></div>
+    <div class="c-tile"><div class="num">11</div><div><div class="name">Poster</div><div class="role">WeChat</div></div></div>
+  </div>
+
+  <div class="c-meta">
+    <div class="card"><div class="num">11</div><div class="label">specialised agents in the swarm</div></div>
+    <div class="card"><div class="num">33</div><div class="label">Iron Triangle roles (Builder · Reviewer · Cron)</div></div>
+    <div class="card"><div class="num">6</div><div class="label">verticals onboarded as the pilot fleet</div></div>
+    <div class="card"><div class="num">∞</div><div class="label">verticals supported once Universal-GTM ships</div></div>
+  </div>
+</section>
+
+<!-- ============================ FOOTER ============================ -->
+<div class="footer-pick">
+  pick a card &nbsp;·&nbsp; <strong>A</strong> terminal brutalist &nbsp;/&nbsp; <strong>B</strong> editorial &nbsp;/&nbsp; <strong>C</strong> soft tech &nbsp;·&nbsp; tell Hunter the letter
+</div>
+
+</body>
+</html>

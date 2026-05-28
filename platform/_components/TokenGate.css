@@ -1,0 +1,66 @@
+.tg-btn {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  cursor: pointer;
+  color: var(--text-sub);
+}
+.tg-btn.is-set { background: rgba(16,185,129,0.1); color: var(--green-deep); border-color: rgba(16,185,129,0.3); }
+.tg-btn.is-unset { background: var(--red-light); color: var(--red); border-color: rgba(220,38,38,0.25); }
+.tg-btn:hover { border-color: var(--border-strong); }
+
+.tg-modal-bg {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.45);
+  display: grid; place-items: center;
+  z-index: 100;
+}
+.tg-modal {
+  background: var(--card);
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  width: min(460px, 90vw);
+  box-shadow: 0 30px 60px rgba(0,0,0,0.25);
+}
+.tg-modal h3 { margin: 0 0 12px; font-size: 18px; font-weight: 700; color: var(--text); }
+.tg-help { margin: 0 0 6px; font-size: 13px; color: var(--text); line-height: 1.5; }
+.tg-help-small { margin: 0 0 16px; font-size: 12px; color: var(--text-sub); line-height: 1.5; }
+.tg-help code { background: var(--pink-soft); color: var(--pink-deep); padding: 2px 6px; border-radius: 4px; font-family: var(--mono); font-size: 11px; }
+.tg-input {
+  width: 100%;
+  padding: 10px 14px;
+  font-family: var(--mono);
+  font-size: 13px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  margin-bottom: 16px;
+}
+.tg-actions { display: flex; gap: 8px; justify-content: flex-end; }
+.tg-btn-save {
+  background: var(--ink);
+  color: #fff;
+  border: none;
+  padding: 0 18px;
+  height: 40px;
+  border-radius: var(--radius-pill);
+  font-weight: 500;
+  font-size: 14px;
+  cursor: pointer;
+  font-family: inherit;
+}
+.tg-btn-cancel, .tg-btn-clear {
+  background: var(--card);
+  border: 1px solid var(--border-strong);
+  padding: 9px 16px;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  color: var(--text-sub);
+  font-family: inherit;
+}
+.tg-btn-clear { color: var(--red); border-color: rgba(239,68,68,0.3); margin-right: auto; }

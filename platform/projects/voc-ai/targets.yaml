@@ -1,0 +1,42 @@
+# voc-ai — Traffic + Revenue Targets
+# Edit Founder-side; readers (server/north-star.js + dashboard/NorthStar.tsx)
+# pick up changes on next /api/north-star call (no restart needed).
+#
+# Currency: USD. All four stages tracked daily/weekly/monthly/annual.
+# Periods are calendar-aligned (week = ISO week, month = calendar month).
+
+targets:
+  traffic:                     # unique site visits / inbound clicks
+    daily: 200
+    weekly: 1400
+    monthly: 6000
+    annual: 72000
+  registrations:               # account signups
+    daily: 5
+    weekly: 35
+    monthly: 150
+    annual: 1800
+  payments:                    # first-time paid conversions (count)
+    daily: 0.5
+    weekly: 3
+    monthly: 12
+    annual: 144
+  revenue_usd:                 # MRR-equivalent recognised revenue
+    daily: 500
+    weekly: 3500
+    monthly: 15000
+    annual: 180000
+
+# Per-stage ownership — who's accountable when actuals drift from target.
+# Names should match agent.yaml's builder/reviewer fields so the dashboard
+# can roll up activity.
+stage_owners:
+  traffic:       [Wayne, 张基琳]          # content + distribution builders
+  registrations: [Wayne, 高博远]          # social + ads
+  payments:      [高博远, Boyuan]         # ads + foundation/conversion ops
+  revenue_usd:   [Boyuan, "Hunter"]      # full funnel + executive
+
+# Update cadence — for now, manual entry once per day at EOD.
+# Future: pipe in from GA, Stripe, Mixpanel etc.
+data_source: manual
+last_target_review: "2026-05-14"

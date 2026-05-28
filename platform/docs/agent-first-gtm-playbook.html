@@ -1,0 +1,504 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Agent-First GTM Playbook · 4 张卡</title>
+<style>
+  :root {
+    --paper: #f6f2e9;
+    --paper-2: #efeadc;
+    --ink: #1a1a1a;
+    --muted: #7a7060;
+    --line: #d8cfb8;
+    --accent: #c95400;
+    --accent-2: #2a6f4e;
+    --warning: #b35d3d;
+    --serif: "Iowan Old Style", "Charter", "Source Serif Pro", Georgia, serif;
+    --sans: -apple-system, "SF Pro Text", "Inter", "Helvetica Neue", Arial, sans-serif;
+    --mono: "JetBrains Mono", "SF Mono", Menlo, monospace;
+    --card-bg-1: #f0e8d5;
+    --card-bg-2: #e8e3d3;
+    --card-bg-3: #ecdfc8;
+    --card-bg-4: #e3decd;
+  }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--paper);
+    background-image:
+      radial-gradient(circle at 12% 18%, rgba(201,84,0,.04), transparent 28%),
+      radial-gradient(circle at 88% 78%, rgba(42,111,78,.04), transparent 32%);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1280px; margin: 0 auto; padding: 64px 36px 140px; }
+
+  /* ── Masthead ─────────────────────────── */
+  header { border-bottom: 1px solid var(--line); padding-bottom: 36px; margin-bottom: 64px; position: relative; }
+  .eyebrow {
+    font-family: var(--mono); font-size: 11px; letter-spacing: .28em;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 14px;
+    display: flex; justify-content: space-between; align-items: baseline;
+  }
+  .eyebrow .date { color: var(--accent); }
+  h1 {
+    font-family: var(--serif); font-size: 64px; line-height: 1.02;
+    margin: 0 0 18px; letter-spacing: -0.015em; font-weight: 600;
+  }
+  h1 em { font-style: italic; color: var(--accent); }
+  .lede {
+    font-family: var(--serif); font-size: 22px; line-height: 1.5;
+    color: var(--ink); max-width: 960px; margin: 0 0 22px;
+  }
+  .lede b { color: var(--ink); font-weight: 700; }
+  .lede strike { text-decoration-thickness: 2.5px; color: var(--warning); }
+  .meta-row {
+    display: flex; gap: 28px; font-family: var(--mono); font-size: 11.5px;
+    color: var(--muted); margin-top: 12px;
+  }
+  .meta-row b { color: var(--ink); font-weight: 500; }
+
+  /* ── Funnel diagram ──────────────────────── */
+  .funnel {
+    display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px;
+    margin: 18px 0 0; align-items: center;
+  }
+  .fstage {
+    background: #fff; border: 1px solid var(--line); border-radius: 4px;
+    padding: 10px 12px; text-align: center; font-size: 12px;
+    font-family: var(--mono);
+  }
+  .fstage.before { background: rgba(179, 93, 61, 0.1); border-color: rgba(179, 93, 61, 0.4); }
+  .fstage.after { background: rgba(42, 111, 78, 0.1); border-color: rgba(42, 111, 78, 0.4); }
+  .fstage b { color: var(--ink); font-family: var(--sans); font-weight: 600; font-size: 13px; }
+  .fstage .label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .12em; margin-bottom: 4px; }
+  .farrow { font-family: var(--mono); color: var(--muted); text-align: center; font-size: 14px; }
+
+  /* ── Cards ────────────────────────────── */
+  .deck {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 28px;
+    margin: 56px 0;
+  }
+  @media (max-width: 900px) { .deck { grid-template-columns: 1fr; } }
+  .card {
+    background: var(--card-bg-1); border-radius: 8px; padding: 32px 34px;
+    position: relative; overflow: hidden;
+    box-shadow: 0 1px 0 rgba(0,0,0,.04), 0 8px 24px -16px rgba(0,0,0,.12);
+    border: 1px solid var(--line);
+  }
+  .card.c2 { background: var(--card-bg-2); }
+  .card.c3 { background: var(--card-bg-3); }
+  .card.c4 { background: var(--card-bg-4); }
+  .card-num {
+    font-family: var(--mono); font-size: 11px; letter-spacing: .25em;
+    color: var(--accent); text-transform: uppercase; margin-bottom: 6px;
+  }
+  .card-name {
+    font-family: var(--serif); font-size: 36px; line-height: 1.05;
+    margin: 0 0 14px; letter-spacing: -0.01em; font-weight: 600;
+  }
+  .card-name .cn { color: var(--accent); }
+  .card-shift {
+    border-left: 3px solid var(--accent); padding: 10px 0 10px 16px; margin: 16px 0 22px;
+    font-family: var(--serif); font-size: 17px; line-height: 1.45;
+    color: var(--ink); font-style: italic;
+  }
+  .card-shift strike { color: var(--warning); }
+  .card-shift b { font-style: normal; color: var(--accent); font-weight: 700; }
+
+  .h-move {
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: .22em;
+    color: var(--muted); text-transform: uppercase; margin: 26px 0 10px;
+  }
+  .move-list { padding-left: 0; list-style: none; margin: 0 0 22px; }
+  .move-list li {
+    padding: 10px 0 10px 28px; border-bottom: 1px dashed rgba(0,0,0,.1);
+    position: relative; font-size: 14.5px; line-height: 1.5;
+  }
+  .move-list li:last-child { border-bottom: 0; }
+  .move-list li::before {
+    content: counter(move) ".";
+    counter-increment: move;
+    position: absolute; left: 0; top: 10px;
+    font-family: var(--mono); font-size: 12px; color: var(--accent);
+    font-weight: 600;
+  }
+  .move-list { counter-reset: move; }
+  .move-list code {
+    font-family: var(--mono); font-size: 12px; background: rgba(0,0,0,.06);
+    padding: 1px 6px; border-radius: 3px;
+  }
+  .move-list b { color: var(--ink); font-weight: 700; }
+
+  .ship-block {
+    background: #fff; border-radius: 6px; padding: 16px 20px; margin: 0 0 16px;
+    border: 1px solid var(--line);
+  }
+  .ship-block .h-ship {
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: .22em;
+    color: var(--accent-2); text-transform: uppercase; margin-bottom: 6px;
+  }
+  .ship-block .ship-content {
+    font-size: 13.5px; line-height: 1.5;
+  }
+  .ship-block code {
+    font-family: var(--mono); font-size: 12px; background: rgba(0,0,0,.06);
+    padding: 1px 6px; border-radius: 3px;
+  }
+
+  .kpi {
+    display: flex; justify-content: space-between; align-items: baseline;
+    padding: 12px 16px; background: rgba(0,0,0,.04); border-radius: 4px;
+    margin-top: 14px;
+  }
+  .kpi .kpi-l { font-family: var(--mono); font-size: 10px; letter-spacing: .18em; color: var(--muted); text-transform: uppercase; }
+  .kpi .kpi-v { font-family: var(--mono); font-size: 13px; color: var(--ink); font-weight: 600; }
+
+  /* ── Section heads ──────────────────────── */
+  section { margin-top: 80px; }
+  h2 {
+    font-family: var(--serif); font-size: 38px; line-height: 1.1;
+    margin: 0 0 8px; letter-spacing: -0.005em; font-weight: 600;
+  }
+  .h2-sub {
+    font-family: var(--mono); font-size: 11.5px; color: var(--muted);
+    letter-spacing: .18em; text-transform: uppercase; margin-bottom: 32px;
+    padding-bottom: 16px; border-bottom: 1px solid var(--line);
+  }
+
+  /* ── Roadmap ────────────────────────────── */
+  .roadmap {
+    display: grid; grid-template-columns: 60px 1fr 1fr 1fr 1fr; gap: 0;
+    border: 1px solid var(--line); border-radius: 6px; overflow: hidden;
+    background: #fff;
+  }
+  .roadmap .rh, .roadmap .rc {
+    padding: 14px 16px; border-bottom: 1px solid var(--line); border-right: 1px solid var(--line);
+    font-size: 13px; line-height: 1.45;
+  }
+  .roadmap .rh {
+    background: var(--paper-2); font-family: var(--mono); font-size: 11px;
+    letter-spacing: .18em; text-transform: uppercase; color: var(--muted);
+    font-weight: 600;
+  }
+  .roadmap .rc:last-child { border-right: 0; }
+  .roadmap .week {
+    background: var(--card-bg-1); font-family: var(--mono); font-size: 12px;
+    font-weight: 700; color: var(--accent); text-align: center;
+  }
+  .roadmap .rc strong { color: var(--ink); font-weight: 700; }
+
+  /* ── Footer ──────────────────────────── */
+  footer {
+    border-top: 1px solid var(--line); padding-top: 28px; margin-top: 100px;
+    font-family: var(--mono); font-size: 11.5px; color: var(--muted);
+    line-height: 1.7;
+  }
+  footer b { color: var(--ink); font-weight: 600; }
+  footer a { color: var(--accent); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+
+  /* ── First-principle quote box ──────────── */
+  .principle {
+    background: #1a1a1a; color: #f4ecd8; padding: 30px 36px; margin: 36px 0 24px;
+    border-radius: 6px; font-family: var(--serif); font-size: 20px; line-height: 1.5;
+    position: relative;
+  }
+  .principle::before {
+    content: "§"; font-size: 56px; position: absolute; top: 10px; right: 30px;
+    color: var(--accent); opacity: 0.5;
+  }
+  .principle .ptag {
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: .25em;
+    color: var(--accent); text-transform: uppercase; margin-bottom: 12px;
+    display: block;
+  }
+  .principle em { color: var(--accent); font-style: italic; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">
+      <span>Solvea Group · Agent-First GTM</span>
+      <span class="date">2026-05-18 · Hunter</span>
+    </div>
+    <h1>抽四张卡：<em>面向 Agent 的 GTM</em></h1>
+    <p class="lede">
+      Agent 时代的用户漏斗已经换底逻辑 ——
+      <strike>用户打开 App</strike> → <b>Agent 找能力</b>；
+      <strike>SEO 拿点击</strike> → <b>Capability 拿 tool call</b>；
+      <strike>看到广告</strike> → <b>被 LLM 默认推荐</b>。
+      旧漏斗的 4 个环节（发现 → 引流 → 内容 → 分发）每一个都要换。
+    </p>
+
+    <div class="funnel">
+      <div class="fstage before"><div class="label">旧 · 发现</div><b>App Store / SEO</b></div>
+      <div class="farrow">→</div>
+      <div class="fstage before"><div class="label">旧 · 引流</div><b>落地页 / 广告</b></div>
+      <div class="farrow">→</div>
+      <div class="fstage before"><div class="label">旧 · 内容</div><b>Blog / 视频</b></div>
+      <div class="farrow">→</div>
+      <div class="fstage before"><div class="label">旧 · 分发</div><b>多渠道发帖</b></div>
+    </div>
+    <div class="funnel" style="margin-top:8px">
+      <div class="fstage after"><div class="label">新 · 发现</div><b>MCP catalog</b></div>
+      <div class="farrow">→</div>
+      <div class="fstage after"><div class="label">新 · 引流</div><b>Capability manifest</b></div>
+      <div class="farrow">→</div>
+      <div class="fstage after"><div class="label">新 · 内容</div><b>OpenAPI / Recipe</b></div>
+      <div class="farrow">→</div>
+      <div class="fstage after"><div class="label">新 · 分发</div><b>Tool call & 默认工具箱</b></div>
+    </div>
+
+    <div class="meta-row">
+      <span><b>受众</b>：Agent &gt; Human</span>
+      <span><b>载体</b>：MCP / OpenAPI / 结构化 JSON</span>
+      <span><b>反馈</b>：tool call 调用次数 + 收入</span>
+      <span><b>目标</b>：成为某类能力的<i>默认</i></span>
+    </div>
+  </header>
+
+  <!-- ─────────────── Principle quote box ─────────────── -->
+  <section style="margin-top:0">
+    <div class="principle">
+      <span class="ptag">PRINCIPLES.md · §06</span>
+      Agents Are the New Distribution Channel —
+      External AI Agents are a new distribution channel on the order of
+      the App Store / SEO / 公众号 / TikTok at their respective
+      inflection points. Agents <em>don't call your UI, they call your capability</em>.
+      A product with only a UI and no API gets bypassed. An API that is
+      not agent-friendly loses to one that is.
+    </div>
+  </section>
+
+  <!-- ─────────────── The Deck — 4 Cards ─────────────── -->
+  <section>
+    <h2>四张卡</h2>
+    <div class="h2-sub">每张 = 漏斗的一个环节 · 一条 mindset shift · 5 个具体动作 · 本季度交付物 · KPI</div>
+
+    <div class="deck">
+
+      <!-- CARD 1: Discovery -->
+      <article class="card c1">
+        <div class="card-num">Card 01 / Discovery</div>
+        <h3 class="card-name">发现 — <span class="cn">让 Agent 知道我们存在</span></h3>
+
+        <div class="card-shift">
+          <strike>"用户发现 App"</strike> → <b>"Agent 在它的工具索引里看到我们"</b>。Agent 的索引来自 3 处：MCP 目录、LLM 训练数据、Agent 框架的默认配置。我们必须出现在这三处。
+        </div>
+
+        <div class="h-move">五个动作</div>
+        <ol class="move-list">
+          <li>提交 flatkey 到 <b>5 大 MCP catalog</b>：<code>mcp.so</code> / <code>glama.ai</code> / <code>smithery.ai</code> / GitHub <code>modelcontextprotocol/servers</code> / PulseMCP。所有 catalog 一周内全收录。</li>
+          <li>建 <code>.well-known/agent-capabilities.json</code> 端点（已 ship in flatkey commit <code>c8b1d5b</code>）— 任何 Agent 在我们域名探测 metadata 都拿得到。</li>
+          <li>把 <b>OpenAPI spec</b> 暴露在 <code>/api/openapi.json</code> 并提交到 <code>apis.guru/openapi-directory</code>（被 LLM 训练数据收录的最便宜方式）。</li>
+          <li>给 3-5 个高 stars Agent 框架（continue.dev / cline / aider / Open Hands / goose）提 PR 加 flatkey 进 default provider 列表。<b>成本 = 社交（Discord 联系 maintainer）</b>，不是代码。</li>
+          <li>所有产品（voc.ai / solvea.cx / btcmind.ai）都要做同样的 capability manifest — Hunter 集团内统一 spec，复用 flatkey 模板。</li>
+        </ol>
+
+        <div class="ship-block">
+          <div class="h-ship">本季度交付</div>
+          <div class="ship-content">
+            5 大 MCP catalog 收录 + 2 个 Agent 框架默认列表（continue.dev / aider）。所有 4 个产品都暴露 <code>/api/agent-capabilities</code>。
+          </div>
+        </div>
+
+        <div class="kpi">
+          <span class="kpi-l">North Star KPI</span>
+          <span class="kpi-v">每周 unique Agent 看到我们 metadata 数 ≥ 500</span>
+        </div>
+      </article>
+
+      <!-- CARD 2: Traffic / Lead-in -->
+      <article class="card c2">
+        <div class="card-num">Card 02 / Traffic</div>
+        <h3 class="card-name">引流 — <span class="cn">让 Agent 把任务路由给我们</span></h3>
+
+        <div class="card-shift">
+          <strike>"广告投放 → 用户点击"</strike> → <b>"Agent 的 router 决定调谁"</b>。Router 在 0.5 秒内基于 metadata 比对一堆候选，挑成本最低 / 描述最匹配 / 历史调用成功率最高的那个。我们在 router 眼里的<i>相对优势</i>就是引流。
+        </div>
+
+        <div class="h-move">五个动作</div>
+        <ol class="move-list">
+          <li><b>Tool description = 第一行广告</b>。每个 tool 的 <code>description</code> 字段是 LLM router 唯一读的入口。重写 <code>complete</code> 描述："Cheaper alternative to direct Anthropic API · drop-in compat · auto-routing"。</li>
+          <li><b>Cost-aware metadata</b>。在 <code>list_models</code> 返回的每个 model 上附 <code>input_per_1m</code> / <code>output_per_1m</code>。Router 看到比 Anthropic 便宜 30-70%，直接路由过来（已 ship in flatkey）。</li>
+          <li><b>Error messages 是引流武器</b>。当别的 provider 报 rate-limit / 429 / 5xx 时，他们的 error body 只说"try again"。我们 error body 写："flatkey 当前可用，<code>x-api-key</code> 切过来即可"。每次别人故障都是我们入流量的窗口。</li>
+          <li><b>Capability cross-link</b>。voc.ai 的 capability manifest 里列出 "Need cheap LLM? → flatkey"；solvea.cx 列 "Need Amazon review intel? → voc.ai"。集团 4 产品互相导流给 Agent。</li>
+          <li><b>One-shot install 链接</b>。`claude mcp add flatkey -- npx -y @flatkey/mcp@latest` — 4 秒接入。摩擦越低，router 越愿意试。</li>
+        </ol>
+
+        <div class="ship-block">
+          <div class="h-ship">本季度交付</div>
+          <div class="ship-content">
+            <code>@flatkey/mcp</code> npm 包发布 + <code>cursor://</code> deep-link install URL + 每个产品的 cross-link manifest。
+          </div>
+        </div>
+
+        <div class="kpi">
+          <span class="kpi-l">North Star KPI</span>
+          <span class="kpi-v">MCP install 数 ≥ 200/周 · 单次 install 后 30 天留存调用率 ≥ 40%</span>
+        </div>
+      </article>
+
+      <!-- CARD 3: Content -->
+      <article class="card c3">
+        <div class="card-num">Card 03 / Content</div>
+        <h3 class="card-name">内容 — <span class="cn">为 Agent 写，不为人写</span></h3>
+
+        <div class="card-shift">
+          <strike>"长 blog / 短视频"</strike> → <b>"机器可读的结构化能力描述 + 人类可读的安装 walkthrough 双轨"</b>。Agent 不读你的封面图；它读你的 OpenAPI、读你的 cookbook、读你的 error code 语义。Reviewer 的标准也得换：approve 一条内容前问"Agent 能直接用吗？"
+        </div>
+
+        <div class="h-move">五个动作</div>
+        <ol class="move-list">
+          <li><b>每条公开 API 都有 OpenAPI 3.1 spec</b>。Agent 用 OpenAPI 自动生成 tool。无 OpenAPI = 不存在。</li>
+          <li><b>Cookbook 比 blog 重要 10 倍</b>。每个 capability 写 1 个"30 秒上手" cookbook：3 行代码 + 1 个 sample output。LLM 训练数据收 cookbook 不收 blog rambles。</li>
+          <li><b>Error code 语义化</b>。<code>error.type: "rate_limit_exceeded"</code> + <code>error.retry_after: 60</code> + <code>error.suggested_action: "Use model='auto' for failover"</code> — Agent 看到自动修复，不需要人。</li>
+          <li><b>gtm-swarm 11 agent 的内容自带 MCP CTA</b>。03-blog 每篇 footer："Install via MCP: <code>npx @flatkey/mcp</code>"；06-reddit thread 末："I use this through MCP — one line setup"。<b>内容机器 = 分发引擎</b>。</li>
+          <li><b>面向 Agent 的"比较页"</b>。建 <code>/compare/anthropic-vs-flatkey</code> + <code>/compare/openai-vs-flatkey</code>，结构化表格 ≥ 散文。Agent 训练数据高频抓取 comparison pages 当 routing reference。</li>
+        </ol>
+
+        <div class="ship-block">
+          <div class="h-ship">本季度交付</div>
+          <div class="ship-content">
+            完整 OpenAPI 3.1 spec for flatkey / voc.ai / solvea.cx · 每个产品 5 个 cookbook · gtm-swarm 内容机器接入 MCP CTA rule (<code>engines/voc-ai/voice/platform-tone.md</code>)
+          </div>
+        </div>
+
+        <div class="kpi">
+          <span class="kpi-l">North Star KPI</span>
+          <span class="kpi-v">公开 cookbook ≥ 50 篇 · Agent training data 抓取率（GitHub stars / Forks / 引用）</span>
+        </div>
+      </article>
+
+      <!-- CARD 4: Distribution -->
+      <article class="card c4">
+        <div class="card-num">Card 04 / Distribution</div>
+        <h3 class="card-name">分发 — <span class="cn">每次 tool call 都是一次种子</span></h3>
+
+        <div class="card-shift">
+          <strike>"广告位 + 渠道商务"</strike> → <b>"成功的 tool call 自动传染"</b>。Agent A 调用我们成功了 → 写进它的 memory → 同 stack 的 Agent B 看到 →  默认加入工具箱。这是 viral loop 的 v3。
+        </div>
+
+        <div class="h-move">五个动作</div>
+        <ol class="move-list">
+          <li><b>埋点每次 MCP call</b>。Redis <code>usage:mcp:*</code> 记录 client name + version + 是否首次。把"MCP 用户"作为独立 persona 喂回 Persona Bank（v3 plan §B）。</li>
+          <li><b>Open-source reference architectures</b>。在 GitHub 放 3-5 个完整可运行的 sample：<code>flatkey-cursor-bridge</code> / <code>flatkey-langchain-router</code> / <code>flatkey-claude-code-default</code>。每个 ≥ 200 stars 是目标。</li>
+          <li><b>Co-distribution 协议</b>。跟 Cursor / Continue.dev / Aider maintainer 谈 bundled config：用户装他们的扩展时默认包含 flatkey provider 选项。这是<i>渠道商务 of the Agent age</i>。</li>
+          <li><b>失败案例也是分发</b>。flatkey 故障时返回的 error 里附 fallback URL 推给我们的 status page —— status page 又是 SEO + Agent 训练数据。损失即流量。</li>
+          <li><b>Hub-and-spoke</b>。flatkey 当 hub（LLM 基础设施层），voc.ai / solvea.cx 当 spoke（垂直 capability 层）。Agent 装了 flatkey 后，flatkey 的 capability list 自动 cross-link 推荐 voc.ai。集团内部分发。</li>
+        </ol>
+
+        <div class="ship-block">
+          <div class="h-ship">本季度交付</div>
+          <div class="ship-content">
+            3 个 OSS reference architecture repo (≥ 200 stars 任一)  ·  与 1 个主流 Agent 框架达成 bundled config  ·  flatkey → voc.ai cross-link manifest 上线
+          </div>
+        </div>
+
+        <div class="kpi">
+          <span class="kpi-l">North Star KPI</span>
+          <span class="kpi-v">第 4 周末：MCP 通道 tool call 数 ≥ 10K · 进入 ≥ 1 个 framework 的默认配置</span>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ─────────────── Roadmap ─────────────── -->
+  <section>
+    <h2>8 周 Roadmap</h2>
+    <div class="h2-sub">把四张卡变成时间表 · 每周一个 deliverable · 不动用全公司，flatkey + gtm-swarm 两条腿就够</div>
+
+    <div class="roadmap">
+      <div class="rh">Week</div>
+      <div class="rh">Discovery (Card 1)</div>
+      <div class="rh">Traffic (Card 2)</div>
+      <div class="rh">Content (Card 3)</div>
+      <div class="rh">Distribution (Card 4)</div>
+
+      <div class="rc week">W1</div>
+      <div class="rc"><strong>MCP server 落地</strong><br>flatkey <code>/api/mcp</code> 用 <code>@modelcontextprotocol/sdk</code> 实现 streamable HTTP</div>
+      <div class="rc">完善 <code>tool.description</code> + <code>list_models</code> 含价格元数据</div>
+      <div class="rc">flatkey OpenAPI spec 写完</div>
+      <div class="rc">埋点 <code>usage:mcp:*</code> Redis 指标</div>
+
+      <div class="rc week">W2</div>
+      <div class="rc"><strong>提交 5 大 catalog</strong> + flatkey GitHub README 加 badges</div>
+      <div class="rc">发布 <code>@flatkey/mcp</code> npm + cursor deep-link install URL</div>
+      <div class="rc">5 个 flatkey cookbook 上线（claude-code/cursor/aider/continue/langchain 各一）</div>
+      <div class="rc">第 1 个 reference repo (<code>flatkey-cursor-bridge</code>) 上传</div>
+
+      <div class="rc week">W3</div>
+      <div class="rc">voc.ai <code>/api/agent-capabilities</code> 上线（复用 flatkey 模板）</div>
+      <div class="rc">联系 continue.dev / aider maintainer，提 PR</div>
+      <div class="rc">comparison page <code>/compare/anthropic-vs-flatkey</code> 上线</div>
+      <div class="rc">第 2 个 reference repo + Hub-and-spoke cross-link 落地</div>
+
+      <div class="rc week">W4</div>
+      <div class="rc">solvea.cx 同上</div>
+      <div class="rc">第一周 KPI 复盘 — install 数 vs 留存率</div>
+      <div class="rc">gtm-swarm 11 agent 内容机器自带 MCP CTA</div>
+      <div class="rc">第 3 个 reference repo</div>
+
+      <div class="rc week">W5-6</div>
+      <div class="rc">官方 modelcontextprotocol/servers 仓库 PR 合并</div>
+      <div class="rc">基于第 1 月数据调整 router metadata（哪些字段促成调用）</div>
+      <div class="rc">公开 50 篇 cookbook 目标达成</div>
+      <div class="rc">co-distribution 协议至少 1 个落定（bundle config）</div>
+
+      <div class="rc week">W7-8</div>
+      <div class="rc">Persona Bank V1 上线（v3 plan §B），开始把"MCP 用户"作为 segment</div>
+      <div class="rc">引入 Persona Lab 预测每条 content 对 Agent persona 的转化</div>
+      <div class="rc">cookbook 自动 sync 进 LLM 训练数据收录目录</div>
+      <div class="rc">10K tool call/周 KPI 验收</div>
+    </div>
+  </section>
+
+  <!-- ─────────────── First-principle close ─────────────── -->
+  <section>
+    <h2>第一性原理</h2>
+    <div class="h2-sub">为什么这条路对，剩下的只是执行</div>
+
+    <div class="principle">
+      <span class="ptag">观察 · 三段式</span>
+      <b>1.</b> 用户行为正从 "open the app" 切到 "ask the agent." <br>
+      <b>2.</b> Agent 不读你的落地页，它读你的 metadata。<br>
+      <b>3.</b> <em>谁先成为 Agent 默认调用的能力源，谁就拿到这波分发红利。</em>
+    </div>
+
+    <p style="font-family: var(--serif); font-size: 18px; line-height: 1.6; max-width: 880px; margin: 30px 0 0;">
+      四张卡的核心是同一件事 ——
+      <b>把所有面向"人"的 marketing 动作，再做一份面向"Agent"的版本</b>。
+      不是替换，是叠加。SEO 不停，但加 LLM-SEO；
+      blog 不停，但加 cookbook；
+      渠道 BD 不停，但加 framework PR；
+      销售不停，但加 Agent router 推荐位优化。
+    </p>
+
+    <p style="font-family: var(--serif); font-size: 18px; line-height: 1.6; max-width: 880px; margin: 16px 0 0;">
+      8 周后我们会有第一批数据：
+      <b>每天有多少个 Agent 在调我们的能力，
+      其中多少是它们自己路由过来的（vs 人工配置），
+      留存率多少。</b>
+      这三个数字定义了 Agent 时代的<i>新版本 PMF</i>。
+    </p>
+  </section>
+
+  <footer>
+    Generated <b>2026-05-18</b> · Solvea Group · GTM Swarm v3 (Persona Loop + MCP Distribution) <br>
+    References:
+    <a href="https://github.com/SolveaCX/gtm-swarm/blob/main/PRINCIPLES.md">PRINCIPLES.md §06</a> ·
+    <a href="https://github.com/SolveaCX/flatkey/blob/main/app/src/app/api/agent-capabilities/route.ts">flatkey agent-capabilities</a> ·
+    <a href="https://modelcontextprotocol.io">MCP spec</a> ·
+    Sister plan: <code>~/.claude/plans/gtm-agent-swarm-...md</code> (v3 plan, approved 2026-05-18)
+  </footer>
+
+</div>
+</body>
+</html>

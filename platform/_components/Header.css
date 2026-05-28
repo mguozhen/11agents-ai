@@ -1,0 +1,98 @@
+.dj-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 4px 4px 18px;
+}
+
+.dj-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.dj-logo {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-md);
+}
+
+.dj-logo-dot {
+  width: 14px;
+  height: 14px;
+  background: #fff;
+  border-radius: 50%;
+}
+
+.dj-wordmark {
+  font-size: 20px;
+  font-weight: 500;
+  margin: 0;
+  color: var(--ink);
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.dj-wordmark-name {
+  color: var(--ink);
+}
+
+.dj-wordmark-sub {
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--text-sub);
+}
+
+.dj-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.dj-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 16px;
+  height: 36px;
+  border-radius: var(--radius-pill);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-sub);
+  border: 1px solid var(--border-strong);
+  background: var(--card);
+  transition: all 0.15s ease;
+  font-family: var(--sans);
+}
+
+.dj-btn:hover { color: var(--ink); border-color: var(--ink); background: var(--surface-raised); }
+.dj-btn:disabled { opacity: 0.5; cursor: wait; }
+
+.dj-btn-orange { background: var(--card); }
+.dj-btn-green { background: var(--card); }
+.dj-btn-green-dark { background: var(--card); }
+
+.dj-spin {
+  animation: dj-spin 0.8s linear infinite;
+}
+
+@keyframes dj-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.dj-legacy {
+  margin-left: 8px;
+  font-size: 12px;
+  color: var(--text-faint);
+  border: 1px dashed var(--border-strong);
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+}

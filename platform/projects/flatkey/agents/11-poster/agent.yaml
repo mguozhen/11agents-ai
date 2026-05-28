@@ -1,0 +1,26 @@
+id: 11-poster
+name: Poster Agent
+category: distribution
+platform: WeChat
+builder: ''
+reviewer: ''
+goal: >-
+  NOT APPLICABLE — Physical poster distribution and WeChat-ecosystem content are
+  not channels for platform engineers at US and global AI-native startups. The
+  ICP discovers tools through digital, async, text-primary channels (HN, Reddit,
+  GitHub, X, YouTube). Any budget allocated here is misallocated from channels
+  with measurable, ICP-aligned ROI. Revisit if Flatkey expands into China-based
+  developer ecosystems in year 2+.
+default_product: shulex-cn
+kpi:
+  weekly_target: N/A
+  measure: N/A
+schedule: TBD
+budget_monthly_usd: 0
+status: deactivated_by_contentos
+blocked_reason: 'Builder + Reviewer both missing (Principle 3: No Triangle = No Agent)'
+reuse: []
+activate: false
+topics:
+  - Skipped — no applicable topic territory
+contentos_hydrated_at: '2026-05-11T21:44:14.145Z'

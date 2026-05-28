@@ -1,0 +1,12 @@
+node_modules
+dashboard/node_modules
+dashboard/dist
+.git
+.DS_Store
+logs/
+*.log
+exports/
+.venv/
+__pycache__/
+.github/launchd/
+/tmp/

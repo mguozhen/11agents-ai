@@ -1,0 +1,22 @@
+{
+  "channel": "video",
+  "review_checklist": [
+    "Hook — first 3 seconds compelling?",
+    "Script length — matches platform (60s TikTok vs 10min YouTube)?",
+    "CTA clarity — one clear action at end?",
+    "Brand consistency — logo, colors, voice correct?"
+  ],
+  "content_template": {
+    "type": "short | long",
+    "structure": "hook → demo/story → insight → CTA"
+  },
+  "dashboard_widgets": [
+    { "id": "views", "chart": "line" },
+    { "id": "watch_time", "chart": "bar" },
+    { "id": "subscriber_growth", "chart": "line" }
+  ],
+  "kpi_defaults": {
+    "weekly_target": "2 videos",
+    "measure": "views, watch time, subscriber growth"
+  }
+}

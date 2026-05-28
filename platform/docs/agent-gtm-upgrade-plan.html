@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>agent-gtm 升级计划 — playbook 生成器 → 闭环增长 OS</title>
+<style>
+  :root{
+    --ink:#1a2620; --mut:#5c6b62; --faint:#8a978d;
+    --green:#2f6b3f; --green-soft:#e8f1ea; --green-line:#bcd6c3;
+    --paper:#fbfcfb; --card:#ffffff; --line:#e2e7e3;
+    --red:#b4452f; --amber:#b67d1e; --done:#2f6b3f;
+    --mono:'SF Mono',ui-monospace,Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--paper);color:var(--ink);
+    font-family:-apple-system,'Helvetica Neue',Arial,'PingFang SC','Hiragino Sans GB',sans-serif;
+    line-height:1.62;-webkit-font-smoothing:antialiased;padding:0 0 90px}
+  .wrap{max-width:980px;margin:0 auto;padding:0 28px}
+  code,.m{font-family:var(--mono);font-size:.84em}
+  code{background:var(--green-soft);color:var(--green);padding:.08em .38em;border-radius:4px}
+
+  header{padding:64px 0 38px;border-bottom:3px solid var(--ink)}
+  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--green);font-weight:700}
+  h1{font-size:42px;line-height:1.18;margin:14px 0 16px;letter-spacing:-.02em;font-weight:800}
+  h1 em{font-style:normal;color:var(--green)}
+  .thesis{font-size:18px;color:var(--mut);max-width:760px}
+  .thesis b{color:var(--ink)}
+
+  section{padding:46px 0;border-bottom:1px solid var(--line)}
+  .snum{font-family:var(--mono);font-size:12px;color:var(--faint);letter-spacing:.1em}
+  h2{font-size:27px;margin:6px 0 18px;letter-spacing:-.01em;font-weight:800}
+  h2 em{font-style:normal;color:var(--green)}
+  p{margin:12px 0;max-width:820px}
+  .lead{font-size:16.5px}
+  .mut{color:var(--mut)}
+
+  table{border-collapse:collapse;width:100%;margin:20px 0;font-size:14.5px}
+  th,td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);font-weight:700}
+  td b{color:var(--ink)}
+  tr td:first-child{white-space:nowrap;font-weight:700}
+
+  .fork{display:grid;grid-template-columns:1fr 1fr;gap:0;margin:22px 0;
+    border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  .fork>div{padding:22px 24px}
+  .fork .gins{background:#f4f6f4;border-right:1px solid var(--line)}
+  .fork .us{background:var(--green-soft)}
+  .fork h3{font-size:15px;margin-bottom:6px}
+  .fork .who{font-family:var(--mono);font-size:11px;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--faint);margin-bottom:10px}
+  .fork .us .who{color:var(--green)}
+  .fork p{font-size:14px;margin:8px 0}
+  .fork .punch{font-size:15px;font-weight:700;margin-top:14px;padding-top:12px;
+    border-top:1px dashed var(--green-line)}
+
+  .steal{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:20px 0}
+  .steal .it{background:var(--card);border:1px solid var(--line);
+    border-radius:10px;padding:18px}
+  .steal .it .t{font-weight:800;font-size:15px;margin-bottom:6px}
+  .steal .it .g{font-family:var(--mono);font-size:11px;color:var(--faint);
+    letter-spacing:.06em;text-transform:uppercase;margin-bottom:9px}
+  .steal .it p{font-size:13.5px;margin:6px 0}
+
+  .up{background:var(--card);border:1px solid var(--line);border-left:5px solid var(--green);
+    border-radius:12px;padding:26px 28px;margin:18px 0}
+  .up .tag{display:inline-block;font-family:var(--mono);font-size:12px;font-weight:700;
+    background:var(--green);color:#fff;padding:3px 12px;border-radius:5px;letter-spacing:.05em}
+  .up h3{font-size:21px;margin:12px 0 4px;font-weight:800}
+  .up .sub{color:var(--mut);font-size:14.5px;margin-bottom:14px}
+  .ba{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0}
+  .ba .box{border-radius:8px;padding:14px 16px;font-size:13.5px}
+  .ba .now{background:#faf3f1;border:1px solid #e8cfc7}
+  .ba .nxt{background:var(--green-soft);border:1px solid var(--green-line)}
+  .ba .lbl{font-family:var(--mono);font-size:11px;letter-spacing:.08em;
+    text-transform:uppercase;font-weight:700;margin-bottom:6px}
+  .ba .now .lbl{color:var(--red)}
+  .ba .nxt .lbl{color:var(--green)}
+  .files{margin:12px 0 4px}
+  .files .fl{font-family:var(--mono);font-size:12.5px;padding:5px 0;
+    border-bottom:1px dotted var(--line);color:var(--mut)}
+  .files .fl b{color:var(--ink)}
+  .files .fl .k{display:inline-block;width:54px;font-weight:700}
+  .k-new{color:var(--green)}.k-edit{color:var(--amber)}
+  .deliver{margin-top:12px;font-size:13.5px;background:#f4f6f4;
+    border-radius:7px;padding:10px 14px}
+  .deliver b{color:var(--green)}
+
+  ol.phase{list-style:none;counter-reset:p;margin:18px 0}
+  ol.phase li{counter-increment:p;position:relative;padding:16px 0 16px 56px;
+    border-bottom:1px solid var(--line)}
+  ol.phase li::before{content:"P"counter(p);position:absolute;left:0;top:16px;
+    font-family:var(--mono);font-weight:800;font-size:13px;color:#fff;
+    background:var(--green);width:38px;height:26px;border-radius:6px;
+    display:flex;align-items:center;justify-content:center}
+  ol.phase li:first-child{counter-reset:none}
+  ol.phase .pt{font-weight:800;font-size:15.5px}
+  ol.phase .pd{font-size:14px;color:var(--mut);margin:4px 0}
+  ol.phase .eff{font-family:var(--mono);font-size:12px;color:var(--green);font-weight:700}
+  .dep{font-family:var(--mono);font-size:11px;color:var(--faint)}
+
+  footer{padding:34px 0 10px;color:var(--faint);font-size:12.5px;font-family:var(--mono)}
+  @media(max-width:740px){
+    .wrap{padding:0 18px}h1{font-size:32px}
+    .fork,.ba{grid-template-columns:1fr}
+    .steal{grid-template-columns:1fr}
+    .fork .gins{border-right:none;border-bottom:1px solid var(--line)}
+  }
+</style>
+</head>
+<body>
+
+<header><div class="wrap">
+  <div class="eyebrow">agent-gtm · 升级计划 · 2026-05-18</div>
+  <h1>从 playbook 生成器<br>升级成<em>闭环增长 OS</em></h1>
+  <p class="thesis">触发源:用户分享的 <b>Gins AI</b> pitch deck —— 一套 "self-learning Growth Operating System"。
+  Gins 的内容不能抄(它优化的是旧漏斗),但它的<b>形式值得偷</b>。
+  本计划把 agent-gtm 从「跑一次出一个静态 deck」升级成一个在 6 个产品上持续运行、可测量、会学习的系统。</p>
+</div></header>
+
+<section><div class="wrap">
+  <div class="snum">01 — 分歧</div>
+  <h2>Gins 和 agent-gtm 在赌<em>不同的未来</em></h2>
+  <p class="lead mut">先把定位钉死。两者不是竞品,是两条岔路 —— 抄错了就变成「给 agent 做的 Gins」,失去全部差异化。</p>
+  <div class="fork">
+    <div class="gins">
+      <div class="who">Gins AI</div>
+      <h3>把旧的增长 playbook 跑快 1000 倍</h3>
+      <p>synthetic persona、A/B、campaign personalization、CRM / BI / ad channel 集成。</p>
+      <p>客户依然是<b>人类营销团队</b>;优化的是「人怎么被触达」。</p>
+      <p class="punch">优化 — 你怎么够到人</p>
+    </div>
+    <div class="us">
+      <div class="who">agent-gtm</div>
+      <h3>playbook 本身正在被替换</h3>
+      <p>MCP catalog、agent router metadata、OpenAPI cookbook、hub-and-spoke cross-link。</p>
+      <p>产品的新购买入口是 <b>AI agent</b>;优化的是「agent 怎么找到你」。</p>
+      <p class="punch">优化 — agent 怎么够到你</p>
+    </div>
+  </div>
+  <p><b>一句话写进 showcase 总览页:</b> Gins 优化你怎么够到人;agent-gtm 优化 agent 怎么够到你。不同的漏斗。</p>
+</div></section>
+
+<section><div class="wrap">
+  <div class="snum">02 — 偷形式,不偷内容</div>
+  <h2>Gins deck 做对、agent-gtm 现在<em>缺的 3 件事</em></h2>
+  <div class="steal">
+    <div class="it">
+      <div class="g">Gins slide 6</div>
+      <div class="t">OS,不是文档</div>
+      <p>Gins 是在跑的闭环 Understand → Optimize → Execute。</p>
+      <p class="mut">agent-gtm 跑一次出一个静态 HTML。6 产品 = 6 个一次性 deck,不是 1 个 OS 的 6 个实例。</p>
+    </div>
+    <div class="it">
+      <div class="g">Gins slide 5</div>
+      <div class="t">量化的痛</div>
+      <p>每个动作有 Delay / FTE 成本 / 战略影响 / $ 损失,年损 $4–7M。</p>
+      <p class="mut">我们有 done/partial/todo 进度条,但没说「不做的代价」。</p>
+    </div>
+    <div class="it">
+      <div class="g">Gins slide 5 角标</div>
+      <div class="t">Why now</div>
+      <p>91% marketer 用 AI、CMO 预算转移、first-mover 窗口。</p>
+      <p class="mut">我们的 showcase 没有这个时间钩子。</p>
+    </div>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <div class="snum">03 — 升级 A</div>
+  <h2>从 playbook 生成器 → <em>闭环 OS</em></h2>
+
+  <div class="up">
+    <span class="tag">A · 骨架</span>
+    <h3>让 audit 状态可重跑、有历史、能 diff</h3>
+    <div class="sub">最大结构升级 —— B 和 C 都把数据写进 A 定义的新 schema。</div>
+    <div class="ba">
+      <div class="box now"><div class="lbl">现状</div>
+        <code>shipped[]</code> 里 14 个 item 的 done/partial/todo 状态<b>每次手打进 JSON</b>。
+        重跑 = 从头重写。没有上一次的快照,看不出本周 vs 上周的速度。</div>
+      <div class="box nxt"><div class="lbl">升级后</div>
+        <code>playbook-data/&lt;slug&gt;.json</code> 成为唯一状态源。20 项 audit 结构化:
+        每项带 <code>status / note / last_checked</code>,分数自动算。重跑 = re-audit + diff 上次快照。</div>
+    </div>
+    <div class="files">
+      <div class="fl"><span class="k k-new">新增</span> <b>references/audit-items.json</b> — 把 20 项 checklist 变机器可读(layer / id / check 命令)</div>
+      <div class="fl"><span class="k k-new">新增</span> <b>scripts/audit.py</b> — 读 audit-items + 当前 state,辅助重新打分,写回 JSON</div>
+      <div class="fl"><span class="k k-new">新增</span> <b>playbook-data/history/&lt;slug&gt;-&lt;date&gt;.json</b> — 每次 audit 留快照</div>
+      <div class="fl"><span class="k k-new">新增</span> <b>references/loop.md</b> — Understand→Optimize→Execute 循环说明</div>
+      <div class="fl"><span class="k k-edit">改</span> <b>SKILL.md</b> — 从 1 个动作拆成 3 个子命令:<code>audit</code> / <code>moves</code> / <code>render</code></div>
+      <div class="fl"><span class="k k-edit">改</span> <b>render.py</b> — 加 diff 视图:本次 vs 上次快照,标出新 done 和回退项</div>
+    </div>
+    <div class="deliver"><b>交付物</b> — <code>agent-gtm audit btcmind</code> 重跑后输出
+      「audit 10/20 → 12/20,本周新 done 2 项,0 回退」,而不是重写整个 deck。</div>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <div class="snum">04 — 升级 B</div>
+  <h2>Agent 发现模拟 —— 我们版的 <em>Persona Bank</em></h2>
+
+  <div class="up">
+    <span class="tag">B · 测量层</span>
+    <h3>真起一个 buyer-agent,测它能不能找到产品</h3>
+    <div class="sub">Gins 模拟合成的人类 persona;我们模拟真实的 agent 发现 —— 可测、可重复、不是合成数据。
+      <b>btcmind.json 的 W7-8 已埋「Persona Bank V1 / Persona Lab / v3 plan §B」占位,这一步把它接上。</b></div>
+    <div class="ba">
+      <div class="box now"><div class="lbl">现状</div>
+        audit 表全是「我们做了什么」的自评。没有任何一条来自<b>外部信号</b> ——
+        没人知道 agent 实际能不能在工具索引里看到产品。闭环缺测量层。</div>
+      <div class="box nxt"><div class="lbl">升级后</div>
+        给一个真 agent buyer-task(「找个分析 Amazon 评论的工具」),
+        看它是否经 MCP catalog / 搜索 / 工具索引<b>命中产品</b> —— 命中没?第几位?走哪条通道?</div>
+    </div>
+    <div class="files">
+      <div class="fl"><span class="k k-new">新增</span> <b>scripts/discovery_sim.py</b> — 走 flatkey OpenAI 代理跑 buyer-agent,判定命中 / 排名 / 通道</div>
+      <div class="fl"><span class="k k-new">新增</span> <b>references/discovery-sim.md</b> — 每个品类的 buyer-task 模板(电商 / 加密 / CS / 支付…)</div>
+      <div class="fl"><span class="k k-edit">改</span> <b>playbook-data/&lt;slug&gt;.json</b> — 加 <code>discovery_sim</code> 字段:<code>task / found / rank / channel / excerpt</code></div>
+      <div class="fl"><span class="k k-edit">改</span> <b>render.py</b> — 在 deck 渲染「发现模拟」结果块,作为 Card 1 的真实 KPI</div>
+    </div>
+    <div class="deliver"><b>交付物</b> — 每个产品一条客观分:
+      「buyer-agent 找 Amazon 评论工具 → 第 4 位命中 voc,经 mcp.so」。闭环从此有真实输入信号。</div>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <div class="snum">05 — 升级 C</div>
+  <h2>量化痛 + <em>杠杆表</em></h2>
+
+  <div class="up">
+    <span class="tag">C · 叙事</span>
+    <h3>给每个产品页加「不做的代价」和 1000x 杠杆</h3>
+    <div class="sub">最便宜的一项 —— 主要是 render.py + 模板 + 填数据,不动 skill 架构。可与 B 并行。</div>
+    <div class="ba">
+      <div class="box now"><div class="lbl">现状</div>
+        deck 说了「该做什么」,没说「不做会怎样」。
+        也没把 human-team 时间 vs CC 时间的压缩显示出来 —— Gins 的「1/1000x velocity」我们其实更有资格讲。</div>
+      <div class="box nxt"><div class="lbl">升级后</div>
+        每产品页一张 pain table(GTM 动作 / 现在手工怎么做 / 不做的代价 / agent 时代打法)+
+        why-now 钩子 + 每个 move 标 human / CC 双尺度耗时。</div>
+    </div>
+    <div class="files">
+      <div class="fl"><span class="k k-edit">改</span> <b>render.py</b> — 渲染 <code>pain_table</code> / <code>why_now</code> / move 上的 <code>effort</code></div>
+      <div class="fl"><span class="k k-edit">改</span> <b>references/playbook-template.html</b> — pain table + why-now 区块的 CSS / 结构</div>
+      <div class="fl"><span class="k k-edit">改</span> <b>references/four-cards-rubric.md</b> — 记录新字段写法</div>
+      <div class="fl"><span class="k k-edit">改</span> <b>playbook-data/*.json ×6</b> — 补 <code>pain_table</code> / <code>why_now</code> / 每个 move 的 <code>effort</code></div>
+    </div>
+    <div class="deliver"><b>交付物</b> — 每张 deck 顶部一张量化痛表,把「为什么现在必须做」讲成数字。</div>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <div class="snum">06 — 落地顺序</div>
+  <h2>分 5 个 Phase,<em>A 打地基,B+C 并行</em></h2>
+  <p class="mut">B 和 C 都写进 A 定义的新 JSON schema,所以 schema 必须先定。耗时按 CC 估,括号里是人类团队等价工作量。</p>
+  <ol class="phase">
+    <li>
+      <div class="pt">Phase 0 · 定 schema(地基)</div>
+      <div class="pd">重构 <code>playbook-data</code> JSON 结构:结构化 <code>audit[]</code> 20 项 + 预留 <code>discovery_sim</code> / <code>pain_table</code> / <code>why_now</code> 槽位;写 <code>audit-items.json</code>。</div>
+      <div class="eff">CC ~30 min(human ~半天) · <span class="dep">无依赖,先做</span></div>
+    </li>
+    <li>
+      <div class="pt">Phase 1 · A 闭环化</div>
+      <div class="pd"><code>SKILL.md</code> 三子命令 + <code>audit.py</code> + history 快照 + render.py diff 视图 + <code>loop.md</code>。</div>
+      <div class="eff">CC ~45 min(human ~1.5 天) · <span class="dep">依赖 P0</span></div>
+    </li>
+    <li>
+      <div class="pt">Phase 2 · B 发现模拟</div>
+      <div class="pd"><code>discovery_sim.py</code> 走 flatkey 代理 + buyer-task 模板;先在 voc + btcmind 上验证。</div>
+      <div class="eff">CC ~1 h(human ~2 天) · <span class="dep">依赖 P0 · 可与 P3 并行</span></div>
+    </li>
+    <li>
+      <div class="pt">Phase 3 · C 量化痛表</div>
+      <div class="pd">render.py + template 加 pain table / why-now / 双尺度 effort;补 6 个产品数据。</div>
+      <div class="eff">CC ~1 h(human ~2 天) · <span class="dep">依赖 P0 · 可与 P2 并行</span></div>
+    </li>
+    <li>
+      <div class="pt">Phase 4 · 全量重跑 + 重新部署</div>
+      <div class="pd">6 个产品全部过一遍新 OS(audit→moves→render),刷新 <code>agent-gtm-showcase.html</code>,重部署 Vercel。</div>
+      <div class="eff">CC ~40 min(human ~1 天) · <span class="dep">依赖 P1–P3</span></div>
+    </li>
+  </ol>
+  <p><b>关键收益</b> — 做完之后,「用 6 产品锻造 1 skill」这句话第一次成立:6 个产品不再是 6 个一次性 deck,而是同一个 OS 的 6 个持续运行实例,每周能看到 audit 分数和发现率的变化曲线。</p>
+</div></section>
+
+<footer><div class="wrap">
+  agent-gtm upgrade plan · ~/.claude/skills/agent-gtm · skill 开源 github.com/mguozhen/agent-gtm · 计划生成 2026-05-18
+</div></footer>
+
+</body>
+</html>

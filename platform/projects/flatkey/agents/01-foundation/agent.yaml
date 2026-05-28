@@ -1,0 +1,43 @@
+id: 01-foundation
+name: GTM Foundation
+category: foundation
+platform: Internal Dashboard
+builder: 钟石龙
+reviewer: Boyuan
+goal: >-
+  Build the canonical brand-voice and positioning anchor pages that establish
+  Flatkey as the authoritative voice on LLM API key governance — the reference
+  every other agent inherits tone and substance from.
+default_product: all
+kpi:
+  weekly_target: >-
+    3 core pages live and indexed by week 2; 1 page ranking in top 10 organic
+    results for a target keyword by week 6
+  measure: >-
+    Google Search Console impressions + position tracking for 'llm api key
+    management', 'openai api key rotation', 'litellm alternative managed';
+    Ahrefs rank tracking weekly
+schedule: always-on
+budget_monthly_usd: 0
+status: deployable
+reuse:
+  - ~/agent-teams (Paperclip) schema for agents/goals/issues/approvals
+  - dashboard/ in this repo
+activate: true
+topics:
+  - >-
+    What is LLM API key management — the definitive zero-to-one explainer for
+    platform engineers (anchor page, target keyword: 'llm api key management')
+  - >-
+    Why your .env file is not key management — and what the difference actually
+    costs you (positioning page that names the status quo gap)
+  - >-
+    Flatkey vs LiteLLM vs Portkey vs Doppler — honest comparison table with
+    technical depth on key governance specifically (conversion-intent page)
+  - >-
+    The API Key Security Audit Checklist for AI Teams — free downloadable
+    resource that seeds the EDM list and earns backlinks
+  - >-
+    LLM API key rotation: a practical guide for teams using 2+ providers (SEO
+    target: 'openai api key rotation')
+contentos_hydrated_at: '2026-05-11T21:44:14.141Z'

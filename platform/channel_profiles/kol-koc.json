@@ -1,0 +1,22 @@
+{
+  "channel": "kol-koc",
+  "review_checklist": [
+    "KOL fit — audience alignment with product?",
+    "Personalization — does the outreach read human?",
+    "Schedule — conflict with other campaigns?",
+    "Deliverable clarity — video format, length, deadline explicit?"
+  ],
+  "content_template": {
+    "type": "outreach_dm | video_brief | collab_proposal",
+    "structure": "personal intro → why them specifically → collab idea → deliverables → timeline"
+  },
+  "dashboard_widgets": [
+    { "id": "kol_pipeline", "stages": ["contacted", "negotiating", "confirmed", "live", "completed"] },
+    { "id": "video_output", "chart": "calendar", "metric": "views" },
+    { "id": "engagement", "chart": "bar", "metric": "avg views + interaction rate" }
+  ],
+  "kpi_defaults": {
+    "weekly_target": "XX videos published per milestone",
+    "measure": "KOL count, video views, inbound traffic"
+  }
+}

@@ -1,0 +1,1 @@
+{"date":"2026-05-14","builder":"Boyuan","value_point":"统一 CLI gtm 上线，11 个 agent + 任何 Claude Code 实例都可一行命令对接","product_update":"gtm log / status / ledger / record / ideas 子命令全部走 Railway API","target_update":"每个 builder 每天至少 1 条 standup 记录，覆盖 5 个 active agent","logged_at":"2026-05-14T01:25:19.602Z"}

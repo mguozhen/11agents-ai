@@ -1,0 +1,56 @@
+id: 07-social-media
+name: Social Media Agent
+category: distribution
+platform: X · GitHub · LinkedIn · All Platforms
+builder: Wayne
+reviewer: Ivy Chen
+goal: >-
+  Build Flatkey's voice as the peer-engineer perspective on LLM API
+  infrastructure on X/Twitter (real-time, incident-driven, technically
+  opinionated) and LinkedIn (co-founder and platform lead audience, more
+  considered and strategic) — earning follows from the ICP before they're in
+  buying mode.
+default_product: voc-ai
+kpi:
+  weekly_target: >-
+    X: 3 original posts per week + 10 replies/engagements per week + 500 new
+    ICP-relevant followers per month; LinkedIn: 2 posts per week + 200 new
+    followers per month; combined: 3 qualified trial signups per week
+    attributable to social referral
+  measure: >-
+    X native analytics for impressions, engagements, and profile link clicks;
+    LinkedIn analytics for post reach and follower growth; UTM-tagged bio links
+    track social referral trial signups
+schedule: 'cron: 0 8,17 * * *'
+budget_monthly_usd: 0
+status: deployable
+reuse:
+  - engines/voc-ai platform native rewrite
+  - ~/social-bot LinkedIn API memo
+activate: true
+topics:
+  - >-
+    X/Twitter incident takes: real-time commentary when LLM API incidents
+    surface on HN or in public — 'here's what likely happened and why' technical
+    breakdowns that earn retweets from engineers who trust the analysis
+  - >-
+    X/Twitter hot takes on competitor product decisions: when LiteLLM, Portkey,
+    or OpenRouter ship a new feature or pricing change, post a technically
+    grounded take on what it means for teams who care about key governance — no
+    snark, just analysis
+  - >-
+    X/Twitter 7-tweet thread format: monthly 'anatomy of [incident type]'
+    threads — full technical walkthrough of how a category of failure happens
+    and how to prevent it; these are the primary owned-channel content that
+    earns shares
+  - >-
+    LinkedIn co-founder perspective posts: 'what I've learned from watching 50
+    AI-native teams manage their LLM credentials' — pattern-matching posts that
+    feel like peer wisdom, not marketing copy; designed for technical
+    co-founders and VPs of Engineering to share with their teams
+  - >-
+    LinkedIn compliance angle posts: 'what enterprise prospects are actually
+    asking about your AI stack' — posts that speak to the 'sales call blocker'
+    trigger by helping technical founders prepare for the access-control
+    question before it surprises them
+contentos_hydrated_at: '2026-05-11T21:44:14.144Z'

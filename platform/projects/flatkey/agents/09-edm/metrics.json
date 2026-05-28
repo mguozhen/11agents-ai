@@ -1,0 +1,11 @@
+{
+  "agent_id": "09-edm",
+  "status": "blocked",
+  "rolling_30d": {
+    "drafted": 0,
+    "approved": 0,
+    "rejected": 0,
+    "published": 0
+  },
+  "last_updated": null
+}

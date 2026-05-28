@@ -1,0 +1,39 @@
+slug: ""
+name: ""
+url: ""
+category: ""
+tagline: ""
+status: live | stub
+
+founder:
+  name: ""
+  role: ""
+
+audience:
+  primary: ""
+  secondary: ""
+
+positioning:
+  one_liner: ""
+  vs_status_quo: ""
+  vs_competitors: []
+
+customers:
+  active: []
+  case_studies: []
+
+competitors:
+  direct: []
+  adjacent: []
+
+engine:
+  source_path: ""
+  variant: "voc-ai-style | solvea-style | custom"
+
+contentos_agent:
+  state: not_started | step_1_done | step_2_done | step_3_done | step_4_done | built
+  last_run: null
+
+paperclip:
+  company_id: null
+  synced_at: null

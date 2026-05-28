@@ -1,0 +1,409 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>MCP Catalog Submissions · multi-platform-publisher</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+  :root {
+    --bg: #0a0a0a; --fg: #fff7ed; --dim: #b8a48a; --accent: #fb923c;
+    --accent2: #fed7aa; --card: #14110d; --line: #2a241c; --good: #4ade80;
+    --bad: #f87171; --warn: #fbbf24;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--fg);
+    font: 15px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI",
+                    "Helvetica Neue", Helvetica, "PingFang SC", sans-serif;
+    min-height: 100vh; display: flex; flex-direction: column; align-items: center;
+    padding: 32px 16px 80px;
+  }
+  header {
+    width: 100%; max-width: 900px; margin-bottom: 24px;
+    display: flex; justify-content: space-between; align-items: center;
+    border-bottom: 1px solid var(--line); padding-bottom: 16px;
+  }
+  .eyebrow { font-size: 12px; letter-spacing: 0.08em; color: var(--dim); text-transform: uppercase; }
+  .progress { font: 13px ui-monospace, SF Mono, Menlo, monospace; color: var(--accent); }
+  h1 {
+    width: 100%; max-width: 900px; margin: 0 0 8px;
+    font-size: 28px; font-weight: 700; letter-spacing: -0.01em;
+  }
+  h1 em { color: var(--accent); font-style: normal; }
+  .lede { width: 100%; max-width: 900px; color: var(--dim); margin: 0 0 24px; }
+  .lede code { background: #1f1a13; padding: 1px 6px; border-radius: 3px; color: var(--accent2); }
+  .lede kbd {
+    background: var(--card); border: 1px solid var(--line); padding: 1px 6px;
+    border-radius: 3px; margin: 0 2px; font-size: 11px;
+  }
+  .deck { width: 100%; max-width: 900px; position: relative; min-height: 540px; }
+  .card {
+    background: var(--card); border: 1px solid var(--line); border-radius: 12px;
+    padding: 28px 32px; display: none; flex-direction: column;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+  }
+  .card.active { display: flex; animation: slideIn 0.3s ease-out; }
+  @keyframes slideIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+  .card-head {
+    display: flex; justify-content: space-between; align-items: baseline;
+    border-bottom: 1px dashed var(--line); padding-bottom: 12px; margin-bottom: 16px;
+  }
+  .card-num { font: 13px ui-monospace, SF Mono, Menlo, monospace; color: var(--accent); letter-spacing: 0.05em; }
+  .card-channel { font-size: 22px; font-weight: 700; margin: 0; }
+  .channel-meta { font-size: 12px; color: var(--dim); }
+  .pill {
+    display: inline-block; padding: 2px 9px; border-radius: 99px;
+    font: 11px ui-monospace, SF Mono, Menlo, monospace; letter-spacing: 0.04em;
+    border: 1px solid currentColor;
+  }
+  .pill.form { color: var(--warn); }
+  .pill.pr { color: var(--good); }
+  .pill.issue { color: #60a5fa; }
+  .pill.auto { color: var(--accent2); }
+  .pill.cli { color: #c084fc; }
+  .open-btn {
+    display: inline-block; margin-top: 10px; padding: 10px 18px;
+    background: var(--accent); color: var(--bg); text-decoration: none;
+    border-radius: 6px; font-weight: 600; font-size: 14px;
+  }
+  .open-btn:hover { background: var(--accent2); }
+  .section-h {
+    font-size: 11px; letter-spacing: 0.08em; color: var(--dim);
+    text-transform: uppercase; margin: 20px 0 6px;
+  }
+  .copybox {
+    background: #1f1a13; border: 1px solid var(--line); border-radius: 6px;
+    padding: 12px 14px; font: 12.5px/1.55 ui-monospace, SF Mono, Menlo, monospace;
+    color: var(--accent2); overflow-x: auto; white-space: pre-wrap; word-break: break-word;
+    position: relative; max-height: 280px; overflow-y: auto;
+  }
+  .copy {
+    position: absolute; top: 8px; right: 10px; background: var(--accent);
+    color: var(--bg); border: none; padding: 4px 10px; border-radius: 4px;
+    font: 11px ui-monospace, SF Mono, Menlo, monospace; cursor: pointer;
+  }
+  .copy:hover { background: var(--accent2); }
+  .copy.copied { background: var(--good); color: var(--bg); }
+  .field { margin-bottom: 14px; }
+  .field-label { color: var(--accent); font-size: 12px; letter-spacing: 0.04em; margin-bottom: 4px; }
+  .controls {
+    width: 100%; max-width: 900px;
+    display: flex; justify-content: space-between; align-items: center;
+    margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--line);
+  }
+  .controls button {
+    background: transparent; color: var(--fg); border: 1px solid var(--line);
+    padding: 8px 18px; border-radius: 6px; font-size: 14px; cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .controls button:hover { border-color: var(--accent); color: var(--accent); }
+  .controls button.done {
+    background: var(--good); color: var(--bg); border-color: var(--good); font-weight: 600;
+  }
+  .keys { font: 12px ui-monospace, SF Mono, Menlo, monospace; color: var(--dim); }
+  .keys kbd {
+    background: var(--card); border: 1px solid var(--line); padding: 1px 6px;
+    border-radius: 3px; margin: 0 2px; font-size: 11px;
+  }
+  .dot-strip { display: flex; gap: 6px; }
+  .dot { width: 9px; height: 9px; border-radius: 99px; background: var(--line); }
+  .dot.viewed { background: var(--accent2); }
+  .dot.done { background: var(--good); }
+  .dot.current { transform: scale(1.4); background: var(--accent); }
+  footer {
+    width: 100%; max-width: 900px; margin-top: 32px; color: var(--dim);
+    font-size: 13px; border-top: 1px dashed var(--line); padding-top: 16px;
+  }
+  footer a { color: var(--accent2); }
+  details { margin: 12px 0; }
+  details summary { cursor: pointer; color: var(--accent); font-size: 13px; }
+  details > div { margin-top: 8px; padding: 10px; background: #1f1a13; border-radius: 6px; }
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <div class="eyebrow">multi-platform-publisher · W2 Discovery</div>
+    <h1 style="margin:0;font-size:18px;font-weight:600;">Catalog submission deck · 6 channels</h1>
+  </div>
+  <div class="progress" id="progress">0 / 6 done</div>
+</header>
+
+<h1>抽卡 — <em>multi-platform-publisher</em> 全平台注册</h1>
+<p class="lede">Card 1 of the agent-gtm playbook · W2 deliverable. Repo: <code>mguozhen/multi-platform-publisher</code>. Each card has the exact content to paste — hit Open, paste, then ✓ <kbd>S</kbd> to mark done.</p>
+
+<div class="deck" id="deck"></div>
+
+<div class="controls">
+  <button id="prevBtn">◀ Prev (A)</button>
+  <div class="dot-strip" id="dots"></div>
+  <button id="doneBtn" class="done">✓ Mark Done (S)</button>
+  <button id="nextBtn">Next (D) ▶</button>
+</div>
+<div class="controls" style="border:none;padding:0;justify-content:flex-end;">
+  <span class="keys">
+    <kbd>A</kbd>/<kbd>←</kbd> prev · <kbd>D</kbd>/<kbd>→</kbd> next ·
+    <kbd>S</kbd> mark done · <kbd>O</kbd> open the form link
+  </span>
+</div>
+
+<footer>Generated by <code>publish-mcp</code> skill · Repo: <a href="https://github.com/mguozhen/multi-platform-publisher">mguozhen/multi-platform-publisher</a></footer>
+
+<script>
+const SUBMISSIONS = [
+  {
+    "num": 1,
+    "channel": "Cline MCP Marketplace",
+    "type": "issue",
+    "meta": "Issue template · ~2 day review",
+    "openUrl": "https://github.com/cline/mcp-marketplace/issues/new?template=submission.md",
+    "fields": [
+      {
+        "label": "Title",
+        "body": "[MCP Server Submission]: multi-platform-publisher"
+      },
+      {
+        "label": "GitHub Repo URL",
+        "body": "https://github.com/mguozhen/multi-platform-publisher"
+      },
+      {
+        "label": "Logo (400×400 PNG)",
+        "body": "https://raw.githubusercontent.com/mguozhen/multi-platform-publisher/main/docs/logo-400.png"
+      },
+      {
+        "label": "Reason this server is valuable",
+        "body": "Multi-Platform Publisher — one MCP server, 4 tools, 13 platforms.\n\nThe core 4 MCP tools:\n• publish_to_platforms — adapt + publish (or dry-run) to N platforms in one call, with per-platform failure isolation\n• adapt_content — preview the per-platform reshape (free, no network)\n• list_supported_platforms — platform metadata: auth, features, limits\n• validate_credentials — pre-flight check for a platform's keys\n\nFour API adapters (X / LinkedIn / WeChat / Xiaohongshu) plus the bundled super-writer pipeline adds Dev.to, Qiita, HN, Reddit, note.com, Substack, YouTube, Douyin, and Channels via dedicated publishers.\n\nWhy use it: existing cross-posters (Buffer / Hootsuite / Typefully) post the same string everywhere. MPP reshapes the source per platform — Twitter threads with numbering, LinkedIn paragraph register, WeChat HTML, XHS emoji + tags — and is the only one that's MCP-callable. WeChat is safety-locked to the draft box (never auto-publishes). MIT-licensed."
+      },
+      {
+        "label": "Checklist",
+        "body": "✓ README has working install steps · ✓ Tested with Cline using README only · ✓ 400×400 PNG logo · ✓ Public MIT-licensed repo"
+      }
+    ]
+  },
+  {
+    "num": 2,
+    "channel": "mcp.so",
+    "type": "form",
+    "meta": "Form · largest community directory",
+    "openUrl": "https://mcp.so/submit",
+    "fields": [
+      {
+        "label": "Server URL",
+        "body": "https://github.com/mguozhen/multi-platform-publisher"
+      },
+      {
+        "label": "Name",
+        "body": "multi-platform-publisher"
+      },
+      {
+        "label": "Category",
+        "body": "Social / Publishing"
+      },
+      {
+        "label": "One-line description",
+        "body": "Write once, publish everywhere — adapts a single source into platform-native posts for X/Twitter (threads), LinkedIn (paragraphs), WeChat (HTML drafts), and Xiaohongshu (emoji + tags) in one MCP call."
+      },
+      {
+        "label": "Tags",
+        "body": "social-media, cross-post, twitter, linkedin, wechat, xiaohongshu, content-distribution, publishing, agent-native"
+      },
+      {
+        "label": "Long description",
+        "body": "Multi-Platform Publisher — one MCP server, 4 tools, 13 platforms.\n\nThe core 4 MCP tools:\n• publish_to_platforms — adapt + publish (or dry-run) to N platforms in one call, with per-platform failure isolation\n• adapt_content — preview the per-platform reshape (free, no network)\n• list_supported_platforms — platform metadata: auth, features, limits\n• validate_credentials — pre-flight check for a platform's keys\n\nFour API adapters (X / LinkedIn / WeChat / Xiaohongshu) plus the bundled super-writer pipeline adds Dev.to, Qiita, HN, Reddit, note.com, Substack, YouTube, Douyin, and Channels via dedicated publishers.\n\nWhy use it: existing cross-posters (Buffer / Hootsuite / Typefully) post the same string everywhere. MPP reshapes the source per platform — Twitter threads with numbering, LinkedIn paragraph register, WeChat HTML, XHS emoji + tags — and is the only one that's MCP-callable. WeChat is safety-locked to the draft box (never auto-publishes). MIT-licensed."
+      }
+    ]
+  },
+  {
+    "num": 3,
+    "channel": "PulseMCP",
+    "type": "form",
+    "meta": "Form · weekly newsletter spotlight",
+    "openUrl": "https://www.pulsemcp.com/submit",
+    "fields": [
+      {
+        "label": "URL",
+        "body": "https://github.com/mguozhen/multi-platform-publisher"
+      },
+      {
+        "label": "Name (if asked)",
+        "body": "multi-platform-publisher"
+      },
+      {
+        "label": "Description (if asked)",
+        "body": "Write once, publish everywhere — adapts a single source into platform-native posts for X/Twitter (threads), LinkedIn (paragraphs), WeChat (HTML drafts), and Xiaohongshu (emoji + tags) in one MCP call."
+      }
+    ]
+  },
+  {
+    "num": 4,
+    "channel": "Glama",
+    "type": "auto",
+    "meta": "Auto-indexes GitHub · can nudge with manual submit",
+    "openUrl": "https://glama.ai/mcp/servers/add",
+    "fields": [
+      {
+        "label": "URL",
+        "body": "https://github.com/mguozhen/multi-platform-publisher"
+      },
+      {
+        "label": "Note",
+        "body": "Glama auto-crawls public GitHub repos with 'mcp' / 'mcp-server' topics. Should appear automatically within 24-72h. The /add page lets you manually request a faster scan."
+      }
+    ]
+  },
+  {
+    "num": 5,
+    "channel": "mcp.directory",
+    "type": "auto",
+    "meta": "Auto-pulls from GitHub within 24h after submit",
+    "openUrl": "https://mcp.directory/submit",
+    "fields": [
+      {
+        "label": "GitHub Repo URL",
+        "body": "https://github.com/mguozhen/multi-platform-publisher"
+      },
+      {
+        "label": "Note",
+        "body": "Auto-detects tools by analyzing the MCP implementation. Just submit the URL; metadata is pulled from README, topics, and tool list."
+      }
+    ]
+  },
+  {
+    "num": 6,
+    "channel": "appcypher/awesome-mcp-servers PR",
+    "type": "pr",
+    "meta": "Branch pushed · click below to open compare page",
+    "openUrl": "https://github.com/appcypher/awesome-mcp-servers/compare/main...mguozhen:appcypher-awesome:add-multi-platform-publisher",
+    "fields": [
+      {
+        "label": "PR title",
+        "body": "Add multi-platform-publisher under Social / Publishing"
+      },
+      {
+        "label": "PR body",
+        "body": "## Server\n\n**Name**: multi-platform-publisher\n**Repo**: https://github.com/mguozhen/multi-platform-publisher\n**Category**: 🛒 Social / Publishing\n**License**: MIT\n\n## What it does\n\nMulti-Platform Publisher — one MCP server, 4 tools, 13 platforms.\n\nThe core 4 MCP tools:\n• publish_to_platforms — adapt + publish (or dry-run) to N platforms in one call, with per-platform failure isolation\n• adapt_content — preview the per-platform reshape (free, no network)\n• list_supported_platforms — platform metadata: auth, features, limits\n• validate_credentials — pre-flight check for a platform's keys\n\nFour API adapters (X / LinkedIn / WeChat / Xiaohongshu) plus the bundled super-writer pipeline adds Dev.to, Qiita, HN, Reddit, note.com, Substack, YouTube, Douyin, and Channels via dedicated publishers.\n\nWhy use it: existing cross-posters (Buffer / Hootsuite / Typefully) post the same string everywhere. MPP reshapes the source per platform — Twitter threads with numbering, LinkedIn paragraph register, WeChat HTML, XHS emoji + tags — and is the only one that's MCP-callable. WeChat is safety-locked to the draft box (never auto-publishes). MIT-licensed.\n\nThanks 🙏"
+      },
+      {
+        "label": "Note",
+        "body": "Branch already pushed. Click 'Open' to land on the compare page and hit 'Create pull request'."
+      }
+    ]
+  }
+];
+
+const STORE_KEY = "mcp-submissions-" + (location.pathname.split('/').pop() || 'default');
+let state = { current: 0, done: {}, viewed: {} };
+try { state = Object.assign(state, JSON.parse(localStorage.getItem(STORE_KEY) || "{}")); } catch(_) {}
+
+const deck = document.getElementById("deck");
+const dots = document.getElementById("dots");
+const progressEl = document.getElementById("progress");
+const doneBtn = document.getElementById("doneBtn");
+
+function escape(s) {
+  return String(s).replace(/[&<>"']/g, c => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+  }[c]));
+}
+
+function render() {
+  deck.innerHTML = "";
+  SUBMISSIONS.forEach((s, i) => {
+    const card = document.createElement("article");
+    card.className = "card" + (i === state.current ? " active" : "");
+    const pillCls = s.type;
+    const fieldsHtml = s.fields.map(f => `
+      <div class="field">
+        <div class="field-label">${escape(f.label)}</div>
+        <div class="copybox" data-text="${escape(f.body)}">${escape(f.body)}<button class="copy">Copy</button></div>
+      </div>
+    `).join("");
+
+    card.innerHTML = `
+      <div class="card-head">
+        <div>
+          <div class="card-num">CHANNEL ${s.num} / ${SUBMISSIONS.length}</div>
+          <h2 class="card-channel">${escape(s.channel)}</h2>
+          <div class="channel-meta">${escape(s.meta)} · <span class="pill ${pillCls}">${pillCls.toUpperCase()}</span></div>
+        </div>
+        <div>
+          <a class="open-btn" href="${escape(s.openUrl)}" target="_blank" rel="noopener" data-open>Open ↗</a>
+        </div>
+      </div>
+      <div class="section-h">Submission content (copy + paste)</div>
+      ${fieldsHtml}
+      <details>
+        <summary>Site URL</summary>
+        <div><code>${escape(s.openUrl)}</code></div>
+      </details>
+    `;
+    deck.appendChild(card);
+  });
+
+  dots.innerHTML = SUBMISSIONS.map((_, i) => {
+    let cls = "dot";
+    if (state.done[i]) cls += " done";
+    else if (state.viewed[i]) cls += " viewed";
+    if (i === state.current) cls += " current";
+    return `<span class="${cls}"></span>`;
+  }).join("");
+
+  const doneCount = Object.values(state.done).filter(Boolean).length;
+  progressEl.textContent = `${doneCount} / ${SUBMISSIONS.length} done`;
+  doneBtn.textContent = state.done[state.current] ? "↩ Undo done" : "✓ Mark Done (S)";
+
+  state.viewed[state.current] = true;
+  save();
+  attachCopyHandlers();
+}
+
+function attachCopyHandlers() {
+  document.querySelectorAll(".copybox").forEach(box => {
+    const btn = box.querySelector(".copy");
+    if (!btn) return;
+    btn.onclick = (ev) => {
+      ev.stopPropagation();
+      navigator.clipboard.writeText(box.dataset.text).then(() => {
+        btn.textContent = "✓ Copied";
+        btn.classList.add("copied");
+        setTimeout(() => { btn.textContent = "Copy"; btn.classList.remove("copied"); }, 1200);
+      });
+    };
+  });
+}
+
+function save() { localStorage.setItem(STORE_KEY, JSON.stringify(state)); }
+function go(delta) {
+  state.current = (state.current + delta + SUBMISSIONS.length) % SUBMISSIONS.length;
+  render();
+}
+function toggleDone() {
+  state.done[state.current] = !state.done[state.current];
+  save();
+  render();
+  if (state.done[state.current]) {
+    setTimeout(() => go(1), 350);
+  }
+}
+function openCurrent() {
+  const a = document.querySelector(".card.active [data-open]");
+  if (a) window.open(a.href, "_blank", "noopener");
+}
+
+document.getElementById("prevBtn").onclick = () => go(-1);
+document.getElementById("nextBtn").onclick = () => go(1);
+doneBtn.onclick = toggleDone;
+
+document.addEventListener("keydown", e => {
+  if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") return;
+  const k = e.key.toLowerCase();
+  if (k === "a" || k === "arrowleft") { e.preventDefault(); go(-1); }
+  else if (k === "d" || k === "arrowright") { e.preventDefault(); go(1); }
+  else if (k === "s") { e.preventDefault(); toggleDone(); }
+  else if (k === "o") { e.preventDefault(); openCurrent(); }
+});
+
+render();
+</script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+{
+  "channel": "blog",
+  "review_checklist": [
+    "SEO target — keyword in H1/H2/first 100 words?",
+    "Depth — real data/research vs thin AI summary?",
+    "Internal linking — 2+ links to other blog posts?",
+    "Competitor comparison — honest, data-backed, not FUD"
+  ],
+  "content_template": {
+    "type": "seo_post | comparison_post | case_study",
+    "structure": "H1 + meta desc → intro hook → body (H2 sections) → conclusion + CTA"
+  },
+  "dashboard_widgets": [
+    { "id": "ranking_positions", "chart": "line", "source": "Ahrefs/GSC" },
+    { "id": "organic_traffic", "chart": "bar", "period": "weekly" },
+    { "id": "conversion_rate", "source": "blog→signup funnel" }
+  ],
+  "kpi_defaults": {
+    "weekly_target": "3 posts",
+    "measure": "Ahrefs rank, organic traffic, blog→signup conversion >2%"
+  }
+}
